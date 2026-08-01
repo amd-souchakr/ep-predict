@@ -62,6 +62,10 @@ decision path without adding a tracking system or notebook ceremony.
   level; independent label flips may be used only as a labeled sensitivity.
 - Report mean service pressure separately from trace-replayed P95/P99 queue
   behavior. Mean headroom is necessary but not sufficient.
+- For deadline-degraded execution, separate the latency guarantee from the
+  assumed quality contract. Enforce zero waiting after commit, report missing
+  normalized routed mass and full-fallback incidence, and state the compute,
+  fallback, and traffic-isolation assumptions required for a hard bound.
 - Add request-level uncertainty only for a confirmation run or a genuinely
   borderline decision; do not bootstrap every pilot table.
 

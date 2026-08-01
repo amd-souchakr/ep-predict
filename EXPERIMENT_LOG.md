@@ -359,7 +359,8 @@ The immutable run manifest and metrics remain the source of truth.
 
 - Track: AX — assumption-driven predictive expert-memory architecture
   exploration.
-- Status: `READY`; protocol and sweep are frozen, implementation has not run.
+- Status: `COMPLETE_PENDING_HUMAN_REVIEW`; AX1–AX3 ran without new inference
+  or training.
 - Protocol/config:
   `docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md` and
   `configs/experiment/ax-future-predictor-architecture.toml`.
@@ -371,19 +372,87 @@ The immutable run manifest and metrics remain the source of truth.
   output.
 - Predictor sweep: wave-complete cold-set coverage 50–99.9% and
   predicted/useful byte amplification 1–8×, with correlated wave misses.
-- AX1: project host/pooled-memory capacity and P50/P95/P99 TPOT relative to the
-  same reactive hierarchy over K=8/16/32 and Δ through 15.
-- AX2: derive bandwidth, startup-latency, coverage, amplification, and maximum
-  transfer-object-size bounds; classify bandwidth-, latency-, reliability-,
-  capacity-, and SLO-limited regions.
-- AX3: model long-horizon placement into HBM and short-horizon staging into a
-  32–512 MiB global rolling SRAM tier with double buffering.
-- Required figures: one profitability phase map, one fast-tier
-  capacity-versus-P99 Pareto frontier, and one inverse bandwidth-versus-
-  lookahead curve.
+- Anchor integrity: the 12 MiB transfer fit agrees within 0.000006 ms and the
+  archived H5 K=16/32 headroom cells reproduce exactly.
+- AX1 result: at measured PCIe and assumed C=99%, A=1.5×, the best wave-local
+  projections improve P99 TPOT by 33.8%, 35.3%, and 39.3% versus reactive
+  offload at K=8/16/32. Absolute P99 is 48.03/43.27/30.71 ms versus the
+  10.23 ms all-resident measured reference.
+- Tail sensitivity: selected FCFS queue replay gives 65.23 ms stall at K=16,
+  Δ=9, C=99%, A=1.5× versus 33.04 ms wave-local. At 64 GB/s, K=16, Δ=3, the
+  corresponding queue P99 falls to 20.91 ms but remains nontrivial.
+- AX2 result: for trace-derived K=16 demand, whole experts, A=1×, and one lane,
+  minimum mean bandwidth is 71.3/22.8/11.6/8.2 GB/s at Δ=1/3/6/9.
+  Lookahead and amplification act approximately as reciprocal/linear
+  bandwidth levers; complete-set coverage independently controls cold-path
+  tail incidence.
+- AX3 result: a top-8 layer requires 96 MiB of whole-expert payload. Rolling
+  double buffering needs 192 MiB at A=1× and 384 MiB at A=2×. The frozen
+  SRAM range has 1,429/7,200 physically feasible factorized cells; A=4× and
+  A=8× have no capacity-feasible whole-expert cell at ≤512 MiB.
+- Figures: profitability phase map, memory–P99 Pareto, and inverse
+  bandwidth/lookahead curve saved as PDF/450-DPI PNG with hashed inputs under
+  `artifacts/runs/h1-standard-small/analysis/architecture/figures`.
 - Claim boundary: CPU/pooled-memory prefetch may enable larger models and beat
   reactive offload, but cannot be called faster than an otherwise identical
   all-HBM model. Future-router sweep points are projections, not evidence that
   the current checkpoint achieves them.
-- One next action: implement AX1 by extending H4/H5 replay and first reproduce
-  the measured anchors.
+- Interpretation: a quantitative co-design window exists, but queueing,
+  complete-wave reliability, and false-positive occupancy are architectural
+  requirements rather than predictor footnotes. Whole-expert SRAM is
+  capacity-limited for top-8 routing; top-1/top-2 or selective sub-expert
+  staging would move the bound more than a small link-speed increase.
+- Human review: pending.
+- One next action: review the three figures and select at most one optional
+  live calibration point only if it would change the conclusion.
+
+### `ax4-deadline-degradation` — 2026-08-01
+
+- Track: AX4 — deadline-bounded graceful expert degradation.
+- Status: `COMPLETE_PENDING_HUMAN_REVIEW`; formal analytical gate passed.
+- Protocol/config: `docs/DEADLINE_DEGRADATION_PROTOCOL.md` and
+  `configs/experiment/ax4-deadline-degradation.toml`.
+- Decisive question: can a fixed layer commit deadline remove cold-transfer
+  waiting from low-batch TPOT while retaining a plausible P99 missing-routed-
+  mass contract for future availability-trained models?
+- Inputs: 128,176 retained decode layer-waves with selected IDs/weights, AX1
+  queue/residency state, and H4 timing. No new inference, training, model, or
+  library change.
+- Weight semantics: OLMoE softmaxes over all 64 experts, takes top-8, and does
+  not renormalize. Raw selected weights sum to 0.406 on average (P99 0.717).
+  Primary missing mass is normalized within top-8 and is explicitly a future
+  architecture/training contract.
+- Policies: reactive exact, predictive exact-wait, deadline null,
+  deadline-renormalized, deadline shared-residual, and mass-priority oracle.
+- Replay: 756 factorized wave-local scenarios, 2,304 physical-bound cells,
+  and 19 trace-ordered FCFS boundary candidates; every deadline policy has
+  exactly zero post-commit transfer wait.
+- Formal gate: at least 50% expert offload, ≥25% P99 TPOT improvement over
+  reactive exact, ≤1.5× all-local TPOT with fallback, P99 missing mass ≤20%,
+  and full fallback ≤1% across at least two domains and two layer bands.
+- Formal result: `SUPPORTED_ANALYTICALLY_UNDER_ASSUMPTIONS`. K=8 at 256 GB/s,
+  C=99%, A=1.5×, Δ=1, and one-layer slack passes with only 1.5 GiB resident,
+  10.5 GiB offloaded, 11.25 ms bounded TPOT, 88.9 token/s, 0.93% degraded
+  waves, effectively zero P99 wave missing mass, and zero full fallback. The
+  same-hierarchy reactive P99 is 16.41 ms, so improvement is 31.4%/1.46×.
+- Boundary: K=32 at 128 GB/s passes with 7.2% P99 missing mass. K=16 at
+  128 GB/s narrowly misses at 20.4%. Measured 24.14 GB/s PCIe fails at every
+  capacity with 100%/100%/81% P99 missing mass for K=8/16/32.
+- Frozen headline reproduced: 10.23 ms all-local plus 10% overhead gives
+  11.25 ms and 88.9 token/s, 83.2% lower TPOT and 5.94× throughput versus the
+  earlier 66.83 ms K=16 reactive-PCIe projection. This is not the
+  same-hardware comparison used by the formal gate.
+- Large-model context: 9,216 labeled geometry projections span 64–512
+  experts/layer, top-1/2/4/8, 32–96 MoE layers, 4–64 MiB objects, and batch
+  1/2/4/8. They are sensitivities, not cross-model evidence.
+- HW proposal: always-resident fallback plane, optional residual-expert plane,
+  deadline-aware DMA, atomic commit bitmap, bounded renormalizer, speculative
+  traffic isolation, and missing-mass/fallback telemetry.
+- Figures: latency–quality frontier, capacity–throughput–degradation Pareto,
+  and FCFS bandwidth/erasure phase map are retained as PDF/450-DPI PNG with
+  hashed inputs under
+  `artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures`.
+- Claim boundary: passing identifies an erasure-robustness target worth
+  training for. It cannot show current-model quality under missing experts.
+- One next action: human review. Do not start training, new inference, or a
+  new checkpoint without explicit permission.

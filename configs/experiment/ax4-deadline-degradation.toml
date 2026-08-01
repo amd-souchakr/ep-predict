@@ -1,0 +1,79 @@
+# Frozen AX4 analysis-only deadline-degradation study. Reuses retained routes
+# and AX calibration; performs no model inference or training.
+output_dir = "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation"
+h1_run = "artifacts/runs/h1-standard-small"
+ax_analysis = "artifacts/runs/h1-standard-small/analysis/architecture"
+h4_measurement = "artifacts/runs/h1-standard-small/analysis/h4/measurement.json"
+phase = "decode"
+seed = 17
+
+[weights]
+primary_semantics = "normalize_within_selected_topk"
+preserve_raw_weight_sensitivity = true
+require_model_execution_semantics_check = true
+minimum_delivered_mass_for_renormalization = 0.05
+
+[fallback]
+modes = ["null_residual", "present_renormalization", "shared_residual"]
+always_resident = true
+shared_computed_once_per_layer = true
+local_tpot_overhead_fractions = [0.0, 0.05, 0.10, 0.25]
+normalized_shared_distance_over_expert_bound = [0.25, 0.5, 1.0, 2.0]
+
+[residency]
+experts_per_layer = [8, 16, 32]
+lookaheads = [1, 3, 6, 9]
+
+[predictor]
+complete_coverages = [0.90, 0.95, 0.99, 0.999]
+amplifications = [1.0, 1.5, 2.0, 4.0]
+correlated_wave_misses = true
+importance_orders = ["mass_priority_oracle", "random_within_route", "mass_adversarial"]
+
+[deadline]
+commit_slack_layer_intervals = [0.0, 0.25, 0.5, 1.0]
+missing_mass_thresholds = [0.0, 0.05, 0.10, 0.20, 0.40, 1.0]
+tail_percentiles = [0.50, 0.95, 0.99]
+never_wait_after_commit = true
+cancel_late_generation = true
+
+[cold_tier]
+bandwidth_gbps = [24.1354255944, 64.0, 128.0, 256.0]
+startup_latency_us = 2.7550100475
+transfer_concurrency = [1, 2, 4]
+speculative_traffic_isolated = true
+
+[low_batch]
+primary_batch_size = 1
+sensitivity_batch_sizes = [2, 4]
+separate_batch_size = 8
+tpot_targets_ms = [10.0, 20.0, 30.0, 50.0]
+throughput_semantics = "1000_times_batch_divided_by_bounded_tpot_ms"
+
+[large_model_sensitivity]
+experts_per_layer = [64, 128, 256, 512]
+resident_fractions = [0.125, 0.25, 0.50]
+route_widths = [1, 2, 4, 8]
+moe_layers = [32, 64, 96]
+expert_size_mib = [4.0, 12.0, 32.0, 64.0]
+olmoe_route_truncation_is_not_cross_model_evidence = true
+
+[gate]
+maximum_resident_fraction = 0.50
+minimum_p99_tpot_improvement_vs_reactive = 0.25
+minimum_throughput_improvement_vs_reactive = 1.3333333333
+maximum_tpot_ratio_vs_all_local_with_fallback = 1.50
+maximum_p99_missing_routed_mass = 0.20
+maximum_full_fallback_wave_fraction = 0.01
+minimum_domains = 2
+minimum_layer_bands = 2
+oracle_stop_missing_mass = 0.40
+
+[outputs]
+write_p50_p95_p99 = true
+write_layer_domain_tables = true
+principal_figures = [
+  "deadline_quality_latency_frontier",
+  "capacity_throughput_degradation_pareto",
+  "deadline_hardware_phase_map",
+]

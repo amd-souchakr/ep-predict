@@ -1,0 +1,25 @@
+{
+  "analysis": "AX4_deadline_bounded_graceful_expert_degradation",
+  "evidence_grade": "trace_calibrated_assumption_driven_architecture_projection",
+  "human_review_complete": false,
+  "inputs": {
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/deadline_envelope.csv": "ef6a9951643178c7e0148c941bc6f8c8127544aa4d0c30f6e6a43051270c9dd7",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/deadline_fcfs_candidates.csv": "5bdc09824dbe32621eaa2ddae9226ef052ff356169d762e9eaf5475a5865b161",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/deadline_fcfs_scope_metrics.csv": "69ffc506a545c54de4559cfbe47daec873a54d3e44f637172be28af03c74ae71",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/deadline_physical_bounds.csv": "f58186a9527f00163f0e584febfec4e15a64a4525133305b941f300622cf8154",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/degradation_policy_bounds.csv": "3de2b6d8b0d251fa4304722205f76e6b1298b3dfd06f074033b9da3fba6b489f",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/evidence_ledger.json": "69ebe17d5108dbc0d2d618554b526d8b417de54132c1563786f4f131da5a1522",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/large_sparse_model_projection.csv": "12ee340c02aa1b7ca343dc2a649654365d4dfa6b908e7d1728837ffd7935dda8",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/summary.json": "e464883e022a73f02d7709a082ac0832d3c915119a1a050c0e09e830938c4a1c",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/weight_semantics_integrity.csv": "76de56e90bed4c26c2cca1e0cc51c924900874461c962faf8d4c8fa52ca8f900"
+  },
+  "outputs": {
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/FIGURES.md": "75fd35536b64ddce22fc951904a04037337d4fd652ac3ed526ddd697ea949f34",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig1_deadline_quality_latency_frontier.pdf": "b0279175cb7a1855fbbfc4c79547fe7b1f8041b385340a2c370da13e6baf44e0",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig1_deadline_quality_latency_frontier.png": "6ff3189e3723d859edd86ab4eacd31c4f4ff8360621de902bca6af5d946ae624",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig2_capacity_throughput_degradation_pareto.pdf": "8ca301ea01d0a5bbdc5b67ad80849aeebf1e7a49514f373e78a0f547446a64ff",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig2_capacity_throughput_degradation_pareto.png": "fbf23bb4902e0d1c7f45b3902757cb05d313f8d526f6157792cfeefae7395c89",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig3_deadline_hardware_phase_map.pdf": "255194f3447a8b5a03ff17227e4b0b10a4d635c91cb079f3e314fb61d8103b4d",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig3_deadline_hardware_phase_map.png": "22813d27e04cf2b181f91fa263caba43003cb31d9d5a46ceb9efa49d3a942227"
+  }
+}

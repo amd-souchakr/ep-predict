@@ -1,0 +1,26 @@
+{
+  "assumed_predictor": [
+    "wave-complete coverage",
+    "candidate amplification",
+    "mass ordering and correlated incomplete waves"
+  ],
+  "assumed_robustness": [
+    "missing routed mass is a useful future training contract",
+    "null, renormalized, or shared residual fallback preserves quality"
+  ],
+  "hypothetical_hardware": [
+    "nonblocking atomic commit",
+    "fallback provisioning and speculative-traffic isolation",
+    "non-measured bandwidth, concurrency, and large-model geometries"
+  ],
+  "measured": [
+    "hook-free OLMoE decode timing",
+    "12 MiB expert size",
+    "pinned host-to-device transfer fit"
+  ],
+  "trace_derived": [
+    "selected expert IDs and unnormalized selected weights",
+    "normalized-within-top8 contribution shape",
+    "LRU cold demand, domains, layers, and request order"
+  ]
+}

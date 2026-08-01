@@ -555,6 +555,55 @@ trajectory prediction may still benefit:
 
 The predictive-control thesis is broader than whole-expert PCIe prefetch.
 
+### Lookahead is bandwidth currency; amplification is its exchange rate
+
+The AX inverse sweep makes the co-design relationship unusually simple:
+
+\[
+\beta_{\min}\propto \frac{A}{\Delta}.
+\]
+
+At trace-derived K=16 cold demand with 12 MiB experts and A=1×, the mean
+bandwidth bound falls from 71.3 GB/s at Δ=1 to 22.8, 11.6, and 8.2 GB/s at
+Δ=3, 6, and 9. Longer prediction is valuable even without greater accuracy
+because it converts semantic foreknowledge into physical service time.
+False-positive amplification spends that time almost linearly.
+
+This suggests a clean router/interconnect contract: a predictor should expose
+not merely accuracy, but a deadline-indexed amplification frontier.
+
+### Mean feasibility and tail schedulability are different architectural gates
+
+The AX phase map contains regions with adequate mean cold-service headroom,
+yet selected FCFS replay is much worse than the wave-local bound. For K=16,
+Δ=9, C=99%, and A=1.5× at measured PCIe, wave-local P99 stall is 33.0 ms while
+the within-token FCFS replay reaches 65.2 ms.
+
+The missing concept is schedulability: bursts, false candidates, and correlated
+misses share a finite queue. A link can satisfy \(\rho<1\) on average and
+still violate the token tail. Predictor quality therefore resembles fault
+coverage more than ordinary classifier accuracy. Complete-wave misses are
+rare synchronous recovery events, and their acceptable rate is set by the SLO
+percentile.
+
+### Routing sparsity is a memory-hierarchy multiplier
+
+For whole-expert rolling staging, fast-tier occupancy scales as
+\(2AkS_{\mathrm{expert}}\) under double buffering. OLMoE's top-8, 12 MiB route
+therefore requires 192 MiB even at A=1× and 384 MiB at A=2×. No 512 MiB
+whole-expert cell can tolerate A=4×.
+
+Top-k is consequently not just a model-compute parameter. It jointly controls:
+
+- complete-set reliability difficulty;
+- speculative occupancy;
+- link traffic per wave;
+- minimum useful SRAM staging capacity.
+
+This sharpens why a top-1/top-2 confirmation matters: lower routing width may
+alter the architecture envelope more profoundly than a modest bandwidth
+increase, even if its raw trajectory predictor is less accurate.
+
 ---
 
 ## Unanswered foundational questions
@@ -581,6 +630,55 @@ The predictive-control thesis is broader than whole-expert PCIe prefetch.
 
 ---
 
+## Deadline erasure turns a synchronization problem into a distortion budget
+
+Exact sparse execution has an AND-style completion rule: a layer cannot finish
+until every demanded cold expert is available. One late expert therefore makes
+the token inherit the maximum transfer/queue delay. AX4 shows that an atomic
+commit plus optional residual experts changes the mathematical object being
+managed:
+
+\[
+\max_i T_{\mathrm{expert},i}
+\quad\longrightarrow\quad
+m=\sum_{i\in M} a_i.
+\]
+
+This is a foundational co-design shift. The interconnect no longer determines
+the committed latency after the deadline; it determines how much optional
+expert mass arrives before commit. Hardware schedules distortion reduction per
+byte, software enforces the deadline, and training determines whether a given
+tail of missing mass is acceptable.
+
+The shift is useful only in a real service regime. Trace-ordered FCFS replay
+finds no credible whole-expert PCIe point: P99 normalized missing mass remains
+81–100% at 24.14 GB/s. A boundary appears around 128–256 GB/s under C=99%,
+A=1.5× mass-priority admission. K=16 at 128 GB/s misses the 20% contract by
+only 0.4 point; K=32 passes at 7.2%; K=8/16 at 256 GB/s are effectively exact
+at the wave P99.
+
+Three deeper lessons follow:
+
+1. **Approximation can bound latency without making transfer cheap.** It
+   removes late transfer from the critical path, but only adequate service
+   capacity keeps the quality/distortion tail small.
+2. **More residency is not monotonically more profitable.** K=32 at 256 GB/s
+   delivers essentially all mass, yet fails the 25% improvement gate because
+   reactive offload is already fast. A profitable Pareto point needs both a
+   low erasure tail and enough avoided reactive cost.
+3. **A zero P99 does not mean no degradation.** At the K=8 headline point,
+   0.93% of waves are degraded and the worst wave loses 27.4% normalized mass,
+   even though wave P99 is numerically zero. Publication claims should pair
+   P99 with degraded-wave incidence, token-level maxima, and worst observed
+   mass.
+
+There is also a model-semantics warning. OLMoE does not renormalize after
+selecting top-8; its selected weights sum to 0.406 on average. Normalizing
+within the selected set is appropriate for a future routed-contribution
+contract, but it is not a literal description of current OLMoE execution.
+
+---
+
 ## Strongest defensible claims today
 
 ### Directly supported for the pinned OLMoE workload
@@ -600,6 +698,14 @@ The predictive-control thesis is broader than whole-expert PCIe prefetch.
 - A larger \(K=32,\Delta=3\) oracle region exists in the analytical replay.
 - A controlled first-order profitability region exists, but the unchanged
   transition and linear candidate streams do not enter it.
+- Under an explicitly assumed C=99%, A=1.5× future router, the AX wave-local
+  projection improves P99 by 34–39% over reactive PCIe offload at equal HBM
+  capacity, while remaining much slower than all-resident execution.
+- The AX inverse bound quantifies the approximately A/Δ bandwidth trade:
+  K=16 whole-expert A=1× demand needs 71.3/22.8/11.6/8.2 GB/s at
+  Δ=1/3/6/9.
+- Selected FCFS replay is materially worse than the mean/wave-local envelope,
+  establishing that service headroom is necessary but not tail-sufficient.
 - The current linear ranking contains real useful-versus-unused separation,
   but needs roughly 3.0–3.3× transferred/useful bytes to preserve 50%
   complete cold-set coverage.
@@ -610,6 +716,11 @@ The predictive-control thesis is broader than whole-expert PCIe prefetch.
 - Under identical inputs, OLMoE Base and Instruct retain 89.7% of expert
   selections, and their layer-0→15 conditional prediction gain differs by only
   +1.6 points.
+- Under assumed C=99%, A=1.5× mass-priority prediction and a nonblocking
+  commit, trace-ordered FCFS replay identifies a deadline-erasure regime:
+  K=8/16 pass at 256 GB/s and K=32 passes at 128 GB/s.
+- The same AX4 replay rejects measured PCIe for this mechanism: P99 normalized
+  missing mass is 100%/100%/81% at K=8/16/32.
 
 ### Plausible architectural inference
 
@@ -622,6 +733,9 @@ The predictive-control thesis is broader than whole-expert PCIe prefetch.
   as speed and capacity.
 - Experts transferable per layer interval is a useful co-design quantity, and
   prediction becomes actionable only after residency reduces cold demand.
+- An always-resident competence path plus optional routed residual experts
+  could turn expert availability into an explicit, telemetry-visible
+  distortion budget rather than a token-level synchronization failure.
 
 ### Not yet supported
 
@@ -636,6 +750,10 @@ The predictive-control thesis is broader than whole-expert PCIe prefetch.
 - The base model learned to manage hardware resources.
 - Making routing more predictable would preserve model loss and load balance.
 - Whole-expert movement beats activation movement or additional local memory.
+- Current OLMoE preserves loss, perplexity, or downstream quality under expert
+  erasure, renormalization, or shared-residual substitution.
+- A future availability-trained model can meet the AX4 ≤20% P99 missing-mass
+  contract without harming exact-mode quality or load balance.
 
 ---
 
@@ -665,6 +783,12 @@ Routes Provide Short-Range Correction**
 6. Show that depth-trajectory predictability and temporal cache reuse are
    distinct, and that policy value requires matching the prediction axis to
    the resource-consumption axis.
+7. Derive the deadline-indexed \(A/\Delta\) interconnect law and the
+   \(2AkS\) rolling-staging capacity law, separating mean feasibility from
+   tail schedulability.
+8. Recast late experts as deadline erasures under an always-resident competence
+   path, and quantify the bandwidth–residency–distortion region in which a hard
+   TPOT bound becomes a plausible training target.
 
 The defensible contribution is a workload and co-design boundary, not a
 profitable end-to-end prefetch implementation. Strong long-range routing
@@ -694,3 +818,12 @@ central trajectory result.
   preserved about 90% of expert selections and did not materially change the
   frozen long-range predictability metric, suggesting a pretrained trajectory
   scaffold with local post-training edits.
+- **2026-08-01:** AX1–AX3 converted the future-router assumption into
+  bandwidth/lookahead, capacity/P99, and rolling-SRAM bounds; it established
+  A/Δ as the mean service trade, 2AkS as the staging-capacity bound, and
+  separated mean feasibility from tail schedulability.
+- **2026-08-01:** AX4 converted cold-transfer synchronization into an explicit
+  missing-mass contract. It rejected measured PCIe, identified a
+  mass-priority 128–256 GB/s FCFS regime, and established that a hard latency
+  bound, service capacity, and erasure robustness are three separate
+  requirements.

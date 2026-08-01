@@ -1,0 +1,23 @@
+{
+  "assumed_predictor": [
+    "wave-level complete cold-set coverage",
+    "predicted/useful byte amplification",
+    "block-correlated false-negative waves"
+  ],
+  "hypothetical_hardware": [
+    "non-measured tier bandwidth and latency points",
+    "transfer concurrency",
+    "sub-expert transfer objects",
+    "rolling software-managed SRAM capacities and bandwidths"
+  ],
+  "measured": [
+    "12 MiB OLMoE expert",
+    "0.639 ms effective inter-MoE-layer interval",
+    "hook-free median decode forward",
+    "pinned host-to-device transfer fit"
+  ],
+  "trace_derived": [
+    "per-token per-layer LRU cold demand at K=8,16,32",
+    "cold-demand burst and tail distribution"
+  ]
+}

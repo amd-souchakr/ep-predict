@@ -1,0 +1,77 @@
+{
+  "ax1_headline": [
+    {
+      "capacity_experts_per_layer": 8,
+      "fast_tier_expert_gib": 1.5,
+      "p99_improvement_vs_reactive": 0.3383729986405375,
+      "predictive_p99_tpot_ms": 48.03214713015045,
+      "reactive_p99_tpot_ms": 72.5970177025084,
+      "selected_lookahead": 9
+    },
+    {
+      "capacity_experts_per_layer": 16,
+      "fast_tier_expert_gib": 3.0,
+      "p99_improvement_vs_reactive": 0.3525550457266684,
+      "predictive_p99_tpot_ms": 43.26997940671475,
+      "reactive_p99_tpot_ms": 66.83190458296085,
+      "selected_lookahead": 9
+    },
+    {
+      "capacity_experts_per_layer": 32,
+      "fast_tier_expert_gib": 6.0,
+      "p99_improvement_vs_reactive": 0.3928176261702606,
+      "predictive_p99_tpot_ms": 30.714179276877587,
+      "reactive_p99_tpot_ms": 50.584767609690495,
+      "selected_lookahead": 6
+    }
+  ],
+  "ax2_headline": {
+    "whole_expert_k16_a1_minimum_bandwidth_gbps_by_lookahead": {
+      "1": 71.3238812755158,
+      "3": 22.827669429127635,
+      "6": 11.621886111513525,
+      "9": 8.165567938878683
+    }
+  },
+  "ax3_headline": {
+    "coverage_conditioned_rows": 43200,
+    "minimum_feasible_sram_capacity_mib": 256.0,
+    "minimum_whole_expert_double_buffer_mib_A1": 192.0,
+    "minimum_whole_expert_double_buffer_mib_A2": 384.0,
+    "physical_cells": 7200,
+    "physically_feasible_cells": 1429
+  },
+  "evidence_grade": "trace_calibrated_assumption_driven_analytical_projection",
+  "grid": {
+    "ax1_envelope_rows": 5292,
+    "ax2_inverse_rows": 17640,
+    "ax2_phase_rows": 5292,
+    "ax3_factorized_physical_cells": 7200,
+    "ax3_staging_rows": 43200,
+    "predictor_integrity_rows": 756
+  },
+  "interpretation_boundary": "Projected points combine measured current-testbed anchors, trace-derived demand, assumed future predictor quality, and hypothetical hardware. They are not measured speedups and do not show that current OLMoE attains the assumed quality.",
+  "measured_inputs": {
+    "base_decode_tpot_ms": 10.228975772857666,
+    "effective_inter_moe_layer_ms": 0.6393109858036041,
+    "expert_size_mib": 12.0,
+    "h2d_bandwidth_gbps": 24.135425594434384,
+    "h2d_startup_latency_us": 2.755010047474471
+  },
+  "outputs": {
+    "architecture_comparison": "artifacts/runs/h1-standard-small/analysis/architecture/architecture_comparison.csv",
+    "ax1": "artifacts/runs/h1-standard-small/analysis/architecture/ax1_envelope.csv",
+    "ax2": "artifacts/runs/h1-standard-small/analysis/architecture/ax2_inverse_bounds.csv",
+    "ax3": "artifacts/runs/h1-standard-small/analysis/architecture/ax3_staging.csv",
+    "pareto": "artifacts/runs/h1-standard-small/analysis/architecture/ax1_pareto.csv"
+  },
+  "state": "complete_pending_human_review",
+  "trace": {
+    "decode_tokens": 8011,
+    "decode_waves": 128176,
+    "layers": 16,
+    "run": "artifacts/runs/h1-standard-small",
+    "top_k": 8
+  },
+  "track": "AX"
+}

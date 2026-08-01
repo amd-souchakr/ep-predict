@@ -1,9 +1,9 @@
 # Project status
 
-**Current focus:** AX1 — future-predictor architecture envelope
-**Current stage:** Ready; assumption contract, sweep, and architecture protocol
-are frozen. Implementation has not started and requires no new inference or
-training.
+**Current focus:** AX4 — deadline-bounded graceful expert degradation
+**Current stage:** Complete; formal analytical gate passed under a
+mass-priority, high-bandwidth FCFS regime. Human figure review is pending; no
+training or new-model work is authorized.
 **Last updated:** 2026-08-01
 
 | Gate | Question | State | Exit evidence |
@@ -21,9 +21,10 @@ training.
 | H7 | Can routing be made more predictable without harming loss or balance? | Deferred after H6 failure | Requires a new mechanism and explicit permission |
 | C0 | Does post-training materially change matched-token trajectory predictability? | Pilot not supported; review pending | Base/Instruct retain 89.7% of selections; layer-0→15 conditional-gain change is +1.6 pp versus a 5 pp gate |
 | C1 | Does the result transfer to a top-1/top-2 checkpoint? | Deferred; explicit permission required | No model download or testbed change authorized |
-| AX1 | Under assumed future MTP-style routing quality, what capacity/TPOT envelope does predictive offload enable? | Ready | Protocol and sweep frozen; reuses H1/H4/H5 evidence |
-| AX2 | What bandwidth, latency, reliability, amplification, and granularity bounds define viable regions? | Designed | Begins only after AX1 reproduces H4/H5 anchors |
-| AX3 | What HBM and rolling-SRAM organization suits a three-tier predictive hierarchy? | Designed | Long-/short-horizon control and global staging semantics frozen |
+| AX1 | Under assumed future MTP-style routing quality, what capacity/TPOT envelope does predictive offload enable? | Projected region exists; review pending | At measured PCIe and assumed C=99%, A=1.5×, wave-local P99 improves 34–39% versus reactive offload; FCFS queue tails are materially worse |
+| AX2 | What bandwidth, latency, reliability, amplification, and granularity bounds define viable regions? | Complete; review pending | K=16, A=1× needs 71.3/22.8/11.6/8.2 GB/s at Δ=1/3/6/9; reliability remains orthogonal |
+| AX3 | What HBM and rolling-SRAM organization suits a three-tier predictive hierarchy? | Physical staging envelope complete; review pending | Top-8 whole-expert double buffering needs 192 MiB at A=1× and 384 MiB at A=2×; no SRAM execution speedup is claimed |
+| AX4 | Can deadline-controlled expert erasure bound low-batch TPOT while retaining a plausible routed-mass/quality contract? | Supported analytically under explicit assumptions; review pending | K=8, 256 GB/s, C=99%, A=1.5× passes with 1/8 experts resident, 11.25 ms bounded TPOT, zero full fallback, and <1% degraded waves; measured PCIe fails |
 
 ## Immediate run checklist
 
@@ -122,11 +123,29 @@ training.
       safety without claiming speedup over all-HBM execution.
 - [x] Define AX2 inverse requirements and AX3 rolling three-tier SRAM
       semantics.
-- [ ] Implement AX1 by extending the existing H4/H5 replay.
-- [ ] Reproduce the measured H4/H5 anchors before interpreting synthetic
+- [x] Implement AX1 by extending the existing H4/H5 replay.
+- [x] Reproduce the measured H4/H5 anchors before interpreting synthetic
       future-router points.
-- [ ] Generate and review the capacity–P99 Pareto frontier before enabling
-      AX2.
+- [x] Generate the capacity–P99 Pareto frontier and execute the factorized AX2
+      inverse-bound and AX3 rolling-SRAM sweeps.
+- [x] Generate the three principal PDF/PNG figures and inspect them
+      programmatically.
+- [ ] Researcher reviews the AX figures and selects one representative
+      architecture point, or closes the track without live calibration.
+- [x] Freeze AX4's hard commit deadline, normalized routed-mass definitions,
+      null/renormalized/shared-residual policies, and perturbation bounds.
+- [x] Freeze the analysis-only weighted-route replay and mass-priority oracle
+      without authorizing model training or inference collection.
+- [x] Define low-batch bounded TPOT/tokens-s projections and clearly label
+      top-1/top-2/large-model geometry as sensitivity rather than evidence.
+- [x] Freeze the deadline-elastic HW proposal: always-resident fallback,
+      optional refinements, commit bitmap, deadline-aware DMA, traffic
+      isolation, and degradation telemetry.
+- [x] Implement AX4 and first verify the selected-weight execution semantics.
+- [x] Replay the retained trace, generate the three principal figures, and
+      apply the plausible-degradation-contract gate before any training work.
+- [ ] Researcher reviews the AX4 figures and accepts, narrows, or rejects the
+      erasure-robustness target before any training or new-model work.
 
 Full plan: [docs/NEXT_EXPERIMENTS.md](docs/NEXT_EXPERIMENTS.md).
 Prior result: [docs/H4_RESULTS.md](docs/H4_RESULTS.md).
@@ -136,9 +155,12 @@ Latest empirical result: [docs/C0_RESULTS.md](docs/C0_RESULTS.md).
 
 ## Evidence policy
 
-For empirical hypotheses, `Ready` means code and protocol exist. For the AX
-analysis track, `Ready` means the assumption contract, config, retained inputs,
-and output semantics are frozen and implementation can begin. It never means
-that an architecture is supported. Only immutable output under
-`artifacts/runs/<run-id>/analysis/` can establish a measured or projected
-result.
+For empirical hypotheses, `Ready` means code and protocol exist. AX results
+are explicitly projected: they combine measured calibration, trace-derived
+demand, assumed predictor quality, and hypothetical hardware. The canonical
+tables, report, and figures are under
+`artifacts/runs/h1-standard-small/analysis/architecture/`; none is a measured
+end-to-end speedup. AX4's canonical result is under
+`artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/`. Its gate
+pass identifies a future training contract; it does not mean current OLMoE
+tolerates missing experts.

@@ -44,14 +44,32 @@ frozen 5-point gate. The structured trajectory is already present in Base and
 largely preserved by post-training for this lineage. See
 [docs/C0_RESULTS.md](docs/C0_RESULTS.md).
 
-The active work is now an explicitly assumption-driven architecture
-exploration. It treats a future MTP-style routing gate with swept complete-set
+The assumption-driven AX1–AX3 architecture exploration is now complete and
+awaits human figure review. It treats a future MTP-style routing gate with swept complete-set
 coverage and false-positive amplification as a workload/software contract,
 then derives the host/pooled-memory, HBM, and software-managed SRAM capacities,
 bandwidths, lookaheads, and transfer granularities required for useful
 hierarchical execution. The goal is quantitative bounds and co-design regimes,
-not wall-clock speedup on current OLMoE or the current GPU. See
-[docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md](docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md).
+not wall-clock speedup on current OLMoE or the current GPU. At the measured
+PCIe anchor, assumed C=99%/A=1.5× prediction improves the wave-local P99
+projection by 34–39% versus reactive offload, but FCFS queue replay remains
+much worse and all offload points remain slower than all-resident execution.
+See the [protocol](docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md) and canonical
+[AX report](artifacts/runs/h1-standard-small/analysis/architecture/REPORT.md).
+
+AX4, deadline-bounded graceful expert degradation, is now complete pending
+human figure review.
+Instead of waiting for every cold expert, execution commits at a fixed layer
+deadline and uses an always-resident shared/identity/null path for missing
+contributions. This can make TPOT independent of transfer completion while
+moving prediction failures into an explicit missing-routed-mass and quality
+contract. The formal analytical gate passes only in a high-bandwidth,
+mass-priority regime: K=8 at 256 GB/s keeps 1/8 of experts resident, bounds
+TPOT at 11.25 ms, and degrades fewer than 1% of waves. Measured PCIe fails at
+every capacity with 81–100% P99 missing mass. This is an architecture/training
+target, not evidence that current OLMoE preserves quality under erasure. See
+the [protocol](docs/DEADLINE_DEGRADATION_PROTOCOL.md) and
+[AX4 report](artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/REPORT.md).
 
 The active experiment queue, insight-mining questions, and visualization
 deliverables are in
@@ -242,6 +260,21 @@ H6 reuses the same 96/32 split, routes, projected features, transition tables,
 and fixed linear heads. Prediction can admit only an actually demanded miss;
 it never triggers candidate-only prefetch. No inference, training, model
 download, or library modification occurs.
+
+Run the assumption-driven AX1–AX3 architecture analysis and three principal
+figures:
+
+```bash
+uv run ep-predict analyze-architecture \
+  --config configs/experiment/ax-future-predictor-architecture.toml
+
+uv run ep-predict plot-architecture \
+  --config configs/experiment/ax-future-predictor-architecture.toml
+```
+
+This reuses the retained H1 decode trace and H4 measurement. It performs no
+inference or training. Results are trace-calibrated projections with explicit
+measured, trace-derived, assumed-predictor, and hypothetical-hardware labels.
 
 Run the matched Base–Instruct C0 endpoint comparison:
 

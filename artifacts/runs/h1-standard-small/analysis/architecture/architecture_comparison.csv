@@ -1,0 +1,6 @@
+architecture,hbm_expert_gib,sram_mib,predictor_profile,modeled_p99_tpot_ms,evidence,comparison_semantics
+two_tier_reactive_host_hbm,3.0,0,none,66.83190458296085,measured_anchor_plus_trace_derived_model,P99 analytical comparison; three-tier conservatively sums separate upstream and staging P99 without crediting SRAM compute benefit
+two_tier_predictive_host_hbm,3.0,0,C99_A1.5,43.26997940671475,assumed_predictor_trace_calibrated_projection,P99 analytical comparison; three-tier conservatively sums separate upstream and staging P99 without crediting SRAM compute benefit
+three_tier_predictive_host_hbm_sram,3.0,512,C99_A1.5_both_tiers,43.77729588671475,assumed_predictor_trace_calibrated_upstream_plus_hypothetical_sram_staging,P99 analytical comparison; three-tier conservatively sums separate upstream and staging P99 without crediting SRAM compute benefit
+two_tier_oracle_host_hbm,3.0,0,C1_A1,31.739753167619654,oracle_trace_calibrated_projection,P99 analytical comparison; three-tier conservatively sums separate upstream and staging P99 without crediting SRAM compute benefit
+all_resident_hbm_reference,12.0,0,not_applicable,10.228975772857666,measured_current_model_reference,P99 analytical comparison; three-tier conservatively sums separate upstream and staging P99 without crediting SRAM compute benefit

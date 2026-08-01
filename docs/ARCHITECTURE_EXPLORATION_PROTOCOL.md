@@ -1,10 +1,17 @@
 # Predictive expert-memory architecture exploration
 
 **Track:** AX — assumption-driven workload/software/hardware co-design  
-**Status:** ready; protocol and sweep frozen, implementation not yet run  
+**Status:** AX1–AX3 executed; human figure review pending
 **Primary input:** retained OLMoE decode traces and H4 transfer calibration  
 **New inference or model training:** none  
 **Primary config:** `configs/experiment/ax-future-predictor-architecture.toml`
+
+**Canonical result:**
+`artifacts/runs/h1-standard-small/analysis/architecture/REPORT.md`
+
+**Follow-on protocol:** AX4 deadline-bounded graceful degradation is complete
+pending human review; see `docs/DEADLINE_DEGRADATION_PROTOCOL.md`. It relaxes
+exact expert-set execution and does not alter the completed AX1–AX3 results.
 
 ## Purpose
 
@@ -261,4 +268,3 @@ decisive products are quantitative bounds and regime classifications.
 4. Add AX3 using the same event model and a rolling staging-capacity state.
 5. Synthesize architectural requirements and only then select any physical
    validation point.
-

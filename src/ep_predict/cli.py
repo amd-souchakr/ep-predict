@@ -246,6 +246,54 @@ def _plot_h6(args: argparse.Namespace) -> int:
     return 0
 
 
+def _analyze_architecture(args: argparse.Namespace) -> int:
+    from ep_predict.analysis.architecture import analyze_architecture
+
+    summary = analyze_architecture(load_toml(args.config))
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+def _plot_architecture(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.architecture import plot_architecture
+
+    manifest = plot_architecture(
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
+def _analyze_deadline_degradation(args: argparse.Namespace) -> int:
+    from ep_predict.analysis.degradation import analyze_deadline_degradation
+
+    summary = analyze_deadline_degradation(load_toml(args.config))
+    print(
+        json.dumps(
+            {
+                "formal_gate_passed": summary["formal_gate_passed"],
+                "oracle_stop_triggered": summary["oracle_stop_triggered"],
+                "headline_fcfs_candidate": summary["headline_fcfs_candidate"],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
+def _plot_deadline_degradation(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.degradation import plot_deadline_degradation
+
+    manifest = plot_deadline_degradation(
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
 def _audit_artifacts(args: argparse.Namespace) -> int:
     from ep_predict.artifacts import audit_artifacts
 
@@ -454,6 +502,36 @@ def build_parser() -> argparse.ArgumentParser:
     h6_plot_parser.add_argument("--config", required=True, type=Path)
     h6_plot_parser.add_argument("--output", type=Path)
     h6_plot_parser.set_defaults(function=_plot_h6)
+
+    architecture_parser = subparsers.add_parser(
+        "analyze-architecture",
+        help="run the AX1-AX3 trace-calibrated architecture exploration",
+    )
+    architecture_parser.add_argument("--config", required=True, type=Path)
+    architecture_parser.set_defaults(function=_analyze_architecture)
+
+    architecture_plot_parser = subparsers.add_parser(
+        "plot-architecture",
+        help="plot the AX profitability, Pareto, and inverse-design figures",
+    )
+    architecture_plot_parser.add_argument("--config", required=True, type=Path)
+    architecture_plot_parser.add_argument("--output", type=Path)
+    architecture_plot_parser.set_defaults(function=_plot_architecture)
+
+    degradation_parser = subparsers.add_parser(
+        "analyze-deadline-degradation",
+        help="run the AX4 weighted hard-deadline expert-erasure replay",
+    )
+    degradation_parser.add_argument("--config", required=True, type=Path)
+    degradation_parser.set_defaults(function=_analyze_deadline_degradation)
+
+    degradation_plot_parser = subparsers.add_parser(
+        "plot-deadline-degradation",
+        help="plot the AX4 latency-quality, capacity, and hardware figures",
+    )
+    degradation_plot_parser.add_argument("--config", required=True, type=Path)
+    degradation_plot_parser.add_argument("--output", type=Path)
+    degradation_plot_parser.set_defaults(function=_plot_deadline_degradation)
 
     audit_parser = subparsers.add_parser(
         "audit-artifacts",

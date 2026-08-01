@@ -1,8 +1,8 @@
 # Next experiments: first-order co-design and predictable routing
 
 **Updated:** 2026-08-01  
-**Current next action:** implement AX1, the frozen assumption-driven
-future-predictor architecture envelope; no new inference or training
+**Current next action:** review AX4's three figures and decide whether its
+high-bandwidth erasure contract warrants a later permission-gated training test
 **Operating rule:** use the cheapest existing artifacts first; model broad
 viability and expected benefit before improving timing fidelity or predictors.
 
@@ -25,9 +25,10 @@ OLMoE or the fixed H3 predictor achieves those points. The frozen design is in
 
 | ID | Question | New inference/training? | Status |
 |---|---|---:|---|
-| AX1 | What model-capacity and TPOT envelope can future predictive host/pooled-memory prefetch provide? | No | Ready; protocol/config frozen |
-| AX2 | How do bandwidth, latency, coverage, amplification, and transfer granularity divide the design space? | No | Designed; follows AX1 anchor reproduction |
-| AX3 | What local-HBM and rolling-SRAM capacities suit a multi-horizon three-tier hierarchy? | No | Designed; follows AX2 |
+| AX1 | What model-capacity and TPOT envelope can future predictive host/pooled-memory prefetch provide? | No | Complete; projected region exists, review pending |
+| AX2 | How do bandwidth, latency, coverage, amplification, and transfer granularity divide the design space? | No | Complete; inverse bounds and phase map generated |
+| AX3 | What local-HBM and rolling-SRAM capacities suit a multi-horizon three-tier hierarchy? | No | Complete; physical staging envelope generated |
+| AX4 | Can hard-deadline expert erasure produce a tight low-batch TPOT bound with a plausible quality-robustness contract? | No for completed replay; later training requires permission | Complete; analytical gate passes only in a high-bandwidth mass-priority regime, review pending |
 | H5-A | What prediction × hardware combinations create a first-order profitability window? | No | Complete; region exists |
 | H5-B | What minimum predictor quality is required at each capacity, bandwidth, and lookahead? | No; derived from H5-A | Complete |
 | H5-C | How much analytical oracle benefit do the existing transition and linear streams recover? | No retraining; reconstruct existing predictions | Complete; raw streams fail traffic gate |
@@ -41,6 +42,11 @@ Detailed timing validation, concurrent-copy microbenchmarks, MLPs, predictor
 training, new inference, and model downloads remain deferred. AX is an
 analytical architectural exploration, not an attempt to rescue the current H3
 or H6 policies.
+
+AX4 is the immediate exception to the exact-execution contract, not to the
+no-training rule. It asks whether late experts can be converted from a latency
+failure into bounded routed-mass erasure. Current traces establish the
+resource/erasure contract; they cannot establish model quality under erasure.
 
 C0 adds a within-family control, not a new placement mechanism. Base and
 Instruct preserve 89.7% of expert selections and differ by only +1.6 points on
@@ -101,6 +107,77 @@ Produce at most:
 The result is quantitative bounds and architecture regimes, not a measured
 wall-clock benefit. Live validation is optional and follows only after a
 representative point is selected.
+
+### Completed AX result and review gate
+
+The canonical result and three figures are under
+`artifacts/runs/h1-standard-small/analysis/architecture/`. The immediate
+decision is not another sweep:
+
+1. review the profitability phase map, memory–P99 Pareto, and inverse
+   bandwidth/lookahead curve;
+2. accept or reject the wave-local model as a useful architecture envelope in
+   light of the more pessimistic selected FCFS queue points;
+3. select at most one calibration point only if measuring live asynchronous
+   behavior would change the architectural conclusion;
+4. otherwise preserve C1 top-1/top-2 confirmation and H7 predictable-routing
+   training as future work requiring explicit permission.
+
+## AX4 — Deadline-bounded graceful degradation
+
+The frozen protocol is
+[DEADLINE_DEGRADATION_PROTOCOL.md](DEADLINE_DEGRADATION_PROTOCOL.md), with
+configuration in
+`configs/experiment/ax4-deadline-degradation.toml`.
+
+### Immediate question
+
+At batch-1 decode, can a hard layer commit deadline remove cold-transfer
+queueing from the critical path while keeping P99 missing normalized routed
+mass small enough to define a credible future training target?
+
+### Completed result
+
+OLMoE uses probabilities from a 64-way softmax after top-8 selection without
+renormalizing them. AX4 therefore reports normalized-within-top-8 mass as the
+architecture contract and preserves absolute missing router probability as a
+secondary result.
+
+The trace-ordered FCFS boundary gives:
+
+- measured 24.14 GB/s PCIe fails at K=8/16/32 with 100%/100%/81% P99 missing
+  normalized mass;
+- K=32 at 128 GB/s passes with 7.2% P99 missing mass;
+- K=8 and K=16 at 256 GB/s pass with effectively zero P99 wave mass;
+- K=16 at 128 GB/s is a sharp near miss at 20.4%;
+- K=32 at 256 GB/s delivers the mass but fails the 25% benefit threshold
+  because reactive offload is already too fast.
+
+The gate requires at least 50% expert offload, ≥25% P99 TPOT improvement over
+reactive exact offload, ≤1.5× all-local TPOT including fallback allowance,
+P99 missing mass ≤20%, and ≤1% full-fallback waves across multiple domains
+and layer bands. It passes at K=8, 256 GB/s, C=99%, A=1.5×, Δ=1, one-layer
+slack, and mass-priority ordering: 1.5 GiB is resident, 10.5 GiB is offloaded,
+bounded TPOT is 11.25 ms, and the same-hierarchy reactive comparison is
+16.41 ms. Only 0.93% of waves are degraded and none takes full fallback.
+Passing identifies a robustness target worth training for; it does not
+validate quality.
+
+Concrete frozen prediction: the 10.23 ms measured local anchor plus 10%
+fallback/commit allowance gives an 11.25 ms deadline cap and 88.9 batch-1
+tokens/s, versus the existing 66.83 ms and 15.0 tokens/s K=16 reactive P99
+projection. This is a 5.94× same-batch throughput projection. Whether that
+large resource gain is useful is decided by the resulting P99 missing routed
+mass, not assumed in advance.
+
+The aligned hardware proposal has an always-resident shared/identity/null
+plane, optional routed residual experts, fixed commit bitmaps, deadline-aware
+mass-per-byte scheduling, bounded speculative credits, and missing-mass
+telemetry. Transfers that miss commit cannot delay dispatch.
+
+The immediate next step is human review of the three figures and evidence
+boundary. Do not start erasure training, inference collection, or a new model
+without explicit permission.
 
 ## H5-A — Controlled prediction × hardware sweep
 

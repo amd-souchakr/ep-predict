@@ -1,0 +1,14 @@
+policy,quality_profile,capacity_experts_per_layer,fast_tier_expert_gib,offloaded_expert_gib,selected_lookahead,modeled_p99_tpot_ms,p99_slowdown_vs_all_resident,bandwidth_gbps,evidence
+reactive_offload,none,8,1.5,10.5,0,72.5970177025084,7.097193239536532,24.1354255944,measured_anchor_plus_trace_derived_model
+predictive_offload,predictive_C99_A1.5,8,1.5,10.5,9,48.03214713015045,4.695694681143205,24.1354255944,assumed_predictor_trace_calibrated_projection
+predictive_offload,predictive_C999_A1.25,8,1.5,10.5,6,44.19628121532883,4.320694681143206,24.1354255944,assumed_predictor_trace_calibrated_projection
+oracle_offload,C1_A1,8,1.5,10.5,6,35.263932445034214,3.4474548799505604,24.1354255944,oracle_trace_calibrated_projection
+reactive_offload,none,16,3.0,9.0,0,66.83190458296085,6.533587141764246,24.1354255944,measured_anchor_plus_trace_derived_model
+predictive_offload,predictive_C99_A1.5,16,3.0,9.0,9,43.26997940671475,4.23013802824038,24.1354255944,assumed_predictor_trace_calibrated_projection
+predictive_offload,predictive_C999_A1.25,16,3.0,9.0,6,38.07422446911378,3.7221932395365322,24.1354255944,assumed_predictor_trace_calibrated_projection
+oracle_offload,C1_A1,16,3.0,9.0,6,31.739753167619654,3.1029258326958113,24.1354255944,oracle_trace_calibrated_projection
+reactive_offload,none,32,6.0,6.0,0,50.584767609690495,4.945242684405992,24.1354255944,measured_anchor_plus_trace_derived_model
+predictive_offload,predictive_C99_A1.5,32,6.0,6.0,6,30.714179276877587,3.0026641922817827,24.1354255944,assumed_predictor_trace_calibrated_projection
+predictive_offload,predictive_C999_A1.25,32,6.0,6.0,6,26.331583674739605,2.5742150787579154,24.1354255944,assumed_predictor_trace_calibrated_projection
+oracle_offload,C1_A1,32,6.0,6.0,6,24.736651602050966,2.418292129275451,24.1354255944,oracle_trace_calibrated_projection
+all_resident_reference,not_applicable,64,12.0,0.0,0,10.228975772857666,1.0,inf,measured_current_model_reference

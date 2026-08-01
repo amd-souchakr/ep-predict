@@ -2,7 +2,7 @@
 
 ## Founding Research PRD
 
-**Status:** H1–H6 and C0 empirical pilot complete; AX architecture exploration ready
+**Status:** H1–H6 and C0 empirical pilot complete; AX1–AX4 analytical architecture track complete, AX4 human review pending
 **Primary environment:** Python 3.12, `uv`, PyTorch, Hugging Face Transformers, CUDA 12.4  
 **Initial hardware:** 1× NVIDIA GPU with 24 GB VRAM  
 **Planned scale-up environment:** 8× AMD MI355X-class GPUs with 288 GB HBM per GPU  
@@ -13,7 +13,7 @@ This durable synthesis is updated only at major evidence transitions; routine
 results remain in `EXPERIMENT_LOG.md` and the per-hypothesis reports.
 
 **Active architecture protocol:**
-[docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md](docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md)
+[docs/DEADLINE_DEGRADATION_PROTOCOL.md](docs/DEADLINE_DEGRADATION_PROTOCOL.md)
 
 ---
 
@@ -539,7 +539,79 @@ reactive CPU offload, not claimed faster than all-HBM execution.
 
 See
 [docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md](docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md)
-for the frozen evidence contract, sweep, figures, and interpretation rules.
+for the frozen evidence contract and interpretation rules. The canonical
+result is
+[artifacts/runs/h1-standard-small/analysis/architecture/REPORT.md](artifacts/runs/h1-standard-small/analysis/architecture/REPORT.md).
+
+The completed sweep finds:
+
+- at measured PCIe and assumed C=99%, A=1.5×, wave-local P99 improves
+  34–39% over reactive offload at K=8/16/32, while remaining 3.0–4.7× slower
+  than the all-resident measured reference;
+- the K=16, A=1× mean bandwidth bound falls from 71.3 GB/s at Δ=1 to
+  22.8/11.6/8.2 GB/s at Δ=3/6/9;
+- selected FCFS queue replay is materially worse than the wave-local envelope,
+  so mean headroom is necessary but not tail-sufficient;
+- top-8 whole-expert SRAM staging needs a 192 MiB double buffer at A=1× and
+  384 MiB at A=2×, making staging capacity/pollution a first-order constraint.
+
+### AX4 follow-on: deadline-elastic expert execution
+
+AX4 relaxes exact expert-set execution. At a fixed layer deadline, the runtime
+commits every available routed contribution and substitutes, renormalizes, or
+omits unavailable contributions. Late transfers cannot stall the token.
+
+For normalized selected weights \(a_i\), missing routed mass is
+
+\[
+m_{t,l}=1-\sum_{i\in A_{t,l}}a_i.
+\]
+
+This changes the critical resource contract:
+
+- TPOT is bounded by reserved local compute, fallback, merging, and scheduler
+  work rather than cold-transfer completion;
+- prediction affects missing mass, fallback load, traffic, and quality rather
+  than the committed latency;
+- complete-set coverage is replaced by P99 missing mass and full-fallback
+  incidence;
+- importance-per-byte admission becomes more relevant than expert-ID recall.
+
+The preferred future workload form is an always-resident shared expert plus
+optional routed residual experts. Its per-layer degradation is bounded by the
+missing weighted residual contribution. The immediate retained-trace replay
+can quantify that normalized bound and the TPOT/capacity Pareto, but not loss
+or generation quality. Availability-conditioned training remains deferred
+until the analytical contract passes and requires explicit permission.
+
+The first quantitative prediction is a current-testbed calibration, not a
+quality claim: 10.23 ms local decode plus a 10% fallback/commit allowance
+implies an 11.25 ms deadline cap (88.9 batch-1 tokens/s), compared with the
+66.83 ms and 15.0 tokens/s K=16 reactive-offload P99 projection—a 5.94×
+same-batch throughput projection. For a future 20 ms bounded step, ideal
+synchronous throughput is 50/100/200 tokens/s at batch 1/2/4. AX4 determines
+the missing-mass price paid for those bounds.
+
+AX4 now passes its formal analytical gate, but only in a high-bandwidth,
+mass-priority regime. The strongest capacity point keeps K=8 of 64 experts per
+layer resident at 256 GB/s with C=99%, A=1.5×, Δ=1, and one layer interval of
+commit slack. Its bounded TPOT is 11.25 ms versus 16.41 ms for reactive exact
+offload on the same hierarchy; 0.93% of waves have any missing mass, P99 wave
+missing mass is effectively zero, and full fallback is zero. K=32 at 128 GB/s
+also passes with 7.2% P99 missing mass. Measured PCIe fails at every capacity
+with 81–100% P99 missing mass. K=16 at 128 GB/s is a useful near-boundary point
+at 20.4%.
+
+The selected weights require a semantic caveat: current OLMoE softmaxes over
+all 64 experts, selects eight, and does not renormalize them. The selected
+probabilities sum to 0.406 on average. Normalized-within-top-8 missing mass is
+therefore a future architecture/training contract, not current OLMoE's exact
+execution scale.
+
+See
+[docs/DEADLINE_DEGRADATION_PROTOCOL.md](docs/DEADLINE_DEGRADATION_PROTOCOL.md)
+for definitions, gates, low-batch/large-model projections, and the
+deadline-elastic hardware proposal.
 
 ---
 
@@ -1866,8 +1938,37 @@ Exit condition:
 - at least one concrete architecture configuration or an empty feasible region
   is identified for each hierarchy.
 
-This milestone is the active focus. It does not require model training, new
-inference, or a live asynchronous implementation.
+This milestone is complete. It required no model
+training, new inference, or live asynchronous implementation.
+
+---
+
+## Milestone 5B: Deadline-bounded graceful expert degradation
+
+Deliverables:
+
+- weighted deadline replay with zero post-commit transfer wait;
+- P50/P95/P99 missing routed mass and full-fallback incidence;
+- bounded TPOT and low-batch throughput projections;
+- normalized null, renormalization, and shared-residual perturbation bounds;
+- capacity–throughput–degradation Pareto for current and labeled large sparse
+  geometries;
+- deadline-elastic fallback/refinement HW architecture and telemetry contract.
+
+Exit condition:
+
+- at least one configuration with at least half the experts offloaded improves
+  P99 TPOT by 25% over reactive exact offload;
+- bounded TPOT is at most 1.5× the all-local anchor including fallback;
+- P99 missing mass is at most 20% and full-fallback waves at most 1%;
+- the regime repeats across at least two domains and two layer bands;
+- every quality statement remains an explicit training target, not an
+  empirical claim.
+
+This milestone is complete and used existing traces only. The exit gate passes
+under the explicit assumed-predictor, assumed-robustness, and hypothetical
+high-bandwidth hardware contract. Human review remains pending, and no
+language-quality claim follows from the pass.
 
 ---
 
