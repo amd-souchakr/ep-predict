@@ -116,9 +116,9 @@ The immutable run manifest and metrics remain the source of truth.
 - Figures: two PDF/450-DPI PNG figures show lookahead behavior and primary
   domain consistency under `analysis/h3/figures`; input/output hashes are in
   `figure_manifest.json`.
-- Human visual review: pending.
-- One next action: after figure review, use the simpler H2 transition policy in
-  the minimum H4 hardware-feasibility study.
+- Human visual review: completed 2026-08-01. The formal H3 failure stands; the
+  extended scan below narrows, but does not replace, that decision.
+- One next action: run the minimum oracle-first H4 hardware-feasibility study.
 
 ### `h23-extended-horizon` — 2026-08-01
 
@@ -146,6 +146,136 @@ The immutable run manifest and metrics remain the source of truth.
   without MLP or predictor tuning.
 - Figures: full-horizon curve and triangular source-target gain heatmap
   generated as PDF/450-DPI PNG with hashed inputs.
-- Human visual review: pending.
-- One next action: review the extended figures, then preregister the minimum H4
+- Human visual review: completed 2026-08-01. The researcher accepted the
+  changing-layer-count caveat and the early-versus-late source-layer regime.
+- Protocol lesson: keep one simple early gate, then prefer cheap broad post-hoc
+  analysis over a complex preregistered hypothesis tree. Treat the current
+  held-out split as discovery data for any newly found hybrid policy.
+- One next action: preregister the minimum H4 oracle
   issue-point/bandwidth/capacity feasibility scan.
+
+### `h4-oracle` — 2026-08-01
+
+- Hypothesis: H4 — perfect future knowledge can move exact 12 MiB experts
+  early enough to eliminate a meaningful fraction of cold-expert decode stall.
+- Config: `configs/experiment/h4-oracle.toml`; preregistration in
+  `docs/H4_PROTOCOL.md`.
+- Calibration: four hook-free cached-token chains produced 80 decode-forward
+  samples. Median forward time was 10.229 ms, or a 0.639 ms effective interval
+  across 16 MoE layers. The exact 12 MiB pinned-host copy median was 0.524 ms
+  and the fitted effective bandwidth was 24.14 GB/s.
+- Trace replay: reused the immutable 128-request H1 trace; no routing
+  collection, model modification, inference-library modification, or timing
+  hook. Scanned K=8/16/32, Δ=1/2/3/6/9/12/15, and 0.5×/1×/2× measured
+  bandwidth with one serialized copy engine.
+- Formal result: `PILOT_DOES_NOT_SUPPORT`. At measured bandwidth and K=16,
+  the best frozen short horizon was Δ=3: 32.8% deadline-feasible cold bytes
+  and 38.9% oracle stall reduction, below both 50% thresholds. 74.5% of
+  eligible synchronous waves still stalled.
+- Miss diagnosis: at K=16, Δ=3, only 832/360,247 cold occurrences were
+  compulsory first uses; 359,415 were capacity-eviction misses. Repeated
+  movement, not startup, dominates.
+- Post-gate scan: the physical mechanism is not universally impossible.
+  K=32, Δ=3 reaches 55.5% timely cold bytes and 61.8% stall reduction;
+  K=16 reaches 61.8% at Δ=9; and K=16, Δ=1 reaches 58.1% stall reduction at
+  2× bandwidth. These descriptive cells do not rewrite the formal gate.
+- Decision: do not overlay, retrain, or tune transition/linear policies.
+  First complete human figure review. If the K=32 boundary remains relevant,
+  validate only that cell with a minimal concurrent copy/compute mechanism
+  check.
+- Figures: one oracle bandwidth/lookahead/capacity heatmap and one
+  measured-bandwidth stall-reduction curve, as PDF and 450-DPI PNG with
+  hashed inputs.
+- Human visual review: completed 2026-08-01. The formal result stands; the
+  researcher accepted first-order modeling for subsequent co-design window
+  analysis rather than requiring timing-fidelity work first.
+- Post-hoc synthesis: a co-design regime map combines cold-service headroom
+  \(\Delta T_{\text{layer}}/(\bar N_{\text{cold}}T_{\text{copy}})\) with
+  complete top-8 prediction coverage. It separates both-limited,
+  transfer-limited, prediction-limited, and candidate regions. K=32, Δ=3–6 is
+  the only region where both existing predictors exceed 50% complete coverage
+  and the trace-driven oracle passes. This does not change the formal H4 gate
+  or establish profitability.
+
+### Next-experiment plan update — 2026-08-01
+
+- Decision: performance-model fidelity is not the current research focus.
+  Advance with first-order analytical viability and profitability windows;
+  defer concurrent-overlap validation until a policy region justifies it.
+- H5-A: sweep assumed complete-route coverage, 1×/2×/4× candidate
+  amplification, K=8/16/32, Δ=1–15, and 0.25×–4× normalized cold bandwidth
+  using existing trace-derived demand and reuse.
+- H5-B: invert the sweep to report minimum complete coverage and maximum
+  amplification required for useful benefit.
+- Proposed screen to freeze before execution: ≥25% modeled stall reduction,
+  ≥50% oracle recovery, and ≤2× predicted/useful transferred bytes.
+- H5-C: reconstruct existing transition and linear candidates at four
+  representative boundary/control cells; report cold-set coverage, false/late
+  bytes, expected stall reduction, and oracle recovery without retraining.
+- Visualization: one categorical profitability phase diagram and one
+  inverse-requirement curve; actual policies are overlaid or summarized in a
+  compact actual-versus-required table.
+- Insight mining: identify empty windows, boundary/crossover locations,
+  capacity–bandwidth–lookahead substitution, active constraints, and durable
+  dimensionless quantities after the frozen gate.
+- Conditional later work: H6 mechanism competition, one small H7
+  predictable-routing training intervention with loss/load-balance controls,
+  and one C1 top-1/top-2 sparse-model confirmation before general claims.
+- Full plan: `docs/NEXT_EXPERIMENTS.md`.
+
+### `h5-first-order` — 2026-08-01
+
+- Hypothesis: H5 — predictor quality and cold-path resources jointly define an
+  analytically profitable region, and an existing policy may recover a useful
+  share of that region.
+- Config: `configs/experiment/h5-first-order.toml`; preregistration in
+  `docs/H5_PROTOCOL.md`.
+- Inputs: immutable H1 decode trace, H4 calibration, and existing H2/H3 split,
+  transition statistics, features, and fixed linear heads. No inference,
+  training, model change, or inference-library change.
+- Controlled result: 22,618/68,175 assumption cells pass the frozen ≥25%
+  modeled stall-reduction, ≥50% oracle-recovery, and ≤2× transfer-amplification
+  screen. Nonempty inverse requirements range from 25% to 50% complete
+  cold-set coverage.
+- Existing-policy result: none of eight representative held-out placements
+  passes. K=32 policies cover 67–81% of complete cold sets but require
+  6.3–6.7× transferred candidate bytes per useful cold byte. K=16, Δ=9
+  reaches only 28.9% transition and 42.4% linear complete cold-set coverage,
+  with 3.8× and 3.4× amplification.
+- Interpretation: H5 supports a first-order co-design opportunity but rejects
+  treating the raw K-wide prediction as a transfer list. The limiting
+  mechanism is selective admission, not more predictor capacity.
+- Figures: categorical profitability diagram and inverse prediction
+  requirement curve generated as PDF and 450-DPI PNG with hashed inputs under
+  `analysis/h5/figures`.
+- Human visual review: pending.
+- One next action: after review, compare one simple prediction-guided
+  admission/residency score against reactive and static/domain baselines on
+  the same artifacts. Keep H7, C1, predictor tuning, and new inference
+  deferred.
+
+### `h5-admission` — 2026-08-01
+
+- Hypothesis: post-hoc H5 mechanism diagnosis; formal H5 gate unchanged.
+- Question: do existing scores separate useful cold experts from useless
+  nonresident candidates enough to reach A≤2× without collapsing complete
+  cold-set coverage?
+- Config/protocol: `configs/experiment/h5-admission.toml` and
+  `docs/H5_ADMISSION_PROTOCOL.md`.
+- Inputs: unchanged transition tables, fixed linear heads, 96/32 split, and
+  K=32 LRU residency. All 64 target expert IDs are scored; no inference or
+  retraining.
+- Separation: useful-versus-useless AUROC is 0.850/0.803 for transition and
+  0.883/0.861 for linear at Δ=3/9.
+- Boundary: at A≤2×, linear preserves only 28.4%/22.8% complete cold-set
+  coverage. Reaching C≥50% requires A=3.0×/3.3×. Transition requires
+  A=4.0×/5.0× and has no 2× crossing at Δ=9.
+- Decision: the ranking contains substantial signal but one scalar threshold
+  is insufficient. This is evidence for a targeted cost-sensitive admission
+  calibrator/head, not a generic future-expert MLP accuracy sweep.
+- Figures: admission frontier and useful/useless score distributions generated
+  as PDF and 450-DPI PNG with hashed inputs under
+  `analysis/h5/admission/figures`.
+- Human visual review: pending.
+- One next action: after review, test one per-head calibrated or very small
+  cost-sensitive admission model on the existing artifacts.

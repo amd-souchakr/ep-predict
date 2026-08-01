@@ -5,9 +5,10 @@ decision path without adding a tracking system or notebook ceremony.
 
 ## 1. Freeze
 
-- State the hypothesis, scope, metrics, thresholds, and stop/go rule.
+- State one simple decisive question, one primary scope, and one stop/go rule.
 - Pin model, dataset, generation, and analysis configurations.
-- Separate primary, secondary, and exploratory analyses.
+- Keep cheap descriptive and post-hoc analysis non-gating. Do not preregister
+  every possible layer, domain, or hardware interaction.
 
 ## 2. Validate
 
@@ -26,11 +27,25 @@ decision path without adding a tracking system or notebook ceremony.
 - Generate machine-readable tables before figures.
 - Keep layer, phase, domain, and top-k semantics explicit.
 - Apply the frozen decision gate before exploratory interpretation.
+- Then run cheap broad scans over structure already present in the artifacts,
+  such as all source-target layer pairs. These scans may narrow the conclusion
+  but never rewrite the original gate.
+- Mine the result for boundary locations, empty windows, crossover points,
+  dimensionless ratios, and which constraint is active. Keep this cheap and
+  post-hoc; do not turn every observation into a new preregistered branch.
+- When studying co-design, solve the inverse requirement as well as the forward
+  result: report what predictor quality or hardware headroom would be needed
+  to change the decision.
+- Add request-level uncertainty only for a confirmation run or a genuinely
+  borderline decision; do not bootstrap every pilot table.
 
 ## 5. Visualize
 
-- Generate only one to three decision-relevant figures from the immutable
-  tables or traces.
+- Prefer one simple headline curve and, when heterogeneity matters, one
+  layer/domain/regime heatmap. Add a third figure only if it changes a decision.
+- For assumption-driven co-design work, prefer one categorical phase diagram
+  and one inverse-design curve. Clearly distinguish candidate, analytically
+  profitable, and experimentally demonstrated regions.
 - Use checked-in scripts, not manual plotting or a notebook as the source of
   truth.
 - Save vector PDF and high-resolution PNG plus a manifest that hashes the
@@ -59,6 +74,8 @@ result. Post-hoc findings must remain explicitly exploratory.
 - Update `STATUS.md` with supported, mixed, rejected, or inconclusive.
 - Link the metric report, figures, and review note.
 - Advance only after the human has reviewed the result.
+- Once a held-out set drives post-hoc policy discovery, treat it as development
+  data. Use fresh requests only if the physical gate justifies confirmation.
 
 For a fast prototype, a Markdown checklist in the generated figure directory
 is sufficient evidence of review. Do not introduce an experiment-tracking

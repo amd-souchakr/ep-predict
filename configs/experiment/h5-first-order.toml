@@ -1,0 +1,44 @@
+# Frozen first-order H5 analysis. Reuses immutable H1/H3 artifacts and the H4
+# calibration; performs no inference, training, or timing measurement.
+output_dir = "artifacts/runs/h1-standard-small/analysis/h5"
+h1_run = "artifacts/runs/h1-standard-small"
+h3_run = "artifacts/runs/h3-standard-small"
+h3_analysis = "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon"
+h4_measurement = "artifacts/runs/h1-standard-small/analysis/h4/measurement.json"
+
+[sweep]
+phase = "decode"
+capacities = [8, 16, 32]
+lookaheads = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+bandwidth_scales = [0.25, 0.5, 1.0, 2.0, 4.0]
+candidate_amplifications = [1.0, 2.0, 4.0]
+complete_coverage_step = 0.01
+
+[decision_gate]
+min_modeled_stall_reduction = 0.25
+min_oracle_recovery = 0.50
+max_predicted_to_useful_bytes = 2.0
+
+[[policy_cells]]
+name = "short_physics_control"
+capacity = 32
+lookahead = 1
+bandwidth_scale = 1.0
+
+[[policy_cells]]
+name = "short_boundary"
+capacity = 32
+lookahead = 3
+bandwidth_scale = 1.0
+
+[[policy_cells]]
+name = "long_linear"
+capacity = 32
+lookahead = 9
+bandwidth_scale = 1.0
+
+[[policy_cells]]
+name = "prediction_control"
+capacity = 16
+lookahead = 9
+bandwidth_scale = 1.0

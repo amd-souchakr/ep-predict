@@ -14,9 +14,11 @@ sidecar did not materially and consistently beat the H2 transition table:
 | Layer-domain scopes with positive complete-token gain | ≥ 75% | 75.0% (45/60) | yes |
 | Domains positive on both metrics | ≥ 3/4 | 2/4 | no |
 
-The correct prototype decision is to stop learned-predictor work for this
-checkpoint and carry the simpler transition policy into H4. The result does
-not say that router-input hidden states contain no additional information:
+The correct formal decision is to stop predictor optimization and reject a
+global linear replacement for this checkpoint. H4 remains oracle-first; the
+subsequent all-layer scan justifies retaining both existing candidate streams
+for later replay. The result does not say that router-input hidden states
+contain no additional information:
 they improve strict complete-route coverage in some regimes. It says that this
 fixed linear sidecar does not provide a broad enough improvement to justify
 itself under the frozen gate.
@@ -114,10 +116,9 @@ Three conclusions are justified:
    route transitions on this checkpoint. It misses the selection-gain and
    cross-domain consistency requirements and incurs about 10 points more
    candidate churn at the primary setting.
-3. The simplest next architectural test should therefore use transition
-   tables. H4 can ask whether even perfect or transition-guided lookahead has a
-   physically viable bandwidth/capacity/timing region without confounding the
-   answer with predictor tuning.
+3. The simplest next architectural test is an oracle-first H4 feasibility
+   scan. Only after a viable region appears should it overlay the existing
+   transition and linear streams, without predictor tuning.
 
 Do not start an MLP, combine route and hidden features, tune projection size,
 or specialize heads by domain now. Those are explicitly outside this gate and
@@ -147,9 +148,9 @@ Figures are under
 - `fig2_h3_domain_consistency`: primary-gate gains by domain.
 
 The figure inputs and outputs are hashed in `figure_manifest.json`.
-Human review is pending. After review, the recommended single next action is:
-run the minimum H4 hardware-feasibility study using the transition policy,
-without predictor optimization.
+Human review completed on 2026-08-01. The formal H3 failure stands. The single
+next action is the minimum oracle-first H4 hardware-feasibility study, without
+predictor optimization.
 
 ## Post-hoc extended-horizon qualification
 

@@ -20,23 +20,73 @@ triggering more model complexity.
 
 ## Fast execution order
 
-The hypothesis numbers describe logical claims, not the most efficient work
-queue. After H1:
+The hypothesis numbers describe logical claims, not the work queue. Use the
+cheapest existing artifact first, but do not optimize a predictor before the
+physical mechanism survives:
 
-1. Run H2 with transition tables and conditional entropy; this is nearly free
-   once the trace exists.
-2. Build the minimum oracle feasibility calculation from exact expert bytes,
-   separately measured unhooked layer time, and a PCIe transfer curve. This
-   advances H4 early as a physical kill switch.
-3. Train a linear H3 predictor only if either conditional information is real
-   or oracle feasibility exists. Add an MLP only if the linear model leaves a
-   meaningful oracle gap.
-4. Replay learned policies for H5.
-5. Compare residency/replication/JIT roles for H6.
+1. Answer H1/H2 with routing traces.
+2. Try one fixed linear H3 sidecar when conditional information is clearly
+   present.
+3. Run cheap post-hoc structural scans, such as the full source-target matrix,
+   rather than adding early conditional gates or ablation studies.
+4. Run the minimum H4 oracle calculation from exact expert bytes, separately
+   measured unhooked layer timing, and a host-to-device transfer curve.
+5. Use a first-order normalized H5 sweep to map prediction-quality × hardware
+   profitability windows and solve for minimum predictor requirements.
+6. Place the existing transition and linear streams on that surface without
+   retraining.
+7. Compare residency/replication/JIT roles for H6 only after the analytical
+   policy screen is favorable.
+8. Consider routing-training intervention, sparse-model confirmation, or
+   timing-fidelity work only after those requirements are explicit.
 
-This resolves a tension in the research agenda: learned predictor work is
-listed before the oracle simulator, while the oracle-first gate correctly says
-not to optimize prediction for a physically impossible mechanism.
+For the current project, H4 and H5-A/B/C are complete. H5 found a controlled
+analytical window but rejected the unchanged K-wide candidate streams as
+transfer policies because they move 3.4–6.7× useful bytes. After human figure
+review, the next action is one cost-sensitive per-head calibrator or very small
+admission model on the same artifacts. The shared-threshold result already
+shows that 50% complete coverage costs about 3.0–3.3× for the linear scores.
+No new inference, generic MLP sweep, projection sweep, H7/C1 setup, or overlap
+microbenchmark comes first.
+
+## Simple gate, broad post-hoc view
+
+Preregister one narrow engineering decision, not a complicated hypothesis tree.
+After applying it unchanged, use inexpensive analysis of already collected data
+to find layer, domain, phase, horizon, and capacity regimes. Record those
+regimes as exploratory and use them to design the next physical experiment.
+
+This keeps early experiments fast while avoiding the mistake of filtering out
+useful structure merely because it was outside one primary aggregate.
+
+Once hardware parameters exist, future predictor gates should be evaluated only
+at issue points where bytes can plausibly arrive before demand. Coverage alone
+is an information result; deadline-feasible bytes and residual stalls are the
+architectural result.
+
+For early co-design exploration, collapse expert size, bandwidth, and
+lookahead into dimensionless cold-service pressure. The purpose is to expose
+boundaries and required predictor quality, not to forecast exact latency.
+
+## H5 first-order package
+
+Treat controlled assumption sweep, inverse design, and existing-policy
+placement as one hypothesis package:
+
+1. categorize assumption cells as physics-, prediction-, speculative-traffic-,
+   or jointly viable;
+2. solve for minimum complete coverage and maximum amplification;
+3. replay only the existing transition and linear streams at representative
+   boundary/control points.
+
+The default figures become one phase diagram and one inverse-requirement curve.
+Detailed plan: [NEXT_EXPERIMENTS.md](NEXT_EXPERIMENTS.md).
+
+Current result: a first-order region exists, but actual-policy placement shows
+that a broad candidate set is not an affordable movement set. H6 should test
+whether a context-aware admission layer can improve the observed
+amplification–complete-set frontier. A single shared standardized threshold
+has already been tested and is insufficient.
 
 ## Implementation boundary
 
@@ -86,6 +136,13 @@ change the formal gate.
 
 See `docs/EXPERIMENT_SOP.md` for the lean operating loop.
 
+The default visual pair is:
+
+1. a plain-language headline curve for the primary metric;
+2. a compact heatmap exposing layer/domain/regime heterogeneity.
+
+Do not add dashboards or experiment tracking services for this prototype.
+
 ## Evidence grades
 
 - **Smoke:** synthetic/random tiny model; tests instrumentation.
@@ -105,9 +162,10 @@ With a frozen model and a trained sidecar, the strongest direct claim is:
 > lightweight policy to anticipate expert demand and manage limited fast
 > residency or replication capacity.
 
-The stronger wording “models learn to manage their own expert skew” requires a
-later intervention phase that co-trains or fine-tunes routing/control behavior.
-That is outside this prototype and should not be inferred from sidecar results.
+The stronger wording “models learn to manage their own expert skew” requires
+the later H7 intervention phase that co-trains or fine-tunes routing/control
+behavior. H7 is conditional on a plausible H5 requirement and is outside the
+current hook-only evidence; it must not be inferred from sidecar results.
 
 The memory-hierarchy claim additionally requires a competitive win over moving
 activations to resident experts or simply provisioning more local capacity.

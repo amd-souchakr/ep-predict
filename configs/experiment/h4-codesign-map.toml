@@ -1,0 +1,19 @@
+# Post-hoc descriptive synthesis of immutable H2/H3 prediction metrics and H4
+# physical replay. This config cannot alter either formal gate.
+output_dir = "artifacts/runs/h1-standard-small/analysis/h4"
+
+[simulation]
+capacities = [8, 16, 32]
+lookaheads = [1, 2, 3, 6, 9, 12, 15]
+
+[decision_gate]
+bandwidth_scale = 1.0
+min_deadline_feasible_cold_fraction = 0.50
+min_oracle_stall_reduction = 0.50
+
+[codesign_map]
+prediction_summary = "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon/summary.csv"
+output_dir = "artifacts/runs/h1-standard-small/analysis/h4/codesign"
+policies = ["transition", "linear"]
+min_complete_route_coverage = 0.50
+physical_headroom_ratio = 1.0

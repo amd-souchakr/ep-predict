@@ -9,17 +9,38 @@ Follow a "tracer bullet" development approach that develops a narrow vertical sl
 The project advances one research gate at a time. H1 was mixed: one
 workload-agnostic static tier failed, while domain-conditioned demand was
 strong. H2 was pilot-supported: held-out layer-transition tables strongly beat
-per-layer marginal popularity. H3 did not support replacing that simple policy
-with a fixed linear hidden-state sidecar: selection coverage was essentially
-tied, complete-route gains were domain-dependent, and candidate churn rose.
-See [STATUS.md](STATUS.md), [docs/H3_PROTOCOL.md](docs/H3_PROTOCOL.md), and
-[docs/H3_RESULTS.md](docs/H3_RESULTS.md).
+per-layer marginal popularity. H3 did not support globally replacing that
+simple policy with a fixed linear hidden-state sidecar at the primary \(n+1\)
+gate. The post-hoc all-layer scan found a narrower use: early hidden states
+strongly improve long-range prediction, while late source layers favor
+transitions. H4 then rejected the preregistered \(K=16,\Delta=1\)–3
+whole-expert PCIe target: even a perfect oracle made only 32.8% of cold bytes
+timely and removed 38.9% of stall at the best primary point. A broader
+descriptive region exists with \(K=32,\Delta=3\), longer lead time, or twice
+the measured bandwidth.
+See [STATUS.md](STATUS.md), [docs/H4_PROTOCOL.md](docs/H4_PROTOCOL.md), and
+[docs/H4_RESULTS.md](docs/H4_RESULTS.md).
 
-The current evidence supports routing-transition-guided placement research for
-the pinned OLMoE checkpoint. It does not justify a learned sidecar for this
-checkpoint and does not establish transfer feasibility, latency improvement,
-or universal MoE behavior. After human review, the next gate is the minimum H4
-hardware-feasibility study using the simpler transition policy.
+The current evidence supports source-target-aware planning for the pinned
+OLMoE checkpoint: linear hidden-state candidates for early planning and
+transition candidates for late refinement. H4 now adds a physical boundary:
+the measured platform can hide whole experts only after enough residency,
+lead time, or bandwidth reduces transfer pressure. It still does not establish
+live copy/compute overlap, end-to-end latency improvement, or universal MoE
+behavior. H5 found a first-order profitable region, but the unchanged
+transition/linear streams transfer 3.4–6.7× useful cold bytes and do not pass
+the frozen policy screen. The next high-ROI question is selective
+admission/residency on the current traces, not predictor tuning or new routing
+collection. See [docs/H5_RESULTS.md](docs/H5_RESULTS.md).
+
+The active experiment queue, insight-mining questions, and visualization
+deliverables are in
+[docs/NEXT_EXPERIMENTS.md](docs/NEXT_EXPERIMENTS.md).
+
+The durable publication thesis, foundational principles, perspective shifts,
+and hard-earned lessons are curated separately in
+[docs/FOUNDATIONAL_INSIGHTS.md](docs/FOUNDATIONAL_INSIGHTS.md). Unlike the
+experiment log, that document changes only at major evidence transitions.
 
 ## Testbed
 
@@ -126,6 +147,62 @@ This trains the same fixed linear recipe for all 120 valid source-target pairs
 per phase; it performs no additional inference. See
 [docs/H23_EXTENDED_HORIZON_RESULTS.md](docs/H23_EXTENDED_HORIZON_RESULTS.md).
 
+Run the hook-free H4 calibration, oracle replay, and two figures:
+
+```bash
+uv run ep-predict measure-h4 \
+  --model-config configs/model/olmoe-1b-7b-instruct.toml \
+  --experiment-config configs/experiment/h4-oracle.toml
+
+uv run ep-predict analyze-h4 \
+  --run artifacts/runs/h1-standard-small \
+  --config configs/experiment/h4-oracle.toml
+
+uv run ep-predict plot-h4 \
+  --run artifacts/runs/h1-standard-small \
+  --config configs/experiment/h4-oracle.toml
+
+uv run ep-predict analyze-codesign-map \
+  --config configs/experiment/h4-codesign-map.toml
+
+uv run ep-predict plot-codesign-map \
+  --config configs/experiment/h4-codesign-map.toml
+```
+
+H4 installs no hooks and collects no new routing data. The timing run measures
+ordinary cached-token forwards and pinned host-to-device copies; the simulator
+then replays the existing decode trace.
+The final two commands create a post-hoc regime map combining cold-transfer
+headroom with complete-route prediction coverage; it does not alter H3 or H4.
+
+Run the analysis-only H5 requirements sweep, inverse design, existing-policy
+placement, and figures:
+
+```bash
+uv run ep-predict analyze-h5 \
+  --config configs/experiment/h5-first-order.toml
+
+uv run ep-predict plot-h5 \
+  --config configs/experiment/h5-first-order.toml
+```
+
+H5 performs no inference or training. It reconstructs held-out H2/H3
+candidates and charges nonresident false candidate bytes.
+
+Run the post-hoc H5 score-separation and admission-threshold analysis:
+
+```bash
+uv run ep-predict analyze-h5-admission \
+  --config configs/experiment/h5-admission.toml
+
+uv run ep-predict plot-h5-admission \
+  --config configs/experiment/h5-admission.toml
+```
+
+This scores all 64 expert IDs after K=32 resident filtering and tests whether
+the unchanged predictor confidence can reduce speculative traffic without
+retraining.
+
 The collector writes one compressed JSONL routing trace per request. H3 also
 writes one aligned numeric NPZ shard containing compact projected router
 inputs. Both are crash-safe and resumable at request granularity; no full
@@ -138,6 +215,12 @@ Research evidence uses the revision-pinned standard mixture described in
 Every major experiment ends with scripted visualization and a human review
 before the next hypothesis begins. See
 [docs/EXPERIMENT_SOP.md](docs/EXPERIMENT_SOP.md).
+
+The operating rule is deliberately lean: freeze one simple decision, apply it
+unchanged, then use cheap post-hoc scans of existing artifacts to discover
+regimes. Complex hypothesis trees, broad ablations, uncertainty on every cell,
+and confirmation workloads wait until a physical feasibility result justifies
+them.
 
 ## Invariants
 

@@ -1,0 +1,23 @@
+# Post-hoc H5 admission analysis. Uses frozen H2/H3 predictors and held-out
+# requests; performs no inference or retraining.
+output_dir = "artifacts/runs/h1-standard-small/analysis/h5/admission"
+h1_run = "artifacts/runs/h1-standard-small"
+h3_run = "artifacts/runs/h3-standard-small"
+h3_analysis = "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon"
+h5_analysis = "artifacts/runs/h1-standard-small/analysis/h5"
+
+[analysis]
+phase = "decode"
+resident_capacity = 32
+lookaheads = [3, 9]
+policies = ["transition", "linear"]
+score_histogram_bins = 80
+
+[analysis.threshold_sweep]
+start = -1.5
+stop = 6.0
+step = 0.05
+
+[screen]
+max_candidate_transfer_amplification = 2.0
+reference_complete_cold_set_coverage = 0.50

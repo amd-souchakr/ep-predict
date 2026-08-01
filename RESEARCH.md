@@ -8,6 +8,10 @@
 **Planned scale-up environment:** 8× AMD MI355X-class GPUs with 288 GB HBM per GPU  
 **Primary audience:** AI coding assistant, ML systems researcher, GPU performance modeling engineer, HW/SW/workload co-design architect
 
+**Curated publication insights:** [docs/FOUNDATIONAL_INSIGHTS.md](docs/FOUNDATIONAL_INSIGHTS.md)
+This durable synthesis is updated only at major evidence transitions; routine
+results remain in `EXPERIMENT_LOG.md` and the per-hypothesis reports.
+
 ---
 
 # 1. Executive Summary
@@ -379,9 +383,37 @@ Define:
 
 The learned policy should recover a material fraction of oracle benefit without excessive speculative traffic.
 
+H5 begins with a first-order requirements study rather than a higher-fidelity
+performance model:
+
+1. sweep assumed complete-route coverage, candidate amplification, capacity,
+   lookahead, and normalized cold bandwidth;
+2. solve the inverse problem for minimum predictor quality;
+3. place the existing transition and linear streams on that surface without
+   retraining.
+
+The detailed work queue and visualization plan are in
+[docs/NEXT_EXPERIMENTS.md](docs/NEXT_EXPERIMENTS.md).
+
 ### Failure interpretation
 
 Low oracle recovery means the predictor is not sufficiently useful even if oracle feasibility exists.
+
+### Current pilot result
+
+H5 found a controlled first-order profitability region but no profitable
+unchanged policy placement. At K=32 the existing policies cover 67–81% of
+complete cold sets, yet blindly transferring every nonresident candidate costs
+6.3–6.7× useful bytes. The immediate problem is selective admission, not
+additional prediction capacity. A post-hoc score sweep finds strong pairwise
+separation for the linear sidecar (AUROC 0.883/0.861 at Δ=3/9), but preserving
+50% complete cold-set coverage still requires about 3.0–3.3× amplification.
+The class-conditional score distributions have real but incomplete separation:
+linear JS divergence is 0.381/0.332 bits with 38.7/42.8% overlap. These are
+useful-demand versus unused scores among nonresident IDs, not globally hot
+versus cold expert distributions. The 7–8% useful-candidate base rate explains
+why good ranking does not automatically yield cheap admission.
+See [docs/H5_RESULTS.md](docs/H5_RESULTS.md).
 
 ---
 
@@ -397,6 +429,25 @@ Prediction may be most valuable for:
 - prioritizing transfer queues.
 
 This may remain true even if strict low-latency just-in-time prefetch fails.
+
+---
+
+## H7: Predictable routing can be encouraged without sacrificing model quality
+
+A later controlled intervention will test whether adding one
+trajectory-predictability objective can improve complete future-route coverage
+and modeled hardware benefit while preserving validation loss and marginal
+load balance.
+
+Current H1–H5 evidence is observational and cannot support this claim.
+
+---
+
+## C1: The trajectory result transfers to a more sparsely routed checkpoint
+
+Before making a general MoE claim, repeat the decisive trace and normalized
+co-design analysis on one newer top-1/top-2 checkpoint. This is a confirmation
+experiment, not a reason to broaden the current OLMoE prototype.
 
 ---
 
@@ -1496,12 +1547,14 @@ Use structured logging.
 
 Avoid notebooks as the only source of truth. Notebooks should call library code.
 
-After every major experiment, generate one to three decision-relevant figures
-from the immutable metric tables and pause for human visual review before
-advancing to the next hypothesis. The review must check units, aggregation,
-baselines, thresholds, outliers, regimes, and confounds, and record whether the
-visual evidence changes the interpretation. It must not retroactively change a
-preregistered decision rule. Save publication-quality PDF and high-resolution
+After every major experiment, prefer one plain-language headline curve and one
+compact regime heatmap from immutable metric tables, then pause for human
+review. Apply one simple preregistered gate unchanged; use cheap broad post-hoc
+analysis of existing artifacts to find layer, domain, horizon, and capacity
+regimes rather than preregistering a complex hypothesis tree. Post-hoc findings
+may narrow the interpretation but must not rewrite the gate. Add request-level
+uncertainty and fresh confirmation data only after a result is borderline or a
+physical feasibility gate justifies the extra work. Save PDF and high-resolution
 PNG plus a manifest of figure inputs.
 
 ---
@@ -1672,6 +1725,8 @@ Exit gate:
 
 Deliverables:
 
+- controlled prediction-quality × hardware-assumption sweep;
+- inverse minimum-predictor-quality curves;
 - learned-policy replay;
 - prefetch amplification;
 - residual stall distribution;
@@ -1680,7 +1735,9 @@ Deliverables:
 
 Exit gate:
 
-- architectural conclusions are tied to measured predictor behavior.
+- an analytical profitability window is identified;
+- required predictor quality is explicit;
+- architectural conclusions are tied to the existing predictor behavior.
 
 ---
 
@@ -1697,6 +1754,10 @@ Deliverables:
 Exit gate:
 
 - measured transfer and stall behavior agrees sufficiently with the analytical model to support extrapolation.
+
+This milestone is deferred until H5 identifies a policy region worth
+validating. It is not a prerequisite for the first-order viability and
+profitability-window study.
 
 ---
 
@@ -1736,6 +1797,9 @@ The first complete research package should generate at least:
 14. Transfer timeline for reactive, oracle, and learned prefetch.
 15. Move-token vs move-expert phase diagram.
 16. Viable region by expert size and lookahead time.
+17. Prediction-quality × cold-service-headroom profitability map.
+18. Minimum required complete-route coverage versus lookahead.
+19. Existing-policy location relative to the analytical requirement boundary.
 
 ---
 
@@ -1758,25 +1822,52 @@ The first complete research package should generate at least:
 
 # 32. Decision Gates
 
+Use one gate at a time. These are kill switches, not a requirement to encode
+every interaction as an early threshold. After each gate, scan cheap structural
+axes already present in the data and record any regimes as exploratory.
+
 ## Gate A: Is there useful expert skew?
 
 Proceed with static hot-residency analysis only if skew is strong and stable at relevant scopes.
 
 ## Gate B: Is future demand predictable beyond trivial baselines?
 
-Proceed with learned prefetch only if hidden-state predictors materially beat popularity and transition baselines.
+Record where hidden-state predictors beat popularity and transition baselines,
+but do not optimize them until Gate C identifies issue points where transfers
+can physically complete.
 
 ## Gate C: Is oracle prefetch physically viable?
 
 Stop claiming latency hiding if oracle cannot hide useful transfers.
 
+If Gate C passes, evaluate predictor and transition policies only inside the
+viable issue-point/bandwidth/capacity region rather than against a global
+accuracy average.
+
+Current pilot result: the frozen measured-bandwidth \(K=16,\Delta=1\)–3 gate
+failed, while a descriptive \(K=32,\Delta=3\) region passed the same physical
+thresholds. Treat H4 as a capacity–lead-time–bandwidth boundary, not a universal
+whole-expert feasibility claim. For the prototype, advance to the normalized
+H5 analytical sweep without requiring a higher-fidelity overlap experiment;
+retain the absence of live overlap validation as a claim limitation.
+
 ## Gate D: Is complete-set coverage affordable?
 
 If wave-safe coverage requires prefetching nearly all experts, prediction has little selectivity value.
 
+Current pilot result: complete residual-cold-set coverage is substantially
+better than complete top-8 route coverage at K=32, but the raw candidate lists
+are unaffordable as transfer lists. None of eight H5-C placements meets the 2×
+candidate/useful-byte screen.
+
 ## Gate E: Is learned policy close enough to oracle?
 
 If learned/oracle recovery is low, use prediction for planning rather than just-in-time loading.
+
+Current pilot result: the K=32, Δ=9 policies recover 67–77% of the first-order
+oracle before the traffic gate is applied. This is enough information for a
+selective admission/residency experiment, but not evidence for blind
+just-in-time prefetch.
 
 ## Gate F: Does moving expert state beat moving activations?
 
@@ -1911,16 +2002,16 @@ These are future directions. The initial experiment should only claim support wh
 
 # 36. Deliverable Format
 
-The coding assistant should maintain:
+For the prototype, maintain only:
 
-1. **Research log:** chronological experiments and observations.
-2. **Machine-readable metrics:** CSV, Parquet, or JSON.
-3. **Figures:** publication-quality PNG and PDF.
-4. **Experiment manifests:** immutable configuration snapshots.
-5. **Results summary:** concise Markdown report after each milestone.
-6. **Assumption ledger:** all extrapolation assumptions and their evidence.
-7. **Failure log:** invalidated hypotheses and implementation pitfalls.
-8. **Final technical report:** methodology, results, model calibration, conclusions, and architecture implications.
+1. `STATUS.md` and one chronological experiment log;
+2. machine-readable metrics and immutable configuration/manifest files;
+3. one or two scripted PDF/PNG figures;
+4. one concise Markdown result report containing decisions, limitations, and
+   important assumptions.
+
+Add a separate assumption ledger, failure database, tracking service, or final
+report structure only when architecture-scale evidence makes it necessary.
 
 The results summary must include a human visual-review checkpoint. The next
 major hypothesis starts only after the researcher reviews the generated
@@ -1930,28 +2021,24 @@ figures and records the next action.
 
 # 37. Initial Implementation Order
 
-The coding assistant should execute work in this order:
+Use this lean order:
 
-1. Inspect the selected model.
-2. Identify router and expert modules.
-3. Compute exact expert sizes.
-4. Validate one routed forward pass.
-5. Implement trace schema and small trace collection.
-6. Build trace integrity checks.
-7. Generate popularity and per-layer skew analysis.
-8. Generate reuse and transition analysis.
-9. Implement popularity and transition baselines.
-10. Implement linear skip router.
-11. Add MLP only after linear results exist.
-12. Add complete-set coverage metrics.
-13. Measure PCIe transfer curves.
-14. Build oracle simulator.
-15. Add static cache and reactive-load baselines.
-16. Add learned-policy replay.
-17. Build artificial asynchronous-copy prototype.
-18. Compare model predictions against measured timing.
-19. Produce phase diagrams.
-20. Draft architecture conclusions with explicit evidence levels.
+1. Inspect the model, compute exact expert sizes, and validate hook semantics.
+2. Collect one restartable trace with integrity checks.
+3. Run H1/H2 routing baselines and one fixed linear H3 sidecar.
+4. Use cheap post-hoc scans of the existing trace to expose layer/horizon
+   regimes; do not add predictor ablations.
+5. Measure a small unhooked layer-timing sample and host-to-device transfer
+   curve.
+6. Build the minimum oracle H4 feasibility calculation.
+7. Sweep assumed predictor quality and normalized hardware parameters to map
+   H5 viability/profitability windows and inverse predictor requirements.
+8. Place the existing transition and linear streams on that surface without
+   retraining.
+9. If H5 is positive, compare residency/replication/JIT roles, then consider a
+   small predictable-routing intervention and one sparse-model confirmation.
+10. Defer timing-fidelity work, broad predictor tuning, and asynchronous-copy
+    prototypes until an analytical policy region justifies them.
 
 ---
 

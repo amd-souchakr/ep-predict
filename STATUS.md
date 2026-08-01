@@ -1,8 +1,8 @@
 # Project status
 
-**Current hypothesis:** H3 — lightweight future-route prediction
-**Current stage:** H3 primary gate failed; post-hoc all-layer analysis complete;
-human figure review is pending
+**Current hypothesis:** H5 — analytical co-design requirements and policy recovery
+**Current stage:** H5-A/B/C and post-hoc admission separation complete;
+awaiting human figure review before one targeted cost-sensitive admission model
 **Last updated:** 2026-08-01
 
 | Gate | Question | State | Exit evidence |
@@ -10,10 +10,15 @@ human figure review is pending
 | M0 | Can we inspect and validate the model without source changes? | Passed | Model report, complete hook traces, and zero integrity failures |
 | H1 | Is hotness strong and stable enough for a fast tier? | Mixed; global gate failed | 2/16 mixed decode layers passed; code and math are locally strong |
 | H2 | Does conditional locality beat marginal popularity? | Pilot supported | All Δ=1/2/3 transition baselines passed the held-out decode gate |
-| H3 | Can a small predictor beat transition tables at equal candidate budget? | Pilot not supported; review pending | +0.4 pp selection, +4.7 pp complete at primary gate; only 2/4 domains positive on both |
-| H4 | Is oracle prefetch physically viable? | Recommended after H3 review | Hardware feasibility phase diagram using the transition policy |
-| H5 | Does prediction recover oracle benefit? | Not started | Learned/oracle recovery |
-| H6 | Is prediction better for residency than JIT loading? | Not started | Policy comparison |
+| H3 | Can a small predictor beat transition tables at equal candidate budget? | Formal pilot not supported; reviewed | Global replacement failed; post-hoc scan found strong early-layer/long-range value |
+| H4 | Is oracle prefetch physically viable? | Formal K=16 short-horizon gate not supported; broader region mixed | At K=16, Δ=3: 32.8% timely cold bytes and 38.9% stall reduction; K=32, Δ=3 reaches 55.5%/61.8% |
+| H5-A | What prediction × hardware assumptions create a profitable analytical window? | Supported analytically | 22,618/68,175 controlled cells pass the frozen screen |
+| H5-B | What predictor quality is required to enter that window? | Complete | 25–50% minimum complete cold-set coverage in nonempty windows |
+| H5-C | Where do existing transition/linear policies land? | Raw streams not supported | 3.4–6.7× transfer amplification; no representative row passes |
+| H5-D | Do existing scores separate useful from useless cold candidates? | Mixed; strong ranking, insufficient threshold | Linear AUROC 0.883/0.861 at Δ=3/9; C≥50% needs A≈3.0–3.3× |
+| H6 | Is selective admission/residency better than blind/JIT loading? | Next after review | Policy comparison |
+| H7 | Can routing be made more predictable without harming loss or balance? | Conditional | Loss–balance–predictability–benefit Pareto point |
+| C1 | Does the result transfer to a top-1/top-2 checkpoint? | Conditional confirmation | Repeated trajectory and normalized co-design evidence |
 
 ## Immediate run checklist
 
@@ -44,10 +49,44 @@ human figure review is pending
 - [x] Generate two simple H3 decision figures and hash their inputs.
 - [x] Extend H2/H3 descriptively through Δ=15 without new inference.
 - [x] Generate the global horizon curve and source-target gain heatmap.
-- [ ] Human review the H3 figures and record the decision before starting H4.
+- [x] Human reviewed H3 and the extended figures; formal H3 failure stands,
+      with early-layer linear prediction retained as an exploratory regime.
+- [x] Freeze one simple H4 question and oracle stop/go rule.
+- [x] Measure unhooked inter-layer time and a small host-to-device transfer
+      curve; hooked timings remain excluded.
+- [x] Replay exact 12 MiB experts over a small bandwidth/capacity/issue-point
+      grid and plot the oracle feasible region.
+- [x] Apply the formal gate before interpreting the broader scan; the
+      preregistered K=16, Δ=1–3 target failed.
+- [x] Do not overlay or tune transition/linear policies after the formal H4
+      failure.
+- [x] Researcher accepted first-order analytical modeling as sufficient for
+      the next viability/profitability-window study; timing fidelity is not the
+      current focus.
+- [x] Add the post-hoc cold-service-headroom versus complete-prediction regime
+      map; keep “candidate region” distinct from demonstrated profitability.
+- [x] Preregister H5-A’s simple analytical-profit screen: ≥25% modeled stall
+      reduction, ≥50% oracle recovery, and ≤2× predicted/useful bytes.
+- [x] Sweep complete coverage, candidate amplification, K=8/16/32, Δ=1–15,
+      and 0.25×–4× normalized cold bandwidth using existing artifacts.
+- [x] Derive H5-B minimum complete coverage and maximum amplification rather
+      than tuning a predictor blindly.
+- [x] Generate one profitability phase diagram and one inverse-requirement
+      curve.
+- [ ] Complete human review of the H5 figures.
+- [x] Reconstruct and place existing transition/linear streams at four
+      representative H5-C points without retraining.
+- [x] Sweep a shared standardized score threshold and plot useful-versus-false
+      expert separation at K=32, Δ=3/9.
+- [ ] After review, fit one cost-sensitive per-head calibrator or very small
+      admission model on the same features; do not run a generic MLP sweep.
+- [x] Defer overlap microbenchmarks, MLPs, fresh routing collection, H7, C1,
+      and timing
+      fidelity until a selective policy identifies a worthwhile mechanism.
 
-Full interpretation: [docs/H3_RESULTS.md](docs/H3_RESULTS.md) and
-[docs/H23_EXTENDED_HORIZON_RESULTS.md](docs/H23_EXTENDED_HORIZON_RESULTS.md).
+Full plan: [docs/NEXT_EXPERIMENTS.md](docs/NEXT_EXPERIMENTS.md).
+Prior result: [docs/H4_RESULTS.md](docs/H4_RESULTS.md).
+Current result: [docs/H5_RESULTS.md](docs/H5_RESULTS.md).
 
 ## Evidence policy
 

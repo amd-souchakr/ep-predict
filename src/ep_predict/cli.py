@@ -120,6 +120,94 @@ def _plot_extended_horizon(args: argparse.Namespace) -> int:
     return 0
 
 
+def _measure_h4(args: argparse.Namespace) -> int:
+    from ep_predict.hardware.h4 import measure_h4
+
+    result = measure_h4(
+        load_toml(args.model_config),
+        load_toml(args.experiment_config),
+    )
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0
+
+
+def _analyze_h4(args: argparse.Namespace) -> int:
+    from ep_predict.analysis.h4 import analyze_h4
+
+    summary = analyze_h4(args.run, load_toml(args.config))
+    print(json.dumps(summary["gate"], indent=2, sort_keys=True))
+    return 0
+
+
+def _plot_h4(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.h4 import plot_h4
+
+    manifest = plot_h4(
+        args.run,
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
+def _analyze_codesign_map(args: argparse.Namespace) -> int:
+    from ep_predict.analysis.codesign import analyze_codesign_map
+
+    summary = analyze_codesign_map(load_toml(args.config))
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+def _plot_codesign_map(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.codesign import plot_codesign_map
+
+    manifest = plot_codesign_map(
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
+def _analyze_h5(args: argparse.Namespace) -> int:
+    from ep_predict.analysis.h5 import analyze_h5
+
+    summary = analyze_h5(load_toml(args.config))
+    print(json.dumps(summary["gate"], indent=2, sort_keys=True))
+    return 0
+
+
+def _plot_h5(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.h5 import plot_h5
+
+    manifest = plot_h5(
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
+def _analyze_h5_admission(args: argparse.Namespace) -> int:
+    from ep_predict.analysis.admission import analyze_admission
+
+    summary = analyze_admission(load_toml(args.config))
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+def _plot_h5_admission(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.admission import plot_admission
+
+    manifest = plot_admission(
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ep-predict",
@@ -218,6 +306,76 @@ def build_parser() -> argparse.ArgumentParser:
     horizon_plot_parser.add_argument("--config", required=True, type=Path)
     horizon_plot_parser.add_argument("--output", type=Path)
     horizon_plot_parser.set_defaults(function=_plot_extended_horizon)
+
+    h4_measure_parser = subparsers.add_parser(
+        "measure-h4",
+        help="measure hook-free decode timing and pinned-host transfers",
+    )
+    h4_measure_parser.add_argument("--model-config", required=True, type=Path)
+    h4_measure_parser.add_argument(
+        "--experiment-config", required=True, type=Path
+    )
+    h4_measure_parser.set_defaults(function=_measure_h4)
+
+    h4_parser = subparsers.add_parser(
+        "analyze-h4",
+        help="replay exact expert demand with an oracle prefetcher",
+    )
+    h4_parser.add_argument("--run", required=True, type=Path)
+    h4_parser.add_argument("--config", required=True, type=Path)
+    h4_parser.set_defaults(function=_analyze_h4)
+
+    h4_plot_parser = subparsers.add_parser(
+        "plot-h4", help="generate the two H4 oracle decision figures"
+    )
+    h4_plot_parser.add_argument("--run", required=True, type=Path)
+    h4_plot_parser.add_argument("--config", required=True, type=Path)
+    h4_plot_parser.add_argument("--output", type=Path)
+    h4_plot_parser.set_defaults(function=_plot_h4)
+
+    codesign_parser = subparsers.add_parser(
+        "analyze-codesign-map",
+        help="combine H4 physical headroom with H2/H3 complete coverage",
+    )
+    codesign_parser.add_argument("--config", required=True, type=Path)
+    codesign_parser.set_defaults(function=_analyze_codesign_map)
+
+    codesign_plot_parser = subparsers.add_parser(
+        "plot-codesign-map",
+        help="plot categorical physical/prediction co-design regions",
+    )
+    codesign_plot_parser.add_argument("--config", required=True, type=Path)
+    codesign_plot_parser.add_argument("--output", type=Path)
+    codesign_plot_parser.set_defaults(function=_plot_codesign_map)
+
+    h5_parser = subparsers.add_parser(
+        "analyze-h5",
+        help="run the first-order H5 requirements sweep and policy placement",
+    )
+    h5_parser.add_argument("--config", required=True, type=Path)
+    h5_parser.set_defaults(function=_analyze_h5)
+
+    h5_plot_parser = subparsers.add_parser(
+        "plot-h5", help="plot the H5 profitability and inverse-design figures"
+    )
+    h5_plot_parser.add_argument("--config", required=True, type=Path)
+    h5_plot_parser.add_argument("--output", type=Path)
+    h5_plot_parser.set_defaults(function=_plot_h5)
+
+    admission_parser = subparsers.add_parser(
+        "analyze-h5-admission",
+        help="sweep cost-sensitive admission over frozen expert scores",
+    )
+    admission_parser.add_argument("--config", required=True, type=Path)
+    admission_parser.set_defaults(function=_analyze_h5_admission)
+
+    admission_plot_parser = subparsers.add_parser(
+        "plot-h5-admission",
+        help="plot admission frontiers and useful/useless expert scores",
+    )
+    admission_plot_parser.add_argument("--config", required=True, type=Path)
+    admission_plot_parser.add_argument("--output", type=Path)
+    admission_plot_parser.set_defaults(function=_plot_h5_admission)
     return parser
 
 

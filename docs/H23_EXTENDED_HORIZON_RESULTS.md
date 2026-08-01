@@ -158,7 +158,8 @@ The extended view strengthens the information side of the architecture:
 This is evidence for hierarchical planning, not yet for transfer feasibility.
 The minimum H4 study should remain oracle-first, scan issue point as an
 explicit dimension, and carry both existing transition and linear candidate
-streams as non-optimized comparisons. Do not begin MLP or projection tuning.
+streams as non-optimized comparisons only after the oracle exposes a viable
+region. Do not begin MLP, projection tuning, or a new inference workload.
 
 ## Figures
 
@@ -167,4 +168,6 @@ streams as non-optimized comparisons. Do not begin MLP or projection tuning.
 - `fig2_source_target_gain_heatmap`: one cell per valid source-target pair,
   showing linear-minus-transition gains.
 
-Human visual review remains pending before H4.
+Human visual review completed on 2026-08-01. The formal H3 decision remains
+unchanged; the early-versus-late source-layer regime is accepted as exploratory
+guidance for H4.
