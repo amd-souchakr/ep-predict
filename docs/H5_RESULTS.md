@@ -145,11 +145,11 @@ H5 is mixed: the co-design opportunity is analytically plausible, but the
 existing raw candidate streams are not profitable prefetch policies. Do not
 train a larger predictor or collect a new model yet.
 
-After human figure review, run one lean H6 analysis on the current testbed:
-compare reactive JIT, static/domain residency, and a simple
-prediction-guided admission/residency score. The decisive metric is whether
-admission can approach ≤2× transfer amplification while preserving enough
-complete cold-set coverage to recover at least half of the analytical oracle.
+H6 has now completed the lean residency test on the current artifacts. The
+existing transition/linear depth scores did not beat static/domain/LRU
+residency at equal capacity and movement budget, despite a strong next-use
+oracle. See [H6_RESULTS.md](H6_RESULTS.md). Do not start H7, fit a new
+admission head, or download a confirmation model as an automatic follow-on.
 
 ## Artifacts
 

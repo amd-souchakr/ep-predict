@@ -10,14 +10,14 @@ Update it only when at least one of the following occurs:
 
 - a major hypothesis gate materially changes the architectural thesis;
 - a broad post-hoc analysis reveals a new organizing principle;
-- H4/H5 connects prediction to physical timing or policy benefit;
+- H4–H6 connects prediction to physical timing or policy benefit;
 - a second model confirms or contradicts a claimed general principle;
 - a result changes the strongest defensible paper claim.
 
 Routine metrics, commands, implementation changes, and transient next steps
 belong in `EXPERIMENT_LOG.md`, `STATUS.md`, and the per-hypothesis reports.
 
-**Evidence snapshot:** 2026-08-01, after H1–H5 and the all-layer H2/H3 scan.
+**Evidence snapshot:** 2026-08-01, after H1–H6 and the all-layer H2/H3 scan.
 
 ---
 
@@ -138,6 +138,22 @@ with AUROC 0.883 and 0.861. But only 7–8% of scored nonresident IDs are useful
 At 50% complete cold-set coverage, even the linear ranking still needs
 3.0–3.3× transferred/useful bytes. The rare-event base rate and set-completion
 requirement—not only distribution overlap—control admission profitability.
+
+### H6 separates depth trajectory from temporal reuse
+
+At held-out decode \(K=16,\Delta=3\), reactive LRU leaves 48.1% residual cold
+expert demand. Transition- and linear-guided residency leave 50.2% and 48.8%,
+while an equal-movement-budget next-use oracle reaches 31.2%.
+
+The oracle establishes a real residency opportunity, but the existing
+predictors do not recover it. They predict a target layer for the same token;
+residency needs to predict reuse by later tokens. Linear and transition
+movements earn later hits only 66.3% and 60.0% of the time, versus 69.7% for
+LRU and 94.7% for the oracle.
+
+This negative result changes the architectural interpretation: trajectory
+information is not a generic cache-control signal. The conditioning axis must
+match the mechanism's reuse axis.
 
 ---
 
@@ -358,6 +374,27 @@ This prevents two symmetric errors: dismissing useful trajectory information
 because one transfer policy fails, and claiming a viable hierarchy because a
 predictor or oracle looks strong in isolation.
 
+### 16. Prediction must match the mechanism's time axis
+
+The project now exposes two different prediction problems:
+
+\[
+\text{depth: }P(E_{\ell+\Delta,t}\mid \text{state}_{\ell,t}),
+\qquad
+\text{time: }P(E_{\ell,t+\tau}\mid \text{history}).
+\]
+
+H2/H3 establish strong depth prediction. H6 shows that feeding those scores
+into a temporal residency policy does not beat simple caching, despite a
+substantial oracle gap.
+
+This is more than a failed heuristic. It is a workload–mechanism alignment
+principle: advance information has architectural value only when it predicts
+the future event that consumes the managed resource. A depth trajectory can
+schedule within-token transfers; cache retention needs cross-token reuse;
+replication needs cross-request or cross-device demand. These tasks may share
+features, but one cannot be substituted for another without evidence.
+
 ---
 
 ## Perspective shifts produced by the experiments
@@ -377,6 +414,7 @@ predictor or oracle looks strong in isolation.
 | Complete route coverage is the placement target | Complete residual-cold-set coverage is the operational target |
 | Quote bandwidth in GB/s | Compare experts transferable per layer interval with cold experts per wave |
 | One good metric establishes architectural value | Information, physical service, and selectivity must pass together |
+| Future-expert prediction is a generic cache signal | The predictor's axis must match the mechanism: depth for within-token action, time for reuse |
 | A failed primary gate ends the idea | A failed global policy can expose a valuable conditional regime |
 | Preregister every important interaction | Freeze one decision, then use cheap post-hoc scans for discovery |
 
@@ -437,6 +475,18 @@ residency or replication over simple policies. Co-training predictable routing
 remains later work and should not be used to rescue an unproven placement
 mechanism.
 
+### A strong oracle gap can coexist with the wrong predictor
+
+H6's next-use oracle materially beats LRU, so residency is not intrinsically
+empty. Yet the depth predictors fail. Oracle headroom identifies an opportunity
+for information; it does not prove that the information already collected is
+the right information.
+
+Before tuning a model, write the exact conditional event the controller needs
+to predict. This check would distinguish same-token layer lookahead from
+cross-token reuse and prevents optimizing an impressive but causally misaligned
+metric.
+
 ---
 
 ## Provocative hypotheses for later work
@@ -492,9 +542,9 @@ The predictive-control thesis is broader than whole-expert PCIe prefetch.
    concurrent copy/compute contention?
 2. Can prediction be aggregated across requests or token waves so that reuse
    offsets candidate churn?
-3. Can existing trajectory information improve residency or replication over
-   static, domain-conditioned, and reactive/LRU policies at equal capacity and
-   movement budget?
+3. Can a direct temporal-reuse predictor, request-level aggregation, or
+   replication objective exploit the H6 oracle gap without becoming a new
+   high-complexity project?
 4. Is future-routing information genuinely low-dimensional, or did one random
    projection happen to work well?
 5. Does the early-linear/late-transition regime reproduce on fresh requests?
@@ -532,13 +582,18 @@ The predictive-control thesis is broader than whole-expert PCIe prefetch.
 - The current linear ranking contains real useful-versus-unused separation,
   but needs roughly 3.0–3.3× transferred/useful bytes to preserve 50%
   complete cold-set coverage.
+- Existing transition/linear depth scores do not beat static/domain/LRU
+  on-demand residency at equal capacity and movement budget.
+- A strong equal-budget next-use oracle gap remains: at decode K=16, Δ=3,
+  residual cold demand is 31.2% for oracle versus 48.1% for LRU.
 
 ### Plausible architectural inference
 
 - A hybrid early-planning/late-correction controller is more appropriate than
   one universal prediction policy.
-- Predictive information may help scheduling and residency even when literal
-  prefetch is too expensive.
+- Predictive information may help within-token scheduling even when literal
+  prefetch is too expensive; residency requires a separate temporal-reuse
+  signal.
 - A memory hierarchy could be organized around certainty and deadline as well
   as speed and capacity.
 - Experts transferable per layer interval is a useful co-design quantity, and
@@ -550,6 +605,7 @@ The predictive-control thesis is broader than whole-expert PCIe prefetch.
   copy/compute contention.
 - Prediction reduces end-to-end latency or TPOT.
 - The current prediction-guided transfer policy is profitable.
+- The current depth predictors improve on-demand expert residency.
 - The result generalizes beyond one top-8 OLMoE checkpoint.
 - The base model learned to manage hardware resources.
 - Making routing more predictable would preserve model loss and load balance.
@@ -580,6 +636,9 @@ Routes Provide Short-Range Correction**
    is physically actionable.
 5. Separate predictive belief, residency state, and byte-committing admission,
    showing why information, service, and selectivity are independent gates.
+6. Show that depth-trajectory predictability and temporal cache reuse are
+   distinct, and that policy value requires matching the prediction axis to
+   the resource-consumption axis.
 
 The defensible contribution is a workload and co-design boundary, not a
 profitable end-to-end prefetch implementation. Strong long-range routing
@@ -601,3 +660,7 @@ central trajectory result.
   established information–service–selectivity as three independent gates, and
   showed how rare-event base rates make strong ranking insufficient for
   profitable movement.
+- **2026-08-01:** H6 separated within-token depth prediction from cross-token
+  reuse prediction. Existing depth scores failed equal-budget residency despite
+  a strong next-use oracle ceiling, establishing the prediction-axis and
+  mechanism-axis alignment principle.

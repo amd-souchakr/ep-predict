@@ -208,6 +208,25 @@ def _plot_h5_admission(args: argparse.Namespace) -> int:
     return 0
 
 
+def _analyze_h6(args: argparse.Namespace) -> int:
+    from ep_predict.analysis.h6 import analyze_h6
+
+    summary = analyze_h6(load_toml(args.config))
+    print(json.dumps(summary["gate"], indent=2, sort_keys=True))
+    return 0
+
+
+def _plot_h6(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.h6 import plot_h6
+
+    manifest = plot_h6(
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ep-predict",
@@ -376,6 +395,20 @@ def build_parser() -> argparse.ArgumentParser:
     admission_plot_parser.add_argument("--config", required=True, type=Path)
     admission_plot_parser.add_argument("--output", type=Path)
     admission_plot_parser.set_defaults(function=_plot_h5_admission)
+
+    h6_parser = subparsers.add_parser(
+        "analyze-h6",
+        help="replay prediction-guided expert residency on existing traces",
+    )
+    h6_parser.add_argument("--config", required=True, type=Path)
+    h6_parser.set_defaults(function=_analyze_h6)
+
+    h6_plot_parser = subparsers.add_parser(
+        "plot-h6", help="plot the H6 layer/lookahead residency gain heatmap"
+    )
+    h6_plot_parser.add_argument("--config", required=True, type=Path)
+    h6_plot_parser.add_argument("--output", type=Path)
+    h6_plot_parser.set_defaults(function=_plot_h6)
     return parser
 
 

@@ -29,9 +29,12 @@ lead time, or bandwidth reduces transfer pressure. It still does not establish
 live copy/compute overlap, end-to-end latency improvement, or universal MoE
 behavior. H5 found a first-order profitable region, but the unchanged
 transition/linear streams transfer 3.4–6.7× useful cold bytes and do not pass
-the frozen policy screen. The next high-ROI question is selective
-admission/residency on the current traces, not predictor tuning or new routing
-collection. See [docs/H5_RESULTS.md](docs/H5_RESULTS.md).
+the frozen policy screen. H6 then tested prediction-guided on-demand residency
+at equal capacity and movement budget. It failed: neither existing predictor
+beat the strongest static/domain/LRU baseline across layers and domains,
+despite a strong oracle ceiling. The key distinction is that predicting a
+token's trajectory down network depth does not automatically predict expert
+reuse across later tokens. See [docs/H6_RESULTS.md](docs/H6_RESULTS.md).
 
 The active experiment queue, insight-mining questions, and visualization
 deliverables are in
@@ -202,6 +205,21 @@ uv run ep-predict plot-h5-admission \
 This scores all 64 expert IDs after K=32 resident filtering and tests whether
 the unchanged predictor confidence can reduce speculative traffic without
 retraining.
+
+Run the analysis-only H6 residency replay and its compact heatmap:
+
+```bash
+uv run ep-predict analyze-h6 \
+  --config configs/experiment/h6-residency.toml
+
+uv run ep-predict plot-h6 \
+  --config configs/experiment/h6-residency.toml
+```
+
+H6 reuses the same 96/32 split, routes, projected features, transition tables,
+and fixed linear heads. Prediction can admit only an actually demanded miss;
+it never triggers candidate-only prefetch. No inference, training, model
+download, or library modification occurs.
 
 The collector writes one compressed JSONL routing trace per request. H3 also
 writes one aligned numeric NPZ shard containing compact projected router

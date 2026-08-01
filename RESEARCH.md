@@ -430,6 +430,29 @@ Prediction may be most valuable for:
 
 This may remain true even if strict low-latency just-in-time prefetch fails.
 
+### Current pilot result
+
+The tested form is not supported. H6 replayed static popularity,
+domain-conditioned popularity, reactive LRU, transition-guided residency,
+linear-guided residency, and an equal-budget next-use oracle over both phases,
+all valid layer pairs, and K=8/16/32. Prediction could admit only an actually
+demanded miss and could not trigger candidate-only prefetch.
+
+At the frozen decode \(K=16,\Delta=3\) gate, transition and linear are 3.9 and
+2.5 percentage points worse than the strongest matched simple baseline on
+expert-stall reduction, and 0.7 and 0.6 points worse on complete resident-set
+hits. Neither is positive across any domain or layer on average. The oracle
+still cuts residual cold demand from LRU's 48.1% to 31.2%, showing that the
+residency mechanism has headroom but the existing depth-trajectory scores do
+not supply the needed temporal-reuse information.
+
+The direct lesson is:
+
+> Predicting \(E_{\ell+\Delta,t}\) for the current token is not the same task
+> as predicting \(E_{\ell,t+\tau}\) for future tokens.
+
+See [docs/H6_RESULTS.md](docs/H6_RESULTS.md).
+
 ---
 
 ## H7: Predictable routing can be encouraged without sacrificing model quality
@@ -439,7 +462,9 @@ trajectory-predictability objective can improve complete future-route coverage
 and modeled hardware benefit while preserving validation loss and marginal
 load balance.
 
-Current H1–H5 evidence is observational and cannot support this claim.
+Current H1–H6 evidence is observational and cannot support this claim. The H6
+placement failure also removes the immediate justification for this training
+intervention.
 
 ---
 
@@ -1867,7 +1892,10 @@ If learned/oracle recovery is low, use prediction for planning rather than just-
 Current pilot result: the K=32, Δ=9 policies recover 67–77% of the first-order
 oracle before the traffic gate is applied. This is enough information for a
 selective admission/residency experiment, but not evidence for blind
-just-in-time prefetch.
+just-in-time prefetch. H6 subsequently showed that the unchanged depth
+predictors do not convert this information into better on-demand residency:
+both fail against the strongest static/domain/LRU comparator. Do not optimize
+the predictor or proceed to routing intervention as a rescue.
 
 ## Gate F: Does moving expert state beat moving activations?
 
@@ -2035,8 +2063,8 @@ Use this lean order:
    H5 viability/profitability windows and inverse predictor requirements.
 8. Place the existing transition and linear streams on that surface without
    retraining.
-9. If H5 is positive, compare residency/replication/JIT roles, then consider a
-   small predictable-routing intervention and one sparse-model confirmation.
+9. Compare residency roles only with the existing policies first. H6 did so
+   and failed; stop this mechanism rather than escalating predictor complexity.
 10. Defer timing-fidelity work, broad predictor tuning, and asynchronous-copy
     prototypes until an analytical policy region justifies them.
 

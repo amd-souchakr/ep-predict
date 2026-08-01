@@ -40,14 +40,14 @@ physical mechanism survives:
 8. Consider routing-training intervention, sparse-model confirmation, or
    timing-fidelity work only after those requirements are explicit.
 
-For the current project, H4 and H5-A/B/C are complete. H5 found a controlled
-analytical window but rejected the unchanged K-wide candidate streams as
-transfer policies because they move 3.4–6.7× useful bytes. After human figure
-review, the next action is one cost-sensitive per-head calibrator or very small
-admission model on the same artifacts. The shared-threshold result already
-shows that 50% complete coverage costs about 3.0–3.3× for the linear scores.
-No new inference, generic MLP sweep, projection sweep, H7/C1 setup, or overlap
-microbenchmark comes first.
+For the current project, H4–H6 are complete. H5 found a controlled analytical
+window but rejected the unchanged K-wide candidate streams as transfer
+policies. H6 then rejected using the same transition/linear depth predictions
+for on-demand residency: they do not beat static/domain/LRU at equal capacity
+and movement budget, even though the next-use oracle is substantially better.
+The current mechanism stops after human figure review. No admission-head fit,
+new inference, generic MLP sweep, projection sweep, H7/C1 setup, model
+download, or overlap microbenchmark follows automatically.
 
 ## Simple gate, broad post-hoc view
 
@@ -83,10 +83,10 @@ The default figures become one phase diagram and one inverse-requirement curve.
 Detailed plan: [NEXT_EXPERIMENTS.md](NEXT_EXPERIMENTS.md).
 
 Current result: a first-order region exists, but actual-policy placement shows
-that a broad candidate set is not an affordable movement set. H6 should test
-whether a context-aware admission layer can improve the observed
-amplification–complete-set frontier. A single shared standardized threshold
-has already been tested and is insufficient.
+that a broad candidate set is not an affordable movement set. H6 further shows
+that smoothing the existing depth-prediction scores into an on-demand
+residency belief does not recover that region. Predicting a token's route down
+network depth and predicting reuse by later tokens are distinct tasks.
 
 ## Implementation boundary
 

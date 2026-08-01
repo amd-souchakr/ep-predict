@@ -277,5 +277,42 @@ The immutable run manifest and metrics remain the source of truth.
   as PDF and 450-DPI PNG with hashed inputs under
   `analysis/h5/admission/figures`.
 - Human visual review: pending.
-- One next action: after review, test one per-head calibrated or very small
-  cost-sensitive admission model on the existing artifacts.
+- One next action at the time: test placement value before predictor
+  escalation. The subsequent H6 residency result supersedes the proposed
+  cost-sensitive admission model.
+
+### `h6-residency` — 2026-08-01
+
+- Hypothesis: H6 — existing trajectory prediction improves on-demand expert
+  residency at equal fast-tier capacity and runtime movement budget.
+- Config/protocol: `configs/experiment/h6-residency.toml` and
+  `docs/H6_PROTOCOL.md`.
+- Inputs: existing H3 routes/features, preserved 96/32 split, frozen
+  transition tables and linear heads, and the measured exact 12 MiB expert
+  size. No inference, predictor training, model download, or library change.
+- Policies: static popularity, domain popularity, reactive LRU,
+  transition-guided residency, linear-guided residency, and an equal-budget
+  exact-next-use oracle. Prediction may admit only an actually demanded miss;
+  one insertion is allowed per target-layer wave.
+- Formal result: `PILOT_DOES_NOT_SUPPORT`. At decode K=16, Δ=3, transition and
+  linear are 3.9/2.5 pp worse in expert-stall reduction and 0.7/0.6 pp worse
+  in complete-set hits than the strongest matched static/domain/LRU baseline.
+  Only 5/52 and 3/52 layer-domain scopes improve on both metrics; no domain or
+  layer is positive on average.
+- Primary metrics: residual cold demand is 48.1% for LRU, 50.2% transition,
+  48.8% linear, and 31.2% oracle. Complete resident-set hits are 2.8%, 3.4%,
+  3.5%, and 11.8%. Later-use movement efficiency is 69.7%, 60.0%, 66.3%, and
+  94.7%.
+- Broad scan: no domain-balanced decode cell improves both headline metrics at
+  K=16 or K=32. Prefill contains a few weak middle-layer cells, but none gains
+  at least 2 pp on both metrics.
+- Interpretation: same-token prediction down network depth is not a temporal
+  reuse predictor across tokens. The oracle gap shows residency has headroom;
+  the existing information is misaligned with this mechanism.
+- Figure: one triangular source-layer × lookahead heatmap for K=8/16/32,
+  saved as PDF and 450-DPI PNG with hashed inputs under
+  `analysis/h6/figures`.
+- Human visual review: pending.
+- One next action: review the H6 heatmap, then close this placement mechanism.
+  Do not fit an admission head, tune an MLP, start H7, collect confirmation,
+  or download a second model without a new explicitly approved hypothesis.

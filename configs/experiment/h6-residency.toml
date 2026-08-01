@@ -1,0 +1,28 @@
+# Frozen H6 trace-replay experiment. Reuses existing routes, projected
+# router-input features, transition tables, and fixed linear heads.
+output_dir = "artifacts/runs/h1-standard-small/analysis/h6"
+h3_run = "artifacts/runs/h3-standard-small"
+h3_analysis = "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon"
+h4_measurement = "artifacts/runs/h1-standard-small/analysis/h4/measurement.json"
+
+[replay]
+capacities = [8, 16, 32]
+lookaheads = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+phases = ["prefill", "decode"]
+# One exact expert copy takes approximately one measured inter-MoE interval.
+movement_budget_experts_per_wave = 1
+# Smooth one-token predictions into a residency belief; fixed, not swept.
+prediction_ema_alpha = 0.25
+expert_bytes = 12582912
+
+[decision_gate]
+phase = "decode"
+capacity_experts = 16
+lookahead = 3
+comparators = ["static", "domain", "lru"]
+candidate_policies = ["transition", "linear"]
+min_mean_expert_stall_reduction_gain = 0.02
+min_mean_complete_set_hit_gain = 0.02
+min_positive_scope_fraction_both = 0.50
+min_positive_domains_both = 3
+min_positive_layers_both = 4

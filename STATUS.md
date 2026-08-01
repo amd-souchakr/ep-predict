@@ -1,8 +1,8 @@
 # Project status
 
-**Current hypothesis:** H5 — analytical co-design requirements and policy recovery
-**Current stage:** H5-A/B/C and post-hoc admission separation complete;
-awaiting human figure review before one targeted cost-sensitive admission model
+**Current hypothesis:** H6 — prediction-guided residency
+**Current stage:** frozen H6 gate complete and not supported; awaiting human
+review of the H6 heatmap before closing the current mechanism
 **Last updated:** 2026-08-01
 
 | Gate | Question | State | Exit evidence |
@@ -16,9 +16,9 @@ awaiting human figure review before one targeted cost-sensitive admission model
 | H5-B | What predictor quality is required to enter that window? | Complete | 25–50% minimum complete cold-set coverage in nonempty windows |
 | H5-C | Where do existing transition/linear policies land? | Raw streams not supported | 3.4–6.7× transfer amplification; no representative row passes |
 | H5-D | Do existing scores separate useful from useless cold candidates? | Mixed; strong ranking, insufficient threshold | Linear AUROC 0.883/0.861 at Δ=3/9; C≥50% needs A≈3.0–3.3× |
-| H6 | Is selective admission/residency better than blind/JIT loading? | Next after review | Policy comparison |
-| H7 | Can routing be made more predictable without harming loss or balance? | Conditional | Loss–balance–predictability–benefit Pareto point |
-| C1 | Does the result transfer to a top-1/top-2 checkpoint? | Conditional confirmation | Repeated trajectory and normalized co-design evidence |
+| H6 | Does prediction-guided residency beat static/domain/LRU placement? | Pilot not supported; review pending | At decode K=16, Δ=3, transition/linear lose 3.9/2.5 pp expert-stall reduction and 0.7/0.6 pp complete hits versus the strongest matched baseline |
+| H7 | Can routing be made more predictable without harming loss or balance? | Deferred after H6 failure | Requires a new mechanism and explicit permission |
+| C1 | Does the result transfer to a top-1/top-2 checkpoint? | Deferred; explicit permission required | No model download or testbed change authorized |
 
 ## Immediate run checklist
 
@@ -73,20 +73,31 @@ awaiting human figure review before one targeted cost-sensitive admission model
       than tuning a predictor blindly.
 - [x] Generate one profitability phase diagram and one inverse-requirement
       curve.
-- [ ] Complete human review of the H5 figures.
+- [x] Researcher explicitly advanced from H5 to the minimal H6 residency
+      study; the H5 formal result remains unchanged.
 - [x] Reconstruct and place existing transition/linear streams at four
       representative H5-C points without retraining.
 - [x] Sweep a shared standardized score threshold and plot useful-versus-false
       expert separation at K=32, Δ=3/9.
-- [ ] After review, fit one cost-sensitive per-head calibrator or very small
-      admission model on the same features; do not run a generic MLP sweep.
+- [x] Defer the cost-sensitive admission head; test placement value first.
+- [x] Preregister H6 with held-out decode K=16, Δ=3, one demanded-miss
+      insertion per wave, and a breadth gate across layers and domains.
+- [x] Replay static, domain, LRU, transition, linear, and equal-budget oracle
+      residency at K=8/16/32 over both phases and all valid lookaheads.
+- [x] Report residual cold demand, complete-set hits, useful/wasted movement
+      bytes, evictions/churn, first-order stall reduction, and oracle recovery.
+- [x] Generate the compact layer/lookahead/capacity gain heatmap and hash its
+      inputs.
+- [x] Apply the H6 gate unchanged: neither guided policy passes.
+- [ ] Complete human review of the H6 heatmap and record the final
+      interpretation.
 - [x] Defer overlap microbenchmarks, MLPs, fresh routing collection, H7, C1,
       and timing
       fidelity until a selective policy identifies a worthwhile mechanism.
 
 Full plan: [docs/NEXT_EXPERIMENTS.md](docs/NEXT_EXPERIMENTS.md).
 Prior result: [docs/H4_RESULTS.md](docs/H4_RESULTS.md).
-Current result: [docs/H5_RESULTS.md](docs/H5_RESULTS.md).
+Current result: [docs/H6_RESULTS.md](docs/H6_RESULTS.md).
 
 ## Evidence policy
 

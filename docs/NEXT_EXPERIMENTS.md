@@ -1,8 +1,8 @@
 # Next experiments: first-order co-design and predictable routing
 
 **Updated:** 2026-08-01  
-**Current next experiment:** one cost-sensitive admission calibrator/model,
-after H5 figure review  
+**Current next action:** human review of the completed negative H6 residency
+result; no automatic follow-on experiment
 **Operating rule:** use the cheapest existing artifacts first; model broad
 viability and expected benefit before improving timing fidelity or predictors.
 
@@ -23,13 +23,14 @@ This plan separates three questions that should not be conflated:
 | H5-B | What minimum predictor quality is required at each capacity, bandwidth, and lookahead? | No; derived from H5-A | Complete |
 | H5-C | How much analytical oracle benefit do the existing transition and linear streams recover? | No retraining; reconstruct existing predictions | Complete; raw streams fail traffic gate |
 | H5-D | Do existing scores separate useful from useless cold candidates? | No | Complete; signal present, shared threshold insufficient |
-| H6 | Does prediction-guided admission/residency beat JIT expert movement and simple baselines? | Small sidecar fit only; no model inference/training | Next after review |
-| H7 | Can a routing-predictability objective improve modeled benefit without harming loss or load balance? | Yes; small controlled intervention | Conditional on H5 targets |
-| C1 | Does the trajectory/co-design result transfer to one newer top-1/top-2 checkpoint? | Yes; one trace collection | Before general claims |
+| H6 | Does prediction-guided on-demand residency beat static/domain/LRU at equal capacity and movement budget? | No | Complete; frozen gate failed |
+| H7 | Can a routing-predictability objective improve modeled benefit without harming loss or load balance? | Yes; small controlled intervention | Deferred after H6 failure |
+| C1 | Does the trajectory/co-design result transfer to one newer top-1/top-2 checkpoint? | Yes; one trace collection | Deferred; explicit permission required |
 
 Detailed timing validation, concurrent-copy microbenchmarks, multi-GPU
-extrapolation, MLPs, and broad predictor tuning remain deferred until H5 shows
-an analytically valuable region.
+extrapolation, MLPs, predictor tuning, new inference, and model downloads
+remain deferred. H6 did not establish placement value for the current depth
+predictors.
 
 ## H5-A — Controlled prediction × hardware sweep
 
@@ -146,30 +147,28 @@ show a small actual-versus-required table. Do not create a separate dashboard.
 
 ## H6 — Mechanism competition
 
-Only after H5 identifies a useful policy region, compare:
+H6 is complete. It compared static popularity, domain popularity, reactive
+LRU, transition-guided residency, linear-guided residency, and an equal-budget
+next-use oracle at K=8/16/32. Prediction could admit only an actually demanded
+miss; no broad candidate prefetch was allowed.
 
-- reactive JIT whole-expert movement;
-- static or domain-conditioned residency;
-- prediction-guided admission/residency;
-- prediction-guided replication proxy;
-- moving activations to resident experts.
+At the frozen decode K=16, Δ=3 gate, transition and linear lose 3.9 and 2.5 pp
+of expert-stall reduction and 0.7 and 0.6 pp of complete-set hits relative to
+the strongest matched simple baseline. The oracle remains strong, but existing
+depth-trajectory scores do not predict temporal reuse well enough to select
+residency.
 
-Keep this first-order and normalized. The purpose is to determine which
-mechanism deserves implementation, not to forecast production latency.
-
-H5 identifies the narrow H6 target: candidate admission, not broader predictor
-optimization. A shared score threshold reduces the linear policy from roughly
-6.5× to 3.0–3.3× at 50% complete cold-set coverage, but cannot reach 2×.
-Start with one per-head calibrator or very small cost-sensitive admission model
-that combines score, rank, margin, current residency, and recent/domain
-popularity. Compare it at K=32, Δ=3/9 and stop if it cannot approach 2× without
-destroying complete cold-set coverage. Do not add a generic MLP sweep, new
-inference, H7, or C1 in this step.
+Decision: stop this placement mechanism after human figure review. Do not fit
+the previously proposed cost-sensitive head, tune an MLP, collect fresh
+confirmation, begin H7, or download a second model. Any later work must first
+pose a genuinely different mechanism or a direct temporal-reuse hypothesis and
+receive explicit permission.
 
 ## H7 — Controlled routing-predictability intervention
 
-H1–H5 observe a normally trained model; they do not show that predictability
-can be increased without quality loss.
+H1–H6 observe a normally trained model; they do not show that predictability
+can be increased without quality loss. H6 also removes the immediate placement
+justification for this intervention.
 
 If H5-B produces a plausible predictor target, run one small matched pilot:
 
