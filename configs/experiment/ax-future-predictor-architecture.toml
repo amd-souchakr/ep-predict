@@ -1,0 +1,50 @@
+# Frozen assumption-driven architecture exploration. Reuses retained OLMoE
+# traces and H4 calibration. It performs no model inference or training.
+output_dir = "artifacts/runs/h1-standard-small/analysis/architecture"
+h1_run = "artifacts/runs/h1-standard-small"
+h4_measurement = "artifacts/runs/h1-standard-small/analysis/h4/measurement.json"
+h5_analysis = "artifacts/runs/h1-standard-small/analysis/h5"
+phase = "decode"
+seed = 17
+
+[predictor]
+# Complete cold-set coverage is a wave-level assumption, not derived from
+# independent per-expert accuracy.
+complete_coverages = [0.50, 0.75, 0.90, 0.95, 0.99, 0.999]
+amplifications = [1.0, 1.25, 1.5, 2.0, 4.0, 8.0]
+correlated_miss_generation = true
+suppress_resident_and_inflight = true
+
+[residency]
+experts_per_layer = [8, 16, 32]
+lookaheads = [1, 2, 3, 6, 9, 12, 15]
+
+[cold_tier]
+bandwidth_gbps = [16.0, 24.1354255944, 32.0, 64.0, 128.0, 256.0, 512.0]
+startup_latency_us = [0.1, 1.0, 2.8, 5.0, 20.0]
+transfer_concurrency = [1, 2, 4]
+
+[granularity]
+object_mib = [12.0, 4.0, 1.0, 0.25]
+normalized_unique_cold_objects = [1, 2, 4, 8]
+
+[sram]
+capacity_mib = [32, 64, 128, 256, 512]
+bandwidth_gbps = [512.0, 1000.0, 2000.0, 4000.0, 8000.0]
+startup_latency_us = [0.05, 0.1, 0.5, 1.0]
+rolling_global_staging = true
+double_buffered = true
+
+[slo]
+# Normalized slack avoids pretending that one current-model TPOT is a future
+# product target. Also report the measured OLMoE anchor separately.
+reactive_miss_slack_multipliers = [0.0, 0.25, 0.5, 1.0, 2.0]
+tail_percentiles = [0.50, 0.95, 0.99]
+
+[classification]
+max_mean_service_pressure = 1.0
+min_robust_headroom = 1.25
+min_modeled_stall_reduction = 0.25
+min_oracle_recovery = 0.50
+max_predicted_to_useful_bytes = 2.0
+

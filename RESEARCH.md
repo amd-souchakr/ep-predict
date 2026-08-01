@@ -2,7 +2,7 @@
 
 ## Founding Research PRD
 
-**Status:** Bootstrap specification  
+**Status:** H1–H6 and C0 empirical pilot complete; AX architecture exploration ready
 **Primary environment:** Python 3.12, `uv`, PyTorch, Hugging Face Transformers, CUDA 12.4  
 **Initial hardware:** 1× NVIDIA GPU with 24 GB VRAM  
 **Planned scale-up environment:** 8× AMD MI355X-class GPUs with 288 GB HBM per GPU  
@@ -11,6 +11,9 @@
 **Curated publication insights:** [docs/FOUNDATIONAL_INSIGHTS.md](docs/FOUNDATIONAL_INSIGHTS.md)
 This durable synthesis is updated only at major evidence transitions; routine
 results remain in `EXPERIMENT_LOG.md` and the per-hypothesis reports.
+
+**Active architecture protocol:**
+[docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md](docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md)
 
 ---
 
@@ -499,6 +502,44 @@ gate. See [docs/C0_RESULTS.md](docs/C0_RESULTS.md).
 Before making a general MoE claim, repeat the decisive trace and normalized
 co-design analysis on one newer top-1/top-2 checkpoint. This is a confirmation
 experiment, not a reason to broaden the current OLMoE prototype.
+
+---
+
+## AX: Future-predictor architecture envelope
+
+The active architecture track makes one explicit optimistic assumption:
+future MoE training can produce an MTP-style routing gate whose additional
+heads expose accurate multi-horizon expert demand without materially degrading
+language-model loss or load balance.
+
+AX does not treat that assumption as an empirical result. It uses:
+
+- measured OLMoE expert size and host-to-device calibration;
+- trace-derived demand sets, cold rates, reuse, and burstiness;
+- independently swept complete cold-set coverage and false-positive
+  amplification;
+- hypothetical host/pooled-memory, HBM, and software-managed SRAM parameters.
+
+The goal is to derive necessary and sufficient first-order conditions,
+inverse-design requirements, capacity/latency Pareto frontiers, and concrete
+workload/software/hardware interfaces. Wall-clock improvement on current
+OLMoE is not an exit condition.
+
+The track contains:
+
+1. **AX1:** capacity and TPOT envelope for predictive host/pooled-memory
+   offload;
+2. **AX2:** bandwidth/latency/reliability/granularity regime classification;
+3. **AX3:** long-horizon HBM placement plus short-horizon rolling SRAM staging.
+
+Complete cold-set coverage and predicted/useful byte amplification are primary
+predictor axes. Synthetic misses are generated at wave level so correlated
+false negatives remain visible in tail latency. CPU offload is compared with
+reactive CPU offload, not claimed faster than all-HBM execution.
+
+See
+[docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md](docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md)
+for the frozen evidence contract, sweep, figures, and interpretation rules.
 
 ---
 
@@ -1802,6 +1843,34 @@ Exit gate:
 
 ---
 
+## Milestone 5A: Assumption-driven architecture envelope
+
+Deliverables:
+
+- wave-level synthetic predictor streams spanning complete coverage and
+  transfer amplification;
+- capacity-versus-P99 Pareto frontier for predictive host/pooled-memory
+  offload;
+- inverse bandwidth, coverage, amplification, object-size, and residency
+  requirements;
+- latency/bandwidth/reliability/granularity phase classification;
+- three-tier pooled-memory/HBM/rolling-SRAM projection;
+- explicit measured, trace-derived, assumed, and hypothetical evidence labels.
+
+Exit condition:
+
+- necessary and sufficient first-order regions are quantified;
+- capacity viability, improvement over reactive hierarchy, and SLO safety are
+  reported separately;
+- future-router assumptions are not described as current-model measurements;
+- at least one concrete architecture configuration or an empty feasible region
+  is identified for each hierarchy.
+
+This milestone is the active focus. It does not require model training, new
+inference, or a live asynchronous implementation.
+
+---
+
 ## Milestone 6: PCIe prototype
 
 Deliverables:
@@ -2101,8 +2170,14 @@ Use this lean order:
    retraining.
 9. Compare residency roles only with the existing policies first. H6 did so
    and failed; stop this mechanism rather than escalating predictor complexity.
-10. Defer timing-fidelity work, broad predictor tuning, and asynchronous-copy
-    prototypes until an analytical policy region justifies them.
+10. Sweep an explicitly assumed MTP-router envelope over complete cold-set
+    coverage and amplification; retain correlated wave misses.
+11. Derive host/pooled-memory capacity–P99 frontiers and inverse interconnect
+    requirements before adding timing fidelity.
+12. Add transfer granularity and rolling HBM-to-SRAM staging using the same
+    event model.
+13. Defer broad predictor training and asynchronous-copy prototypes until an
+    analytical configuration is worth calibrating.
 
 ---
 
@@ -2117,10 +2192,14 @@ The project is minimally successful if it produces:
 - a calibrated transfer model;
 - an oracle prefetch simulation;
 - one learned prefetch result;
-- one artificial asynchronous PCIe overlap demonstration;
+- one trace-calibrated future-predictor architecture envelope;
+- one fast-tier capacity versus tail-latency Pareto result;
 - one defensible positive or negative architecture conclusion.
 
-The project does not require end-to-end model speedup to be successful.
+The project does not require end-to-end model speedup or a live asynchronous
+PCIe implementation to be successful. A later overlap demonstration is a
+calibration step for a selected design point, not a prerequisite for deriving
+the architecture.
 
 ---
 

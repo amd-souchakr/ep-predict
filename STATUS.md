@@ -1,8 +1,9 @@
 # Project status
 
-**Current hypothesis:** C0 — post-training trajectory stability
-**Current stage:** Base–Instruct endpoint gate complete and not supported;
-awaiting human review of the two C0 figures before closing the comparison
+**Current focus:** AX1 — future-predictor architecture envelope
+**Current stage:** Ready; assumption contract, sweep, and architecture protocol
+are frozen. Implementation has not started and requires no new inference or
+training.
 **Last updated:** 2026-08-01
 
 | Gate | Question | State | Exit evidence |
@@ -20,6 +21,9 @@ awaiting human review of the two C0 figures before closing the comparison
 | H7 | Can routing be made more predictable without harming loss or balance? | Deferred after H6 failure | Requires a new mechanism and explicit permission |
 | C0 | Does post-training materially change matched-token trajectory predictability? | Pilot not supported; review pending | Base/Instruct retain 89.7% of selections; layer-0→15 conditional-gain change is +1.6 pp versus a 5 pp gate |
 | C1 | Does the result transfer to a top-1/top-2 checkpoint? | Deferred; explicit permission required | No model download or testbed change authorized |
+| AX1 | Under assumed future MTP-style routing quality, what capacity/TPOT envelope does predictive offload enable? | Ready | Protocol and sweep frozen; reuses H1/H4/H5 evidence |
+| AX2 | What bandwidth, latency, reliability, amplification, and granularity bounds define viable regions? | Designed | Begins only after AX1 reproduces H4/H5 anchors |
+| AX3 | What HBM and rolling-SRAM organization suits a three-tier predictive hierarchy? | Designed | Long-/short-horizon control and global staging semantics frozen |
 
 ## Immediate run checklist
 
@@ -110,13 +114,31 @@ awaiting human review of the two C0 figures before closing the comparison
       figures with hashed inputs.
 - [ ] Complete researcher visual review; do not add SFT/DPO unless that review
       overturns the frozen endpoint stop decision.
+- [x] Freeze the AX evidence contract separating measured, trace-derived,
+      assumed-predictor, and hypothetical-hardware inputs.
+- [x] Freeze AX1 predictor-quality, capacity, lookahead, bandwidth, latency,
+      concurrency, granularity, and SLO sweep axes.
+- [x] Define capacity viability, reactive-hierarchy profitability, and SLO
+      safety without claiming speedup over all-HBM execution.
+- [x] Define AX2 inverse requirements and AX3 rolling three-tier SRAM
+      semantics.
+- [ ] Implement AX1 by extending the existing H4/H5 replay.
+- [ ] Reproduce the measured H4/H5 anchors before interpreting synthetic
+      future-router points.
+- [ ] Generate and review the capacity–P99 Pareto frontier before enabling
+      AX2.
 
 Full plan: [docs/NEXT_EXPERIMENTS.md](docs/NEXT_EXPERIMENTS.md).
 Prior result: [docs/H4_RESULTS.md](docs/H4_RESULTS.md).
-Current result: [docs/C0_RESULTS.md](docs/C0_RESULTS.md).
+Architecture protocol:
+[docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md](docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md).
+Latest empirical result: [docs/C0_RESULTS.md](docs/C0_RESULTS.md).
 
 ## Evidence policy
 
-`Ready` means code and protocol exist, not that the hypothesis is supported.
-Only immutable output under `artifacts/runs/<run-id>/analysis/` can change a
-hypothesis state to supported, mixed, or rejected.
+For empirical hypotheses, `Ready` means code and protocol exist. For the AX
+analysis track, `Ready` means the assumption contract, config, retained inputs,
+and output semantics are frozen and implementation can begin. It never means
+that an architecture is supported. Only immutable output under
+`artifacts/runs/<run-id>/analysis/` can establish a measured or projected
+result.

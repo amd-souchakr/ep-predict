@@ -1,8 +1,8 @@
 # Next experiments: first-order co-design and predictable routing
 
 **Updated:** 2026-08-01  
-**Current next action:** human review of the completed C0 Base–Instruct
-figures; do not add SFT/DPO after the failed endpoint gate
+**Current next action:** implement AX1, the frozen assumption-driven
+future-predictor architecture envelope; no new inference or training
 **Operating rule:** use the cheapest existing artifacts first; model broad
 viability and expected benefit before improving timing fidelity or predictors.
 
@@ -15,10 +15,19 @@ This plan separates three questions that should not be conflated:
 3. Can routing later be trained to move the prediction–quality Pareto frontier
    without harming language-model quality or load balance?
 
+The active AX track answers the first question under an explicit optimistic
+assumption: a future MTP-style router can expose multi-horizon expert-demand
+predictions without degrading model quality. It does not claim that current
+OLMoE or the fixed H3 predictor achieves those points. The frozen design is in
+[ARCHITECTURE_EXPLORATION_PROTOCOL.md](ARCHITECTURE_EXPLORATION_PROTOCOL.md).
+
 ## Experiment list
 
 | ID | Question | New inference/training? | Status |
 |---|---|---:|---|
+| AX1 | What model-capacity and TPOT envelope can future predictive host/pooled-memory prefetch provide? | No | Ready; protocol/config frozen |
+| AX2 | How do bandwidth, latency, coverage, amplification, and transfer granularity divide the design space? | No | Designed; follows AX1 anchor reproduction |
+| AX3 | What local-HBM and rolling-SRAM capacities suit a multi-horizon three-tier hierarchy? | No | Designed; follows AX2 |
 | H5-A | What prediction × hardware combinations create a first-order profitability window? | No | Complete; region exists |
 | H5-B | What minimum predictor quality is required at each capacity, bandwidth, and lookahead? | No; derived from H5-A | Complete |
 | H5-C | How much analytical oracle benefit do the existing transition and linear streams recover? | No retraining; reconstruct existing predictions | Complete; raw streams fail traffic gate |
@@ -28,10 +37,10 @@ This plan separates three questions that should not be conflated:
 | C0 | Does Base→Instruct post-training materially change matched-token trajectory predictability? | Yes; two endpoint traces | Complete; frozen stage-effect gate failed |
 | C1 | Does the trajectory/co-design result transfer to one newer top-1/top-2 checkpoint? | Yes; one trace collection | Deferred; explicit permission required |
 
-Detailed timing validation, concurrent-copy microbenchmarks, multi-GPU
-extrapolation, MLPs, predictor tuning, new inference, and model downloads
-remain deferred. H6 did not establish placement value for the current depth
-predictors.
+Detailed timing validation, concurrent-copy microbenchmarks, MLPs, predictor
+training, new inference, and model downloads remain deferred. AX is an
+analytical architectural exploration, not an attempt to rescue the current H3
+or H6 policies.
 
 C0 adds a within-family control, not a new placement mechanism. Base and
 Instruct preserve 89.7% of expert selections and differ by only +1.6 points on
@@ -39,6 +48,59 @@ the frozen long-range conditional-predictability metric. Do not spend two more
 checkpoint downloads on SFT/DPO stage localization. The next generalization
 experiment, if explicitly approved later, should change routing architecture
 rather than add another OLMoE post-training stage.
+
+## AX architecture-exploration sequence
+
+### Assumption boundary
+
+Use measured and trace-derived OLMoE demand as the workload anchor, but sweep
+hypothetical future-router quality independently:
+
+- complete cold-set coverage
+  \(C\in\{0.50,0.75,0.90,0.95,0.99,0.999\}\);
+- predicted/useful byte amplification
+  \(A\in\{1,1.25,1.5,2,4,8\}\);
+- correlated wave misses rather than independent expert-label corruption.
+
+Every output must label measured inputs, trace-derived inputs, assumed
+predictor behavior, and hypothetical hardware parameters separately.
+
+### AX1 — Capacity-first predictive offload
+
+Extend the existing H4/H5 replay over K=8/16/32, selected lookaheads through
+Δ=15, and cold-tier bandwidths from 16–512 GB/s. Report HBM bytes retained,
+maximum offloaded expert capacity, useful/false/late/missed bytes, and
+mean/P95/P99 slowdown relative to the **reactive hierarchy**.
+
+CPU-memory prefetch is a capacity-enabling mechanism. Do not compare it as a
+speedup over an otherwise identical all-HBM model.
+
+### AX2 — Reliability and interconnect regimes
+
+Add startup latency, transfer concurrency, and 12/4/1/0.25 MiB transfer
+objects. Derive \(\beta_{\min}\), \(C_{\min}\), \(A_{\max}\), and
+\(S_{\max}\). Classify bandwidth-, latency-, reliability-, capacity-, and
+SLO-limited regions. Use normalized unique demand U=1/2/4/8 only as a clearly
+labeled sensitivity for future top-1/top-2 routing.
+
+### AX3 — Predictive three-tier hierarchy
+
+Model pooled or host memory → local HBM → rolling software-managed SRAM.
+Long-horizon heads plan HBM placement; short-horizon heads plan SRAM staging;
+the ordinary router confirms demand. Sweep 32–512 MiB global SRAM capacity
+with double buffering, not a persistent per-layer expert cache.
+
+### Required synthesis
+
+Produce at most:
+
+1. complete coverage versus cold-service-headroom profitability map;
+2. fast-tier capacity versus P99 TPOT Pareto frontier;
+3. minimum bandwidth versus lookahead inverse-design curve.
+
+The result is quantitative bounds and architecture regimes, not a measured
+wall-clock benefit. Live validation is optional and follows only after a
+representative point is selected.
 
 ## H5-A — Controlled prediction × hardware sweep
 

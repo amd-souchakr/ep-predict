@@ -13,6 +13,10 @@ decision path without adding a tracking system or notebook ceremony.
   an explicit cross-model synthesis.
 - Keep cheap descriptive and post-hoc analysis non-gating. Do not preregister
   every possible layer, domain, or hardware interaction.
+- For assumption-driven architecture studies, freeze an evidence contract that
+  labels every input as measured, trace-derived, assumed predictor behavior,
+  or hypothetical hardware. Do not let an optimistic predictor sweep alter an
+  empirical model result.
 
 ## 2. Validate
 
@@ -50,6 +54,14 @@ decision path without adding a tracking system or notebook ceremony.
 - When studying co-design, solve the inverse requirement as well as the forward
   result: report what predictor quality or hardware headroom would be needed
   to change the decision.
+- For capacity-enabling offload, compare predicted policies with the same
+  reactive hierarchy. Do not call CPU/pooled-memory offload faster than an
+  otherwise identical all-resident execution.
+- Evaluate future predictors by complete cold-set coverage and
+  predicted/useful byte amplification. Generate correlated misses at the wave
+  level; independent label flips may be used only as a labeled sensitivity.
+- Report mean service pressure separately from trace-replayed P95/P99 queue
+  behavior. Mean headroom is necessary but not sufficient.
 - Add request-level uncertainty only for a confirmation run or a genuinely
   borderline decision; do not bootstrap every pilot table.
 

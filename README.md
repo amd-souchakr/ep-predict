@@ -44,6 +44,15 @@ frozen 5-point gate. The structured trajectory is already present in Base and
 largely preserved by post-training for this lineage. See
 [docs/C0_RESULTS.md](docs/C0_RESULTS.md).
 
+The active work is now an explicitly assumption-driven architecture
+exploration. It treats a future MTP-style routing gate with swept complete-set
+coverage and false-positive amplification as a workload/software contract,
+then derives the host/pooled-memory, HBM, and software-managed SRAM capacities,
+bandwidths, lookaheads, and transfer granularities required for useful
+hierarchical execution. The goal is quantitative bounds and co-design regimes,
+not wall-clock speedup on current OLMoE or the current GPU. See
+[docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md](docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md).
+
 The active experiment queue, insight-mining questions, and visualization
 deliverables are in
 [docs/NEXT_EXPERIMENTS.md](docs/NEXT_EXPERIMENTS.md).

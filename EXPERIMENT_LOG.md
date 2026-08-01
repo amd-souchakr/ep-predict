@@ -354,3 +354,36 @@ The immutable run manifest and metrics remain the source of truth.
 - One next action: human review of the two C0 figures; retain C1 sparse-model
   transfer as the higher-value future confirmation requiring explicit
   permission.
+
+### `ax-future-predictor-architecture` — 2026-08-01
+
+- Track: AX — assumption-driven predictive expert-memory architecture
+  exploration.
+- Status: `READY`; protocol and sweep are frozen, implementation has not run.
+- Protocol/config:
+  `docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md` and
+  `configs/experiment/ax-future-predictor-architecture.toml`.
+- Objective: derive quantitative capacity, bandwidth, latency, reliability,
+  granularity, and SLO regions for a future MTP-style routing gate. The goal is
+  architectural exploration, not wall-clock benefit on current OLMoE.
+- Evidence contract: keep measured calibration, trace-derived demand, assumed
+  future-predictor quality, and hypothetical hardware inputs separate in every
+  output.
+- Predictor sweep: wave-complete cold-set coverage 50–99.9% and
+  predicted/useful byte amplification 1–8×, with correlated wave misses.
+- AX1: project host/pooled-memory capacity and P50/P95/P99 TPOT relative to the
+  same reactive hierarchy over K=8/16/32 and Δ through 15.
+- AX2: derive bandwidth, startup-latency, coverage, amplification, and maximum
+  transfer-object-size bounds; classify bandwidth-, latency-, reliability-,
+  capacity-, and SLO-limited regions.
+- AX3: model long-horizon placement into HBM and short-horizon staging into a
+  32–512 MiB global rolling SRAM tier with double buffering.
+- Required figures: one profitability phase map, one fast-tier
+  capacity-versus-P99 Pareto frontier, and one inverse bandwidth-versus-
+  lookahead curve.
+- Claim boundary: CPU/pooled-memory prefetch may enable larger models and beat
+  reactive offload, but cannot be called faster than an otherwise identical
+  all-HBM model. Future-router sweep points are projections, not evidence that
+  the current checkpoint achieves them.
+- One next action: implement AX1 by extending H4/H5 replay and first reproduce
+  the measured anchors.
