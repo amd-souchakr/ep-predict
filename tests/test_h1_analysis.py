@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import tempfile
 import unittest
 from pathlib import Path
@@ -8,6 +9,7 @@ from pathlib import Path
 from ep_predict.analysis.h1 import (
     distribution_metrics,
     gini,
+    jensen_shannon_divergence,
     window_stability,
 )
 from ep_predict.analysis.h1 import analyze_h1
@@ -38,6 +40,13 @@ class MetricTests(unittest.TestCase):
         assert metrics is not None
         self.assertAlmostEqual(metrics["mean_jaccard"], 1.0)
         self.assertAlmostEqual(metrics["mean_lagged_oracle_ratio"], 1.0)
+
+    def test_jensen_shannon_divergence(self) -> None:
+        self.assertAlmostEqual(jensen_shannon_divergence([1, 1], [2, 2]), 0.0)
+        self.assertAlmostEqual(
+            jensen_shannon_divergence([1, 0], [0, 1]),
+            math.log(2),
+        )
 
 
 class H1IntegrationTest(unittest.TestCase):

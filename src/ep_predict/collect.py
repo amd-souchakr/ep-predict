@@ -161,7 +161,7 @@ def collect_run(
                     run_id=run_id,
                     request_id=request_id,
                     sample_id=sample_id,
-                    dataset_name=prompt_path.stem,
+                    dataset_name=prompt_record.get("dataset_name", prompt_path.stem),
                     domain=prompt_record["domain"],
                 )
             )

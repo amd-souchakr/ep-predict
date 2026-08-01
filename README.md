@@ -4,7 +4,7 @@ Hook-only experiments for testing whether MoE expert demand is skewed,
 predictable, and useful for hierarchical memory placement. The model and
 Transformers source remain unmodified.
 
-Follow a "tracer bullet" development approach that develops a narrow vertical slice to a result instead of breadth and ceremony. This is a scientist's tool for rapid prototyping and experimentation, not a production software.
+Follow a "tracer bullet" development approach that develops a narrow vertical slice to a result instead of breadth and ceremony. This is a scientist's tool for rapid prototyping and experimentation, not a production software. Keep the human in the loop. Explain your findings, analysis, and interpretation from each experiment before moving to the next one.
 
 The project advances one research gate at a time. The current gate is **H1:
 expert popularity is skewed and stable at an operationally useful scope**.
@@ -41,22 +41,35 @@ uv run ep-predict inspect \
   --config configs/model/olmoe-1b-7b-instruct.toml
 ```
 
-Run the small H1 pilot:
+Materialize the small standard workload:
+
+```bash
+uv sync --extra data --extra inference
+
+uv run ep-predict prepare-dataset \
+  --config configs/dataset/h1-standard-small.toml
+```
+
+Run H1:
 
 ```bash
 uv run ep-predict collect \
   --model-config configs/model/olmoe-1b-7b-instruct.toml \
-  --experiment-config configs/experiment/h1-pilot.toml
+  --experiment-config configs/experiment/h1-standard-small.toml
 
 uv run ep-predict analyze-h1 \
-  --run artifacts/runs/h1-pilot \
-  --config configs/experiment/h1-pilot.toml
+  --run artifacts/runs/h1-standard-small \
+  --config configs/experiment/h1-standard-small.toml
 ```
 
 The collector writes one compressed JSONL trace per request. This is
 deliberately simple, crash-safe, and resumable. It is sufficient for the pilot;
 Arrow/Parquet should be added only when hidden-state features or million-event
 traces make JSON decoding a bottleneck.
+
+`data/prompts/h1-pilot.jsonl` remains only an instrumentation smoke fixture.
+Research evidence uses the revision-pinned standard mixture described in
+[docs/DATASET_PROTOCOL.md](docs/DATASET_PROTOCOL.md).
 
 ## Invariants
 

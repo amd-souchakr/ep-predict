@@ -1,7 +1,7 @@
 # Project status
 
 **Current hypothesis:** H1 — expert popularity is skewed  
-**Current stage:** implementation ready; real-model run pending  
+**Current stage:** standard workload materialized; real-model run pending
 **Last updated:** 2026-07-31
 
 | Gate | Question | State | Exit evidence |
@@ -17,10 +17,11 @@
 ## Immediate run checklist
 
 - [ ] Confirm the actual machine exposes the intended 24 GB NVIDIA GPU.
-- [ ] Install the `inference` dependency group.
+- [x] Install the `data` and `inference` dependency groups.
+- [x] Materialize and review the revision-pinned standard-small workload.
 - [ ] Run model inspection and retain `model_report.json`.
-- [ ] Run two prompts with `--limit 2`; require zero trace integrity errors.
-- [ ] Run the 20-request pilot.
+- [ ] Run two standard examples with `--limit 2`; require zero integrity errors.
+- [ ] Run the 128-request standard pilot.
 - [ ] Review H1 gate output before expanding the workload.
 - [ ] If borderline, run the confirmation workload with more requests and
       request-level bootstrap intervals.

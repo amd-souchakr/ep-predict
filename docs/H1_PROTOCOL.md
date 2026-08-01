@@ -41,25 +41,22 @@ Tracing uses ordinary PyTorch forward pre/post hooks:
 There is no monkey patching, model rewrite, custom model implementation, or
 change to Transformers.
 
-## Pilot workload
+## Workloads
 
-The checked-in pilot has 20 original prompts: five each in general prose,
-code, mathematics/reasoning, and conversation. Each request is run separately
-with greedy generation for 64 decode tokens and a maximum prompt length of 384
-tokens.
+The checked-in 20-prompt authored workload is only a hook smoke fixture. The H1
+research pilot uses 128 examples: 32 each from revision-pinned WikiText-2,
+GSM8K, HumanEval, and MT-Bench splits. See `docs/DATASET_PROTOCOL.md`.
 
-This should produce roughly 25k–50k token-layer records (roughly 200k–400k
-individual expert selections), depending on prompt tokenization and early EOS.
-It is large enough to catch gross skew and tracing errors, but not large enough
-for a publication claim.
+Each request is run separately with greedy generation for 64 decode tokens and
+a maximum prompt length of 384 tokens. The standard pilot is large enough for
+a spend/no-spend decision, but not a publication claim.
 
 Run order is fixed for the pilot. Before a strong claim:
 
 - repeat with at least three shuffled request orders;
-- increase to at least 50 requests per domain;
+- repeat with two additional deterministic subset seeds;
 - add request-level bootstrap intervals;
-- pin model and tokenizer revisions;
-- include a real corpus sample rather than only authored prompts.
+- confirm that the domain conclusions are not driven by token-count imbalance.
 
 ## Metrics
 
@@ -82,6 +79,15 @@ For windows of 128 and 256 routed tokens:
 
 The last ratio is an operational stability measure: it asks how much of the
 best possible coverage a one-window-old placement retains.
+
+To distinguish a data-conditioned effect from sampling noise, also report:
+
+- pairwise Jensen-Shannon divergence between domain expert distributions;
+- top-8 hot-set Jaccard between domains;
+- the same metrics between split halves of each domain.
+
+Between-domain divergence should be interpreted relative to within-domain
+split-half drift, not against zero.
 
 ## Preregistered pilot gate
 
@@ -106,8 +112,8 @@ Interpretation:
 | Weak + stable | Skew is insufficient; do not justify a hot tier from popularity |
 | Weak + unstable | Reject popularity-based residency for this scope |
 
-Domain-specific positives are reported as mixed evidence, not promoted into a
-model-wide claim.
+Per-domain prefill results are primary for the data-conditioned claim.
+Token-weighted mixed-domain results and decode results are secondary.
 
 ## Confounds and controls
 

@@ -29,6 +29,8 @@ class HookIntegrationTest(unittest.TestCase):
             num_experts=8,
             num_experts_per_tok=2,
             max_position_embeddings=32,
+            eos_token_id=2,
+            pad_token_id=0,
         )
         model = OlmoeForCausalLM(config).eval()
         routers = discover_routers(model, [".mlp.gate"])

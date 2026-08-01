@@ -28,6 +28,14 @@ def _inspect(args: argparse.Namespace) -> int:
     return 0
 
 
+def _prepare_dataset(args: argparse.Namespace) -> int:
+    from ep_predict.data.standard import materialize_standard_workload
+
+    manifest = materialize_standard_workload(load_toml(args.config))
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
 def _collect(args: argparse.Namespace) -> int:
     from ep_predict.collect import collect_run
 
@@ -61,6 +69,13 @@ def build_parser() -> argparse.ArgumentParser:
     inspect_parser.add_argument("--config", required=True, type=Path)
     inspect_parser.add_argument("--output", type=Path)
     inspect_parser.set_defaults(function=_inspect)
+
+    dataset_parser = subparsers.add_parser(
+        "prepare-dataset",
+        help="materialize a revision-pinned standard trace workload",
+    )
+    dataset_parser.add_argument("--config", required=True, type=Path)
+    dataset_parser.set_defaults(function=_prepare_dataset)
 
     collect_parser = subparsers.add_parser(
         "collect", help="collect resumable request-level routing traces"

@@ -5,6 +5,7 @@ import json
 import math
 import statistics
 from collections import Counter, defaultdict
+from itertools import combinations
 from pathlib import Path
 from typing import Any
 
@@ -42,6 +43,35 @@ def demand_coverage(counts: list[int], top_n: int) -> float:
     if total == 0:
         return 0.0
     return sum(sorted(counts, reverse=True)[:top_n]) / total
+
+
+def jensen_shannon_divergence(left: list[int], right: list[int]) -> float:
+    """Bounded, symmetric distribution distance in nats."""
+    if len(left) != len(right):
+        raise ValueError("distributions must have the same expert count")
+    left_total = sum(left)
+    right_total = sum(right)
+    if left_total == 0 or right_total == 0:
+        return 0.0
+    left_probability = [value / left_total for value in left]
+    right_probability = [value / right_total for value in right]
+    midpoint = [
+        (left_value + right_value) / 2
+        for left_value, right_value in zip(
+            left_probability, right_probability, strict=True
+        )
+    ]
+
+    def kl_divergence(probability: list[float]) -> float:
+        return sum(
+            value * math.log(value / middle)
+            for value, middle in zip(probability, midpoint, strict=True)
+            if value > 0 and middle > 0
+        )
+
+    return 0.5 * (
+        kl_divergence(left_probability) + kl_divergence(right_probability)
+    )
 
 
 def distribution_metrics(counts: list[int], top_n: list[int]) -> dict[str, Any]:
@@ -335,6 +365,77 @@ def analyze_h1(
     _write_csv(analysis_dir / "rank_frequency.csv", rank_rows)
     _write_csv(analysis_dir / "window_stability.csv", window_rows)
 
+    domain_comparison_rows: list[dict[str, Any]] = []
+    within_domain_rows: list[dict[str, Any]] = []
+    phases = sorted({scope[0] for scope in events})
+    domains = sorted(
+        {scope[1] for scope in events if scope[1] != "__all__"}
+    )
+    for phase in phases:
+        for layer, num_experts in sorted(experts_by_layer.items()):
+            for left_domain, right_domain in combinations(domains, 2):
+                left_counter = counts.get((phase, left_domain, layer), Counter())
+                right_counter = counts.get((phase, right_domain, layer), Counter())
+                if not left_counter or not right_counter:
+                    continue
+                left_dense = [left_counter[index] for index in range(num_experts)]
+                right_dense = [right_counter[index] for index in range(num_experts)]
+                left_hot = _top_set(left_counter, capacity)
+                right_hot = _top_set(right_counter, capacity)
+                union = left_hot | right_hot
+                domain_comparison_rows.append(
+                    {
+                        "phase": phase,
+                        "layer_id": layer,
+                        "left_domain": left_domain,
+                        "right_domain": right_domain,
+                        "jensen_shannon_divergence": jensen_shannon_divergence(
+                            left_dense, right_dense
+                        ),
+                        "hotset_jaccard": (
+                            len(left_hot & right_hot) / len(union) if union else 1.0
+                        ),
+                    }
+                )
+
+            for domain in domains:
+                scoped_events = events.get((phase, domain, layer), [])
+                midpoint = len(scoped_events) // 2
+                if midpoint == 0:
+                    continue
+                first = Counter(
+                    expert
+                    for selected in scoped_events[:midpoint]
+                    for expert in selected
+                )
+                second = Counter(
+                    expert
+                    for selected in scoped_events[midpoint : 2 * midpoint]
+                    for expert in selected
+                )
+                first_dense = [first[index] for index in range(num_experts)]
+                second_dense = [second[index] for index in range(num_experts)]
+                first_hot = _top_set(first, capacity)
+                second_hot = _top_set(second, capacity)
+                union = first_hot | second_hot
+                within_domain_rows.append(
+                    {
+                        "phase": phase,
+                        "domain": domain,
+                        "layer_id": layer,
+                        "tokens_per_half": midpoint,
+                        "split_half_jensen_shannon_divergence": (
+                            jensen_shannon_divergence(first_dense, second_dense)
+                        ),
+                        "split_half_hotset_jaccard": (
+                            len(first_hot & second_hot) / len(union) if union else 1.0
+                        ),
+                    }
+                )
+
+    _write_csv(analysis_dir / "domain_comparison.csv", domain_comparison_rows)
+    _write_csv(analysis_dir / "within_domain_stability.csv", within_domain_rows)
+
     gate_phase = str(gate_config.get("phase", "decode"))
     gate_window = int(gate_config.get("window_size", 256))
     min_lift = float(gate_config.get("min_coverage_lift_over_uniform", 2.0))
@@ -427,6 +528,10 @@ def analyze_h1(
             "popularity": str(analysis_dir / "popularity.csv"),
             "rank_frequency": str(analysis_dir / "rank_frequency.csv"),
             "window_stability": str(analysis_dir / "window_stability.csv"),
+            "domain_comparison": str(analysis_dir / "domain_comparison.csv"),
+            "within_domain_stability": str(
+                analysis_dir / "within_domain_stability.csv"
+            ),
         },
     }
     write_json(analysis_dir / "summary.json", summary)

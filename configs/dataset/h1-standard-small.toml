@@ -1,0 +1,55 @@
+output_file = "artifacts/datasets/h1-standard-small/prompts.jsonl"
+manifest_file = "artifacts/datasets/h1-standard-small/manifest.json"
+seed = 7
+samples_per_domain = 32
+shuffle_buffer = 10000
+
+[[sources]]
+key = "wikitext2"
+dataset_name = "Salesforce/wikitext"
+subset = "wikitext-2-raw-v1"
+split = "validation"
+revision = "b08601e04326c79dfdd32d625aee71d232d685c3"
+domain = "general"
+field = "text"
+id_field = ""
+min_chars = 200
+prefix = "Continue the following passage in a coherent style:\n\n"
+
+[[sources]]
+key = "gsm8k"
+dataset_name = "openai/gsm8k"
+subset = "main"
+split = "test"
+revision = "ecdace25ad778589e9d5524ca35f2cca6d7d6fd1"
+domain = "math"
+field = "question"
+id_field = ""
+min_chars = 40
+prefix = "Solve this problem and explain your reasoning:\n\n"
+
+[[sources]]
+key = "humaneval"
+dataset_name = "openai/openai_humaneval"
+subset = "openai_humaneval"
+split = "test"
+revision = "e9b53e1677523f1e61e4d0960fd7502694a24bd4"
+domain = "code"
+field = "prompt"
+id_field = "task_id"
+min_chars = 80
+prefix = "Complete this Python function correctly:\n\n"
+preserve_whitespace = true
+
+[[sources]]
+key = "mt_bench"
+dataset_name = "HuggingFaceH4/mt_bench_prompts"
+subset = ""
+split = "train"
+revision = "e3a795c"
+domain = "conversation"
+field = "prompt"
+id_field = "prompt_id"
+value_mode = "first"
+min_chars = 40
+prefix = ""
