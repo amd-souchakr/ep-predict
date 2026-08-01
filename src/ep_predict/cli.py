@@ -56,6 +56,18 @@ def _analyze_h1(args: argparse.Namespace) -> int:
     return 0
 
 
+def _plot_h1(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.h1 import plot_h1
+
+    manifest = plot_h1(
+        args.run,
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ep-predict",
@@ -93,6 +105,18 @@ def build_parser() -> argparse.ArgumentParser:
     analyze_parser.add_argument("--run", required=True, type=Path)
     analyze_parser.add_argument("--config", required=True, type=Path)
     analyze_parser.set_defaults(function=_analyze_h1)
+
+    plot_parser = subparsers.add_parser(
+        "plot-h1", help="generate publication-style H1 figures"
+    )
+    plot_parser.add_argument("--run", required=True, type=Path)
+    plot_parser.add_argument("--config", required=True, type=Path)
+    plot_parser.add_argument(
+        "--output",
+        type=Path,
+        help="figure directory (default: RUN/analysis/h1/figures)",
+    )
+    plot_parser.set_defaults(function=_plot_h1)
     return parser
 
 

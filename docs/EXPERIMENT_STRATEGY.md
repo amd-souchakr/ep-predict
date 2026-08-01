@@ -68,11 +68,23 @@ Keep only:
 - `model_report.json`: exact router mapping and expert bytes;
 - compressed request traces;
 - machine-readable CSV/JSON metrics;
-- one short Markdown report.
+- one short Markdown report;
+- one to three decision-relevant PDF/PNG figures and their input-hash manifest.
 
 Use `STATUS.md` for the current gate and `EXPERIMENT_LOG.md` for one-paragraph
 decisions. Do not add a tracking service, database, notebook-only pipeline, or
 large configuration framework during the prototype.
+
+## Human-in-the-loop visualization gate
+
+After every major experiment, generate the smallest set of plots needed to
+understand the decision, then pause for human review before starting the next
+hypothesis. The reviewer checks semantics, aggregation, thresholds, outliers,
+regimes, and confounds against the machine-readable tables. Record the review
+and one next action in Markdown; do not use visual inspection to retroactively
+change the formal gate.
+
+See `docs/EXPERIMENT_SOP.md` for the lean operating loop.
 
 ## Evidence grades
 

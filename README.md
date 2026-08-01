@@ -11,6 +11,11 @@ expert popularity is skewed and stable at an operationally useful scope**.
 See [STATUS.md](STATUS.md) for the live state and
 [docs/H1_PROTOCOL.md](docs/H1_PROTOCOL.md) for the preregistered pilot.
 
+The completed H1 pilot did not support one mixed-workload static top-8 tier
+(2/16 layers passed), but found strong code- and math-conditioned hotness.
+See [docs/H1_RESULTS.md](docs/H1_RESULTS.md) for the findings and claim
+boundary.
+
 ## Testbed
 
 The primary model is `allenai/OLMoE-1B-7B-0125-Instruct`:
@@ -32,6 +37,12 @@ Install the inference dependencies:
 
 ```bash
 uv sync --extra inference
+```
+
+Install plotting dependencies:
+
+```bash
+uv sync --all-extras
 ```
 
 Inspect the model before collecting data:
@@ -60,6 +71,10 @@ uv run ep-predict collect \
 uv run ep-predict analyze-h1 \
   --run artifacts/runs/h1-standard-small \
   --config configs/experiment/h1-standard-small.toml
+
+uv run ep-predict plot-h1 \
+  --run artifacts/runs/h1-standard-small \
+  --config configs/experiment/h1-standard-small.toml
 ```
 
 The collector writes one compressed JSONL trace per request. This is
@@ -70,6 +85,10 @@ traces make JSON decoding a bottleneck.
 `data/prompts/h1-pilot.jsonl` remains only an instrumentation smoke fixture.
 Research evidence uses the revision-pinned standard mixture described in
 [docs/DATASET_PROTOCOL.md](docs/DATASET_PROTOCOL.md).
+
+Every major experiment ends with scripted visualization and a human review
+before the next hypothesis begins. See
+[docs/EXPERIMENT_SOP.md](docs/EXPERIMENT_SOP.md).
 
 ## Invariants
 

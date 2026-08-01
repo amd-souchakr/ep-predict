@@ -1,5 +1,11 @@
 # H1 protocol: expert skew and operational hotness
 
+> Post-run audit: the prose below names 128/256-token windows and a 256-token
+> gate, while the frozen experiment config used 256/512-token windows and a
+> 512-token gate. The formal result used the config. The available 256-token
+> result is also negative because no decode layer reaches 0.50 mean Jaccard.
+> See `docs/H1_RESULTS.md`; this note preserves rather than hides the mismatch.
+
 ## Purpose
 
 H1 is a workload-characterization gate:

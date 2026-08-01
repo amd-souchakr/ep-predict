@@ -1496,6 +1496,14 @@ Use structured logging.
 
 Avoid notebooks as the only source of truth. Notebooks should call library code.
 
+After every major experiment, generate one to three decision-relevant figures
+from the immutable metric tables and pause for human visual review before
+advancing to the next hypothesis. The review must check units, aggregation,
+baselines, thresholds, outliers, regimes, and confounds, and record whether the
+visual evidence changes the interpretation. It must not retroactively change a
+preregistered decision rule. Save publication-quality PDF and high-resolution
+PNG plus a manifest of figure inputs.
+
 ---
 
 # 27. CLI Requirements
@@ -1913,6 +1921,10 @@ The coding assistant should maintain:
 6. **Assumption ledger:** all extrapolation assumptions and their evidence.
 7. **Failure log:** invalidated hypotheses and implementation pitfalls.
 8. **Final technical report:** methodology, results, model calibration, conclusions, and architecture implications.
+
+The results summary must include a human visual-review checkpoint. The next
+major hypothesis starts only after the researcher reviews the generated
+figures and records the next action.
 
 ---
 
