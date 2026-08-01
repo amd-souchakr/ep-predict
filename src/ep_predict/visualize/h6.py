@@ -10,7 +10,14 @@ from ep_predict.tracing.storage import write_json
 
 
 TEXT = "#20242B"
+MUTED = "#5E6875"
 GRID = "#D9DEE7"
+POLICY_COLORS = {
+    "oracle": "#2A8C72",
+    "lru": "#6B7280",
+    "linear": "#3266A8",
+    "transition": "#D97732",
+}
 
 
 def _read_csv(path: Path) -> list[dict[str, str]]:
@@ -32,15 +39,20 @@ def _style() -> None:
     mpl.rcParams.update(
         {
             "font.family": "DejaVu Sans",
-            "font.size": 9.2,
-            "axes.titlesize": 10.8,
-            "axes.labelsize": 9.8,
+            "font.size": 10,
+            "axes.titlesize": 11,
+            "axes.labelsize": 10.5,
             "axes.edgecolor": "#7A828E",
             "axes.linewidth": 0.8,
+            "axes.spines.top": False,
+            "axes.spines.right": False,
             "xtick.color": TEXT,
             "ytick.color": TEXT,
             "text.color": TEXT,
             "axes.labelcolor": TEXT,
+            "legend.frameon": False,
+            "pdf.fonttype": 42,
+            "ps.fonttype": 42,
         }
     )
 
@@ -58,147 +70,124 @@ def _save(figure: Any, stem: Path) -> list[Path]:
     return [png, pdf]
 
 
-def _heatmap_values(
-    rows: list[dict[str, str]],
-    *,
-    phase: str,
-    capacity: int,
-) -> tuple[Any, dict[tuple[int, int], str]]:
-    import numpy as np
-
-    scoped: dict[
-        tuple[str, int, int], dict[str, dict[str, str]]
-    ] = {}
-    for row in rows:
-        if row["phase"] != phase or int(row["capacity"]) != capacity:
-            continue
-        key = (
-            row["domain"],
-            int(row["source_layer"]),
-            int(row["delta"]),
-        )
-        scoped.setdefault(key, {})[row["policy"]] = row
-
-    values: dict[tuple[int, int], list[float]] = {}
-    winners: dict[tuple[int, int], list[str]] = {}
-    for (_domain, source, delta), policies in scoped.items():
-        required = {"static", "domain", "lru", "transition", "linear"}
-        if not required <= set(policies):
-            continue
-        reference = max(
-            float(policies[name]["complete_resident_set_hit_coverage"])
-            for name in ("static", "domain", "lru")
-        )
-        guided = {
-            name: float(
-                policies[name]["complete_resident_set_hit_coverage"]
-            )
-            for name in ("transition", "linear")
-        }
-        winner = max(guided, key=guided.get)
-        values.setdefault((source, delta), []).append(guided[winner] - reference)
-        winners.setdefault((source, delta), []).append(winner)
-
-    matrix = np.full((15, 15), np.nan, dtype=np.float64)
-    labels: dict[tuple[int, int], str] = {}
-    for (source, delta), samples in values.items():
-        matrix[source, delta - 1] = 100 * float(np.mean(samples))
-        votes = winners[(source, delta)]
-        labels[(source, delta)] = (
-            "L" if votes.count("linear") >= votes.count("transition") else "T"
-        )
-    return matrix, labels
-
-
-def _plot_gain_heatmap(
+def _plot_primary_comparison(
     *,
     rows: list[dict[str, str]],
     output: Path,
-    capacities: list[int],
-    primary_delta: int,
+    phase: str,
+    capacity: int,
+    lookahead: int,
 ) -> list[Path]:
     import matplotlib.pyplot as plt
-    import numpy as np
-    from matplotlib.colors import TwoSlopeNorm
 
-    matrices = [
-        _heatmap_values(rows, phase="decode", capacity=capacity)[0]
-        for capacity in capacities
+    selected = {
+        row["policy"]: row
+        for row in rows
+        if row["phase"] == phase
+        and row["domain"] == "__domain_balanced__"
+        and int(row["capacity"]) == capacity
+        and int(row["delta"]) == lookahead
+        and row["policy"] in POLICY_COLORS
+    }
+    missing = set(POLICY_COLORS) - set(selected)
+    if missing:
+        raise ValueError(
+            "H6 summary is missing primary comparison rows for "
+            + ", ".join(sorted(missing))
+        )
+
+    policies = ["oracle", "lru", "linear", "transition"]
+    cold_values = [
+        100 * float(selected[policy]["mean_residual_cold_expert_fraction"])
+        for policy in policies
     ]
-    finite = np.concatenate(
-        [matrix[np.isfinite(matrix)] for matrix in matrices]
-    )
-    limit = max(2.0, float(np.quantile(np.abs(finite), 0.98)))
-    figure, axes = plt.subplots(
-        1,
-        len(capacities),
-        figsize=(12.4, 4.7),
-        sharex=True,
-        sharey=True,
-    )
+    reuse_values = [
+        100 * float(selected[policy]["mean_useful_movement_fraction"])
+        for policy in policies
+    ]
+    labels = {
+        "oracle": "Perfect next-use policy",
+        "lru": "Ordinary LRU",
+        "linear": "Linear predictor",
+        "transition": "Transition predictor",
+    }
+
+    figure, axes = plt.subplots(1, 2, figsize=(10.8, 5.0), sharey=True)
     figure.subplots_adjust(
-        left=0.065, right=0.91, bottom=0.17, top=0.80, wspace=0.08
+        left=0.22, right=0.98, bottom=0.17, top=0.72, wspace=0.18
     )
-    image = None
-    for axis, capacity, matrix in zip(
-        axes, capacities, matrices, strict=True
-    ):
-        image = axis.imshow(
-            matrix,
-            origin="lower",
-            aspect="auto",
-            interpolation="nearest",
-            cmap="RdBu",
-            norm=TwoSlopeNorm(vmin=-limit, vcenter=0.0, vmax=limit),
-        )
-        axis.axvline(
-            primary_delta - 1,
-            color="#252A31",
-            linewidth=0.9,
-            linestyle="--",
-            alpha=0.75,
-        )
-        axis.set_title(f"Fast tier K={capacity}", loc="left", fontweight="bold")
-        axis.set_xlabel("Lookahead Δ (layers)")
-        axis.set_xticks([0, 2, 5, 8, 11, 14])
-        axis.set_xticklabels([1, 3, 6, 9, 12, 15])
-        axis.set_yticks([0, 3, 6, 9, 12, 14])
-        axis.grid(False)
-        for spine in axis.spines.values():
-            spine.set_visible(False)
-    axes[0].set_ylabel("Source MoE layer")
-    color_axis = figure.add_axes([0.925, 0.23, 0.014, 0.47])
-    colorbar = figure.colorbar(image, cax=color_axis)
-    colorbar.set_label(
-        "Best guided gain over\nbest static/domain/LRU (pp)",
-        rotation=90,
-        labelpad=10,
+    positions = list(range(len(policies)))
+    bars = axes[0].barh(
+        positions,
+        cold_values,
+        color=[POLICY_COLORS[policy] for policy in policies],
+        height=0.58,
     )
+    lru_value = cold_values[policies.index("lru")]
+    axes[0].axvline(lru_value, color=TEXT, linestyle="--", linewidth=1.1)
+    axes[0].text(
+        lru_value + 0.6,
+        -0.45,
+        "LRU reference",
+        fontsize=8.5,
+        color=MUTED,
+        va="top",
+    )
+    for bar, value in zip(bars, cold_values, strict=True):
+        axes[0].text(
+            value + 0.7,
+            bar.get_y() + bar.get_height() / 2,
+            f"{value:.1f}%",
+            va="center",
+            fontweight="bold",
+            fontsize=10.5,
+        )
+    reuse_bars = axes[1].barh(
+        positions,
+        reuse_values,
+        color=[POLICY_COLORS[policy] for policy in policies],
+        height=0.58,
+    )
+    for bar, value in zip(reuse_bars, reuse_values, strict=True):
+        axes[1].text(
+            value + 1.2,
+            bar.get_y() + bar.get_height() / 2,
+            f"{value:.1f}%",
+            va="center",
+            fontweight="bold",
+            fontsize=10,
+        )
+    axes[0].set_yticks(positions, [labels[policy] for policy in policies])
+    axes[0].invert_yaxis()
+    axes[0].set_xlim(0, max(cold_values) + 8)
+    axes[1].set_xlim(0, 105)
+    axes[0].set_xlabel("Demand still missing\n(lower is better)")
+    axes[1].set_xlabel("Insertions reused before eviction\n(higher is better)")
+    axes[0].set_title(
+        "Outcome: remaining cold demand", loc="left", fontweight="bold"
+    )
+    axes[1].set_title(
+        "Mechanism: useful cache insertions", loc="left", fontweight="bold"
+    )
+    for axis in axes:
+        axis.grid(axis="x", color=GRID, linewidth=0.7)
     figure.suptitle(
-        "Where prediction-guided residency changes complete-set hits",
-        x=0.065,
-        y=0.965,
+        "The predictors make worse retention choices than ordinary LRU",
+        x=0.02,
+        y=0.98,
         ha="left",
-        fontsize=14.0,
+        fontsize=14.2,
         fontweight="bold",
-        color=TEXT,
     )
     figure.text(
-        0.065,
-        0.895,
-        "Held-out decode · complete resident-set hit coverage · "
-        "one demanded-miss insertion allowed per wave",
-        fontsize=9.7,
-        color="#59616D",
-    )
-    figure.text(
-        0.065,
-        0.045,
-        "Blue: prediction helps. Red: a simple baseline is better. "
-        f"Dashed line: preregistered Δ={primary_delta}. "
-        "Blank cells have no valid target layer.",
-        fontsize=8.7,
-        color="#59616D",
+        0.02,
+        0.855,
+        f"Observed trace replay at {phase}, {capacity} experts resident, "
+        f"{lookahead} layers ahead, and the same one-move-per-wave budget. "
+        "The right panel explains the left: predictor-guided insertions are "
+        "less likely than LRU insertions to earn a later hit.",
+        fontsize=9.1,
+        color=MUTED,
     )
     return _save(figure, output / "fig1_h6_residency_gain_heatmap")
 
@@ -217,61 +206,61 @@ def plot_h6(
     metrics_path = analysis / "scope_metrics.csv"
     gate_path = analysis / "gate.json"
     summary_path = analysis / "summary.csv"
-    rows = _read_csv(metrics_path)
     gate = json.loads(gate_path.read_text(encoding="utf-8"))
-    capacities = [int(value) for value in experiment_config["replay"]["capacities"]]
-    outputs = _plot_gain_heatmap(
-        rows=rows,
+    primary = gate["primary_scope"]
+    summary_rows = _read_csv(summary_path)
+    outputs = _plot_primary_comparison(
+        rows=summary_rows,
         output=output,
-        capacities=capacities,
-        primary_delta=int(gate["primary_scope"]["lookahead"]),
+        phase=str(primary["phase"]),
+        capacity=int(primary["capacity_experts"]),
+        lookahead=int(primary["lookahead"]),
     )
     plt.close("all")
 
+    review_path = output / "FIGURES.md"
+    review_path.write_text(
+        "\n".join(
+            [
+                "# H6 figure review",
+                "",
+                "- [ ] All policies use the same resident capacity and runtime "
+                "movement budget.",
+                "- [ ] Residual cold demand is read as lower-is-better.",
+                "- [ ] Useful insertion fraction means the admitted expert earns "
+                "a later hit before eviction.",
+                "- [ ] LRU is the direct operational comparator.",
+                "- [ ] The oracle is a policy ceiling, not an implementable "
+                "predictor.",
+                "- [ ] Headline values agree with `summary.csv`, `gate.json`, "
+                "and `REPORT.md`.",
+                "- [ ] The negative gate remains unchanged.",
+                "",
+                "**Human review complete:** no",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+
     input_paths = [metrics_path, summary_path, gate_path]
+    output_paths = outputs + [review_path]
     manifest = {
         "hypothesis": "H6",
         "human_review_complete": False,
         "figure_semantics": (
-            "Domain-balanced complete resident-set hit gain of the better "
-            "transition/linear residency policy over the strongest matched "
-            "static/domain/LRU baseline."
+            "Domain-balanced residual cold demand and insertion reuse at the "
+            "frozen primary scope for learned policies, LRU, and an equal-budget "
+            "next-use oracle."
         ),
         "inputs": [
             {"path": str(path), "sha256": _sha256(path)}
             for path in input_paths
         ],
         "outputs": [
-            {"path": str(path), "sha256": _sha256(path)} for path in outputs
+            {"path": str(path), "sha256": _sha256(path)}
+            for path in output_paths
         ],
     }
     write_json(output / "figure_manifest.json", manifest)
-    review = [
-        "# H6 figure review",
-        "",
-        "- [ ] Confirm phase, capacity, source-layer, and lookahead semantics.",
-        "- [ ] Confirm each cell compares against the strongest matched "
-        "static/domain/LRU baseline.",
-        "- [ ] Confirm the dashed Δ=3 column matches the frozen gate.",
-        "- [ ] Inspect whether positive cells form a broad layer/horizon regime "
-        "or isolated artifacts.",
-        "- [ ] Compare the visual pattern with `gate.json` and `REPORT.md`.",
-        "- [ ] Record accept/reject interpretation and one next action.",
-        "",
-        "**Human review complete:** no",
-        "",
-    ]
-    (output / "FIGURES.md").write_text("\n".join(review), encoding="utf-8")
-    manifest["outputs"].extend(
-        [
-            {
-                "path": str(output / "figure_manifest.json"),
-                "sha256": _sha256(output / "figure_manifest.json"),
-            },
-            {
-                "path": str(output / "FIGURES.md"),
-                "sha256": _sha256(output / "FIGURES.md"),
-            },
-        ]
-    )
     return manifest

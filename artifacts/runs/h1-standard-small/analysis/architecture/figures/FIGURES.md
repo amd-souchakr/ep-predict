@@ -4,14 +4,12 @@ These figures combine measured anchors, trace-derived demand, assumed future-rou
 
 ## Review checklist
 
-- [ ] The phase-map axes are complete cold-set coverage and raw service headroom; amplification is applied within each panel.
-- [ ] Green is read as an SLO candidate, not a demonstrated system.
-- [ ] The Pareto comparison is predictive versus reactive offload on the same measured PCIe hierarchy.
-- [ ] The all-resident point is a capacity/performance reference, not the baseline that predictive CPU offload must beat.
-- [ ] The inverse curve is a necessary first-order bandwidth bound; queue and reliability tails remain separate constraints.
-- [ ] AX3's 192/384 MiB whole-expert double-buffer bounds are checked against `ax3_staging.csv`.
-- [ ] One architectural point is selected before any optional live asynchronous calibration.
+- [ ] Figure 1 includes all four selected queue-sensitivity checks and holds each line's scenario fixed.
+- [ ] Figure 2 compares predictive and reactive offload on the same hierarchy and does not claim equivalence to all-resident execution.
+- [ ] Figure 2 includes all K=8/16/32 capacity points; its 99% coverage and 1.5× traffic are assumed future-predictor properties.
+- [ ] Figure 3 is a necessary first-order average-bandwidth bound; queue and reliability tails remain separate.
+- [ ] AX3's 192/384 MiB whole-expert double-buffer bounds remain recorded in `ax3_staging.csv` and `REPORT.md`.
 
 ## One next action
 
-Pending researcher review.
+Review the queue-sensitive capacity point before selecting any live asynchronous calibration.

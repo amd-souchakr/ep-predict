@@ -9,7 +9,7 @@ from ep_predict.tracing.storage import write_json
 
 
 class H6VisualizationTest(unittest.TestCase):
-    def test_h6_heatmap_is_generated(self) -> None:
+    def test_h6_primary_comparison_is_generated(self) -> None:
         try:
             from ep_predict.visualize.h6 import plot_h6
         except ImportError:
@@ -17,28 +17,39 @@ class H6VisualizationTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             analysis = Path(temporary) / "h6"
             analysis.mkdir(parents=True)
-            rows = []
-            for capacity in (8, 16, 32):
-                for policy, coverage in (
-                    ("static", 0.20),
-                    ("domain", 0.25),
-                    ("lru", 0.30),
-                    ("transition", 0.35),
-                    ("linear", 0.40),
-                ):
-                    rows.append(
-                        {
-                            "phase": "decode",
-                            "domain": "code",
-                            "source_layer": 0,
-                            "target_layer": 1,
-                            "delta": 1,
-                            "capacity": capacity,
-                            "policy": policy,
-                            "complete_resident_set_hit_coverage": coverage,
-                        }
-                    )
-            for name in ("scope_metrics.csv", "summary.csv"):
+            scope_rows = [
+                {
+                    "phase": "decode",
+                    "domain": "code",
+                    "source_layer": 0,
+                    "target_layer": 3,
+                    "delta": 3,
+                    "capacity": 16,
+                    "policy": "lru",
+                    "complete_resident_set_hit_coverage": 0.03,
+                }
+            ]
+            summary_rows = [
+                {
+                    "phase": "decode",
+                    "domain": "__domain_balanced__",
+                    "delta": 3,
+                    "capacity": 16,
+                    "policy": policy,
+                    "mean_residual_cold_expert_fraction": residual,
+                    "mean_useful_movement_fraction": useful,
+                }
+                for policy, residual, useful in (
+                    ("oracle", 0.31, 0.95),
+                    ("lru", 0.48, 0.70),
+                    ("linear", 0.49, 0.66),
+                    ("transition", 0.50, 0.60),
+                )
+            ]
+            for name, rows in (
+                ("scope_metrics.csv", scope_rows),
+                ("summary.csv", summary_rows),
+            ):
                 with (analysis / name).open(
                     "w", encoding="utf-8", newline=""
                 ) as handle:
@@ -69,7 +80,7 @@ class H6VisualizationTest(unittest.TestCase):
                     / "fig1_h6_residency_gain_heatmap.pdf"
                 ).is_file()
             )
-            self.assertEqual(len(manifest["outputs"]), 4)
+            self.assertEqual(len(manifest["outputs"]), 3)
 
 
 if __name__ == "__main__":

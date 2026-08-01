@@ -33,341 +33,248 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _quality_latency(
+def _best_mass_priority(
+    rows: list[dict[str, str]],
+    *,
+    capacity: int,
+    bandwidth: float,
+) -> dict[str, str]:
+    candidates = [
+        row
+        for row in rows
+        if int(row["capacity_experts_per_layer"]) == capacity
+        and abs(float(row["bandwidth_gbps"]) - bandwidth) < 0.01
+        and row["importance_order"] == "mass_priority_oracle"
+        and abs(float(row["requested_complete_coverage"]) - 0.99) < 1e-9
+        and abs(float(row["requested_amplification"]) - 1.5) < 1e-9
+    ]
+    if not candidates:
+        raise ValueError(
+            f"no AX4 mass-priority boundary row for K={capacity}, "
+            f"bandwidth={bandwidth:g}"
+        )
+    return min(
+        candidates,
+        key=lambda row: (
+            float(row["p99_missing_routed_mass"]),
+            float(row["full_fallback_wave_fraction"]),
+        ),
+    )
+
+
+def _bandwidth_missing(
     output: Path,
     rows: list[dict[str, str]],
-    summary: dict[str, Any],
 ) -> list[Path]:
     import matplotlib.pyplot as plt
-    from matplotlib.lines import Line2D
 
-    figure, axis = plt.subplots(figsize=(7.6, 5.0))
-    figure.subplots_adjust(left=0.12, right=0.97, bottom=0.19, top=0.76)
-    base = float(summary["frozen_latency_prediction"]["all_local_anchor_ms"])
-    gate_y = 1.5 * base
-    axis.axvspan(0, 20, color="#E1F0E7", alpha=0.8, zorder=0)
-    axis.axhspan(0, gate_y, color="#E1F0E7", alpha=0.35, zorder=0)
-    axis.axvline(20, color=GREEN, linestyle=":", linewidth=1.1)
-    axis.axhline(gate_y, color=GREEN, linestyle=":", linewidth=1.1)
-
+    bandwidths = [24.1354255944, 64.0, 128.0, 256.0]
+    figure, axis = plt.subplots(figsize=(8.0, 4.7))
+    figure.subplots_adjust(left=0.15, right=0.97, bottom=0.20, top=0.72)
     colors = {8: ORANGE, 16: BLUE, 32: GREEN}
-    markers = {
-        "mass_priority_oracle": "o",
-        "random_within_route": "s",
-        "mass_adversarial": "^",
-    }
-    for row in rows:
-        capacity = int(row["capacity_experts_per_layer"])
-        x = 100 * float(row["p99_missing_routed_mass"])
-        y = float(row["bounded_p99_tpot_ms"])
-        axis.scatter(
-            x,
-            y,
+    for capacity in (8, 16, 32):
+        selected = [
+            _best_mass_priority(
+                rows,
+                capacity=capacity,
+                bandwidth=value,
+            )
+            for value in bandwidths
+        ]
+        missing = [
+            100 * float(row["p99_missing_routed_mass"]) for row in selected
+        ]
+        axis.plot(
+            bandwidths,
+            missing,
             color=colors[capacity],
-            marker=markers[row["importance_order"]],
-            s=58,
-            edgecolor="white",
-            linewidth=0.6,
-            zorder=4,
+            marker="o",
+            markersize=7,
+            linewidth=2.2,
+            label=f"{capacity} experts local",
         )
-        if row["gate_pass"] == "True":
+        for bandwidth, value in zip(
+            bandwidths, missing, strict=True
+        ):
+            if bandwidth == 256.0 and capacity != 32:
+                continue
+            label = "all ≈0%" if bandwidth == 256.0 else f"{value:.1f}%"
+            y_offset = {8: 7, 16: -13, 32: 7}[capacity]
             axis.annotate(
-                f"{float(row['bandwidth_gbps']):g} GB/s",
-                (x, y),
-                xytext=(5, 5),
+                label,
+                (bandwidth, value),
+                xytext=(0, y_offset),
                 textcoords="offset points",
+                ha="center",
                 fontsize=7.8,
                 color=colors[capacity],
             )
-    # Exact baselines have zero erasure. Deduplicate values by K.
-    for capacity in (8, 16, 32):
-        row = next(
-            value
-            for value in rows
-            if int(value["capacity_experts_per_layer"]) == capacity
-        )
-        axis.scatter(
-            0,
-            float(row["reactive_p99_tpot_ms"]),
-            color=colors[capacity],
-            marker="x",
-            s=62,
-            linewidth=1.7,
-            zorder=4,
-        )
-    exact_wait = min(
-        rows,
-        key=lambda row: abs(int(row["capacity_experts_per_layer"]) - 16),
-    )
-    axis.scatter(
-        0,
-        float(exact_wait["exact_wait_wave_local_p99_tpot_ms"]),
-        facecolor="white",
-        edgecolor=PURPLE,
-        marker="D",
-        s=58,
-        linewidth=1.2,
-        zorder=4,
-    )
-    axis.scatter(
-        0,
-        base,
-        marker="*",
-        s=125,
-        color=TEXT,
-        zorder=5,
-    )
+    axis.axhline(20, color=TEXT, linestyle="--", linewidth=1.1)
     axis.text(
-        20.7,
-        gate_y - 0.7,
-        "Preregistered architecture gate",
-        color=GREEN,
-        fontsize=8.2,
-        va="top",
+        252,
+        22,
+        "future quality contract: at most 20%",
+        ha="right",
+        fontsize=8.5,
+        color=MUTED,
     )
-    axis.set_xlim(-2, max(45, max(100 * float(row["p99_missing_routed_mass"]) for row in rows) + 5))
-    axis.set_ylim(8, max(80, max(float(row["reactive_p99_tpot_ms"]) for row in rows) + 5))
-    axis.set_xlabel("P99 missing normalized routed mass (%)")
-    axis.set_ylabel("Modeled P99 decode TPOT (ms)")
-    axis.grid(color=GRID, linewidth=0.7)
-    handles = [
-        Line2D([0], [0], color=colors[k], marker="o", linestyle="none", label=f"K={k}")
-        for k in (8, 16, 32)
-    ] + [
-        Line2D([0], [0], color=TEXT, marker=markers[name], linestyle="none", label=label)
-        for name, label in (
-            ("mass_priority_oracle", "Mass-priority oracle"),
-            ("random_within_route", "Random order"),
-            ("mass_adversarial", "Mass-adversarial"),
-        )
-    ] + [
-        Line2D([0], [0], color=TEXT, marker="x", linestyle="none", label="Reactive exact"),
-        Line2D([0], [0], color=TEXT, marker="*", linestyle="none", label="All-local"),
-    ]
-    axis.legend(handles=handles, ncol=2, fontsize=7.7, loc="upper right")
+    axis.set_ylim(0, 112)
+    axis.set_xlim(18, 264)
+    axis.set_xticks(bandwidths, ["24\n(current)", "64", "128", "256"])
+    axis.set_xlabel("Cold-memory link bandwidth (GB/s)")
+    axis.set_ylabel(
+        "Selected expert contribution unavailable\nin the worst 1% of waves"
+    )
+    axis.grid(axis="y", color=GRID, linewidth=0.7)
+    axis.legend(loc="upper right")
     figure.suptitle(
-        "Hard commit exchanges cold-transfer tail latency for missing expert mass",
+        "The full bandwidth–residency sweep reveals the deadline boundary",
         x=0.02,
         y=0.98,
         ha="left",
-        fontsize=14.0,
+        fontsize=14.2,
         fontweight="bold",
     )
     figure.text(
         0.02,
-        0.86,
-        "FCFS trace replay. Deadline points never wait after commit; "
-        "the green box is a training target, not demonstrated quality.",
-        fontsize=8.8,
+        0.855,
+        "All 12 trace-ordered mass-priority boundary points under an assumed "
+        "99%-coverage, 1.5×-traffic predictor. Language quality under erasure "
+        "is not measured.",
+        fontsize=9.0,
         color=MUTED,
     )
     return _save(figure, output / "fig1_deadline_quality_latency_frontier")
 
 
-def _capacity_pareto(
+def _rare_tail(
     output: Path,
     rows: list[dict[str, str]],
-    summary: dict[str, Any],
 ) -> list[Path]:
     import matplotlib.pyplot as plt
 
-    figure, axis = plt.subplots(figsize=(7.5, 4.8))
-    figure.subplots_adjust(left=0.12, right=0.98, bottom=0.20, top=0.76)
-    oracle_candidates = [
-        row for row in rows if row["importance_order"] == "mass_priority_oracle"
-    ]
-    oracle = [
-        min(
-            (
-                row
-                for row in oracle_candidates
-                if int(row["capacity_experts_per_layer"]) == capacity
-            ),
-            key=lambda row: (
-                float(row["p99_missing_routed_mass"]),
-                float(row["bandwidth_gbps"]),
-            ),
+    passing = []
+    for capacity in (8, 16, 32):
+        candidates = [
+            row
+            for row in rows
+            if int(row["capacity_experts_per_layer"]) == capacity
+            and row["importance_order"] == "mass_priority_oracle"
+            and row["gate_pass"].lower() == "true"
+        ]
+        passing.append(
+            min(candidates, key=lambda row: float(row["bandwidth_gbps"]))
         )
-        for capacity in (8, 16, 32)
+    labels = [
+        f"K={row['capacity_experts_per_layer']}\n"
+        f"{float(row['bandwidth_gbps']):.0f} GB/s"
+        for row in passing
     ]
-    oracle.sort(key=lambda row: float(row["fast_tier_expert_gib"]))
-    x = [float(row["fast_tier_expert_gib"]) for row in oracle]
-    y = [float(row["bounded_batch1_tokens_per_second"]) for row in oracle]
-    mass = [100 * float(row["p99_missing_routed_mass"]) for row in oracle]
-    points = axis.scatter(
-        x,
-        y,
-        c=mass,
-        cmap="viridis_r",
-        vmin=0,
-        vmax=max(20, max(mass)),
-        marker="o",
-        s=82,
-        edgecolor="white",
-        linewidth=0.7,
-        zorder=4,
-        label="Deadline, mass-priority",
+    degraded = [100 * float(row["degraded_wave_fraction"]) for row in passing]
+
+    figure, axis = plt.subplots(figsize=(8.0, 4.7))
+    figure.subplots_adjust(left=0.14, right=0.97, bottom=0.20, top=0.70)
+    bars = axis.bar(
+        labels,
+        degraded,
+        color=[ORANGE, BLUE, GREEN],
+        width=0.58,
     )
-    reactive = [
-        (
-            float(row["fast_tier_expert_gib"]),
-            1000.0 / float(row["reactive_p99_tpot_ms"]),
+    for bar, value, row in zip(bars, degraded, passing, strict=True):
+        worst = 100 * float(row["worst_missing_routed_mass"])
+        p99 = 100 * float(row["p99_missing_routed_mass"])
+        axis.text(
+            bar.get_x() + bar.get_width() / 2,
+            value + 0.06,
+            f"{value:.2f}% waves\nP99 {p99:.1f}% · worst {worst:.1f}%",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+            fontweight="bold",
         )
-        for row in oracle
-    ]
-    axis.plot(
-        [value[0] for value in reactive],
-        [value[1] for value in reactive],
-        color=ORANGE,
-        marker="x",
-        linestyle="--",
-        linewidth=1.5,
-        label="Reactive exact offload",
-    )
-    base = float(summary["frozen_latency_prediction"]["all_local_anchor_ms"])
-    all_expert_gib = 12.0
-    axis.scatter(
-        all_expert_gib,
-        1000.0 / base,
-        color=TEXT,
-        marker="*",
-        s=125,
-        zorder=5,
-        label="All-local measured anchor",
-    )
-    for row in oracle:
-        axis.annotate(
-            f"K={row['capacity_experts_per_layer']}\n{float(row['bandwidth_gbps']):g} GB/s",
-            (
-                float(row["fast_tier_expert_gib"]),
-                float(row["bounded_batch1_tokens_per_second"]),
-            ),
-            xytext=(5, 4),
-            textcoords="offset points",
-            fontsize=8.0,
-        )
-    colorbar = figure.colorbar(points, ax=axis, pad=0.015)
-    colorbar.set_label("P99 missing mass (%)")
-    axis.set_xlabel("HBM capacity for routed expert weights (GiB)")
-    axis.set_ylabel("Projected batch-1 throughput (tokens/s)")
-    axis.set_xlim(0.7, 12.8)
-    axis.grid(color=GRID, linewidth=0.7)
-    axis.legend(fontsize=8.0, loc="lower right")
+    axis.set_ylim(0, max(degraded) + 0.55)
+    axis.set_ylabel("Waves with any unavailable contribution")
+    axis.grid(axis="y", color=GRID, linewidth=0.7)
     figure.suptitle(
-        "Deadline erasure exposes a capacity–throughput–degradation Pareto",
+        "Passing points still differ in how often and how severely they degrade",
         x=0.02,
         y=0.98,
         ha="left",
-        fontsize=14.0,
+        fontsize=14.3,
         fontweight="bold",
     )
     figure.text(
         0.02,
-        0.86,
-        "Current OLMoE geometry: 12 GiB total routed experts. "
-        "Deadline throughput assumes a fixed 10% local fallback/commit allowance.",
-        fontsize=8.7,
+        0.81,
+        "The lowest-bandwidth formal pass at each resident capacity. P99 alone "
+        "can hide sub-percent degraded waves, so each bar also reports the "
+        "worst observed missing contribution.",
+        fontsize=9.1,
         color=MUTED,
     )
-    return _save(figure, output / "fig2_capacity_throughput_degradation_pareto")
+    return _save(
+        figure, output / "fig2_capacity_throughput_degradation_pareto"
+    )
 
 
-def _phase_map(
+def _minimum_bandwidth(
     output: Path,
-    fcfs_rows: list[dict[str, str]],
+    rows: list[dict[str, str]],
 ) -> list[Path]:
     import matplotlib.pyplot as plt
     import numpy as np
     from matplotlib.colors import ListedColormap
-    from matplotlib.patches import Patch
 
-    bandwidths = sorted(
-        {
-            float(row["bandwidth_gbps"])
-            for row in fcfs_rows
-            if row["importance_order"] == "mass_priority_oracle"
-        }
+    bandwidths = [24.1354255944, 64.0, 128.0, 256.0]
+    capacities = [8, 16, 32]
+    grid = np.zeros((3, 4), dtype=int)
+    labels: list[list[str]] = []
+    for row_index, capacity in enumerate(capacities):
+        row_labels = []
+        for column_index, bandwidth in enumerate(bandwidths):
+            row = _best_mass_priority(
+                rows,
+                capacity=capacity,
+                bandwidth=bandwidth,
+            )
+            passed = row["gate_pass"].lower() == "true"
+            grid[row_index, column_index] = int(passed)
+            missing = 100 * float(row["p99_missing_routed_mass"])
+            row_labels.append(
+                ("PASS" if passed else "fail") + f"\n{missing:.1f}% missing"
+            )
+        labels.append(row_labels)
+
+    figure, axis = plt.subplots(figsize=(8.2, 4.6))
+    figure.subplots_adjust(left=0.16, right=0.97, bottom=0.20, top=0.72)
+    axis.imshow(
+        grid,
+        aspect="auto",
+        cmap=ListedColormap(["#F3E5E2", "#DDEFE4"]),
+        vmin=0,
+        vmax=1,
     )
-    tolerances = [0.0, 0.05, 0.10, 0.20, 0.40]
-    cmap = ListedColormap(["#E9D9D7", "#F3E6C5", "#DDEFE4", "#C9E4D5"])
-    figure, axes = plt.subplots(1, 3, figsize=(11.0, 4.4), sharey=True)
-    figure.subplots_adjust(left=0.075, right=0.985, bottom=0.20, top=0.75, wspace=0.10)
-    for axis, capacity in zip(axes, (8, 16, 32), strict=True):
-        grid = np.zeros((len(tolerances), len(bandwidths)), dtype=int)
-        annotations: list[tuple[int, int, str]] = []
-        for x_index, bandwidth in enumerate(bandwidths):
-            candidates = [
-                row
-                for row in fcfs_rows
-                if int(row["capacity_experts_per_layer"]) == capacity
-                and abs(float(row["bandwidth_gbps"]) - bandwidth) < 1e-6
-                and row["importance_order"] == "mass_priority_oracle"
-            ]
-            best = min(
-                candidates,
-                key=lambda row: (
-                    float(row["p99_missing_routed_mass"]),
-                    float(row["full_fallback_wave_fraction"]),
-                ),
-            )
-            missing = float(best["p99_missing_routed_mass"])
-            fallback = float(best["full_fallback_wave_fraction"])
-            annotations.append(
-                (x_index, len(tolerances) - 1, f"{100 * missing:.0f}%")
-            )
-            for y_index, tolerance in enumerate(tolerances):
-                if fallback > 0.01:
-                    category = 0  # fallback dominated
-                elif missing <= 1e-12:
-                    category = 3  # exact
-                elif missing <= tolerance:
-                    category = 2  # graceful
-                else:
-                    category = 1  # contract infeasible
-                grid[y_index, x_index] = category
-        axis.imshow(
-            grid,
-            origin="lower",
-            aspect="auto",
-            cmap=cmap,
-            vmin=0,
-            vmax=3,
-            interpolation="nearest",
-        )
-        for x_index, y_index, text in annotations:
+    for row_index in range(3):
+        for column_index in range(4):
             axis.text(
-                x_index,
-                y_index,
-                text,
+                column_index,
+                row_index,
+                labels[row_index][column_index],
                 ha="center",
                 va="center",
-                fontsize=7.7,
-                color=TEXT,
                 fontweight="bold",
+                fontsize=9,
+                color=TEXT,
             )
-        axis.set_xticks(range(len(bandwidths)))
-        axis.set_xticklabels([f"{value:g}" for value in bandwidths])
-        axis.set_yticks(range(len(tolerances)))
-        axis.set_yticklabels([f"{100 * value:.0f}" for value in tolerances])
-        axis.set_xlabel("Cold-tier bandwidth (GB/s)")
-        axis.set_title(f"K={capacity} resident/layer", loc="left", fontweight="bold")
-        axis.tick_params(length=0)
-    axes[0].set_ylabel("Tolerated P99 missing mass (%)")
-    handles = [
-        Patch(facecolor="#C9E4D5", label="Exact"),
-        Patch(facecolor="#DDEFE4", label="Graceful contract"),
-        Patch(facecolor="#F3E6C5", label="Mass exceeds contract"),
-        Patch(facecolor="#E9D9D7", label="Fallback dominated"),
-    ]
-    figure.legend(
-        handles=handles,
-        ncol=4,
-        loc="lower center",
-        bbox_to_anchor=(0.5, 0.015),
-        fontsize=8.0,
+    axis.set_xticks(
+        range(4), ["24\n(current)", "64", "128", "256"]
     )
+    axis.set_yticks(range(3), [f"{capacity} local" for capacity in capacities])
+    axis.set_xlabel("Cold-memory link bandwidth (GB/s)")
+    axis.set_ylabel("Experts kept locally per layer")
+    axis.tick_params(length=0)
     figure.suptitle(
-        "Bandwidth and tolerated erasure define the deadline-elastic regime",
+        "The formal gate passes only in three high-bandwidth cells",
         x=0.02,
         y=0.98,
         ha="left",
@@ -377,9 +284,10 @@ def _phase_map(
     figure.text(
         0.02,
         0.855,
-        "C=99%, A=1.5× mass-priority FCFS boundary; best frozen lookahead/slack per cell. "
-        "Trace-ordered FCFS; top-row labels show the attained P99 missing mass.",
-        fontsize=8.7,
+        "Each cell uses the best frozen lookahead/slack at assumed 99% coverage "
+        "and 1.5× traffic. Labels show P99 unavailable contribution, but the "
+        "pass also requires latency, fallback, domain, and layer-band breadth.",
+        fontsize=9.1,
         color=MUTED,
     )
     return _save(figure, output / "fig3_deadline_hardware_phase_map")
@@ -390,6 +298,8 @@ def plot_deadline_degradation(
     *,
     output_dir: str | Path | None = None,
 ) -> dict[str, Any]:
+    import matplotlib.pyplot as plt
+
     _style()
     analysis = Path(experiment_config["output_dir"])
     inputs = [
@@ -411,11 +321,12 @@ def plot_deadline_degradation(
     output = Path(output_dir) if output_dir else analysis / "figures"
     output.mkdir(parents=True, exist_ok=True)
     fcfs = _read_csv(analysis / "deadline_fcfs_candidates.csv")
-    summary = json.loads((analysis / "summary.json").read_text(encoding="utf-8"))
     outputs: list[Path] = []
-    outputs.extend(_quality_latency(output, fcfs, summary))
-    outputs.extend(_capacity_pareto(output, fcfs, summary))
-    outputs.extend(_phase_map(output, fcfs))
+    outputs.extend(_bandwidth_missing(output, fcfs))
+    outputs.extend(_rare_tail(output, fcfs))
+    outputs.extend(_minimum_bandwidth(output, fcfs))
+    plt.close("all")
+
     review = output / "FIGURES.md"
     review.write_text(
         "\n".join(
@@ -428,22 +339,24 @@ def plot_deadline_degradation(
                 "",
                 "## Review checklist",
                 "",
-                "- [ ] Normalized-within-top-8 missing mass is not mistaken for "
-                "current OLMoE's raw selected probability mass.",
-                "- [ ] Every deadline point has exactly zero post-commit transfer wait.",
-                "- [ ] The green gate region is read as a future training target, "
-                "not demonstrated language quality.",
-                "- [ ] Reactive offload—not all-HBM—is the performance baseline.",
-                "- [ ] FCFS candidate values match `deadline_fcfs_candidates.csv`.",
-                "- [ ] The capacity figure includes the fallback-plane assumption "
-                "when interpreting larger-model projections.",
-                "- [ ] The phase map uses the selected C=99%, A=1.5× "
-                "mass-priority FCFS boundary and does not imply current predictor quality.",
+                "- [ ] Unavailable contribution is normalized within the "
+                "selected top-8 and is not current OLMoE's raw probability mass.",
+                "- [ ] Every deadline point has exactly zero post-commit "
+                "transfer wait.",
+                "- [ ] Figure 1 contains all 12 K×bandwidth mass-priority "
+                "boundary points.",
+                "- [ ] Figure 2 compares the lowest-bandwidth formal pass at "
+                "each capacity and pairs P99 with incidence and worst case.",
+                "- [ ] Figure 3 applies the full formal gate, not only the 20% "
+                "missing-contribution condition.",
+                "- [ ] Assumed predictor and unvalidated language-quality "
+                "robustness remain explicit.",
                 "- [ ] A training or new-model run remains permission-gated.",
                 "",
                 "## One next action",
                 "",
-                "Pending researcher review.",
+                "Review whether the 128–256 GB/s boundary is a credible future "
+                "training target.",
                 "",
             ]
         ),
@@ -458,6 +371,10 @@ def plot_deadline_degradation(
         "inputs": {str(path): _sha256(path) for path in inputs},
         "outputs": {str(path): _sha256(path) for path in outputs},
         "human_review_complete": False,
+        "figure_semantics": (
+            "Full bandwidth/residency boundary, incidence and worst case for "
+            "formal passes, and the complete formal-gate outcome matrix."
+        ),
     }
     write_json(output / "figure_manifest.json", manifest)
     return manifest

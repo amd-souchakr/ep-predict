@@ -22,29 +22,29 @@
   "outputs": [
     {
       "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/figures/fig1_base_instruct_predictability.png",
-      "sha256": "2daf69ccb6b439220f72356ca1aa9eb9a85e46ddd4a995ca3f910b881c326a50"
+      "sha256": "4d9a9f8feeaa04ab2752e87161f9e2333ebd0f54fe9908dcf0d23e3a7ac99686"
     },
     {
       "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/figures/fig1_base_instruct_predictability.pdf",
-      "sha256": "58efd3a213242cd5e164530ecaec6e59a74c49948637fee00ea3d51fa30d7da3"
+      "sha256": "9d1b63023aade5cc17662377b53cad6c4f102f5603ead6c6827fcce868c387e1"
     },
     {
       "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/figures/fig2_matched_route_agreement.png",
-      "sha256": "bd2770ec5ab2582c58c641097ba0ff713de946c5be60ad290669faa684236aa6"
+      "sha256": "c69390589cecdc23ad8abd4d81b8ca1efb09b6bf59093d4982701e32beb722f7"
     },
     {
       "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/figures/fig2_matched_route_agreement.pdf",
-      "sha256": "84d4466fa4cec909b8175f4457a44296cc81cef6e47c24ca6871cea46c1d0963"
+      "sha256": "5e95d624de69ff66f0471415973981b02db3b361c7dbd1d9b6dd24d21c1889b6"
     },
     {
       "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/figures/FIGURES.md",
-      "sha256": "68a45cb2f2fa94cb57d925e92133583dfc14d1bbc7ff805a60094e8df8c74d06"
+      "sha256": "d8994b2a84a143a0537635742d8c3da569263ba7aa0440cdbc7e8992fb719762"
     }
   ],
   "semantics": {
     "phase": "matched-token prefill",
-    "prediction_view": "fixed source layer 0 across all future layers",
-    "route_agreement": "intersection of Base and Instruct top-8 selected expert IDs divided by eight",
+    "prediction_view": "fixed source layer 0 to target layer 15",
+    "route_agreement": "changed expert slots out of eight by MoE layer and domain",
     "split_unit": "request"
   }
 }

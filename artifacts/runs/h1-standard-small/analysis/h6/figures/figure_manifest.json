@@ -1,5 +1,5 @@
 {
-  "figure_semantics": "Domain-balanced complete resident-set hit gain of the better transition/linear residency policy over the strongest matched static/domain/LRU baseline.",
+  "figure_semantics": "Domain-balanced residual cold demand and insertion reuse at the frozen primary scope for learned policies, LRU, and an equal-budget next-use oracle.",
   "human_review_complete": false,
   "hypothesis": "H6",
   "inputs": [
@@ -19,11 +19,15 @@
   "outputs": [
     {
       "path": "artifacts/runs/h1-standard-small/analysis/h6/figures/fig1_h6_residency_gain_heatmap.png",
-      "sha256": "b165993952f09706bf9ff1a938d96a547637ed45536b6f0b0bfe0c6a8709fd9b"
+      "sha256": "7bfd232e654d895255578f9289c374f8fcf5e9c51ab55199fcb4c3876f1de8a6"
     },
     {
       "path": "artifacts/runs/h1-standard-small/analysis/h6/figures/fig1_h6_residency_gain_heatmap.pdf",
-      "sha256": "1963cd6128d8ec96b584eef2c2a9130e3fd4c10f064ecc438d06e69735c56797"
+      "sha256": "765c587a07566075dbbe1050d97342b634194fcc5866af9df36afb621e0e37ee"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h6/figures/FIGURES.md",
+      "sha256": "d476189eecd23f163e16bd6adf1f91dbf29e7b54913317c9afdbe0741f838b11"
     }
   ]
 }

@@ -4,13 +4,12 @@ The figures are trace-driven first-order analytical screens. They are not end-to
 
 ## Human review checklist
 
-- [ ] Complete cold-set coverage excludes already-hot waves and is not confused with selection coverage.
-- [ ] A is transferred candidate bytes per useful predicted cold byte after resident filtering.
-- [ ] The green region is read as analytically profitable under the frozen proxy, not demonstrated speedup.
-- [ ] Empty inverse-curve segments are recognized as physical failure, not missing data.
-- [ ] Actual policy values agree with `h5_policy_placement.csv`.
-- [ ] One next action is recorded before H6 or any new setup.
+- [ ] Figure 1 includes all eight preregistered H5 policy placements and counts only nonresident candidate transfers.
+- [ ] The dashed 2× budget means at most one unnecessary copy per useful copy.
+- [ ] Figure 2 includes all 15 lookaheads at measured bandwidth and the frozen 2× traffic budget.
+- [ ] Missing inverse-curve segments indicate a physically empty analytical window, not missing data.
+- [ ] Headline values agree with `h5_policy_placement.csv` and `h5_inverse_requirements.csv`.
 
 ## One next action
 
-Pending researcher review.
+Use the figures to review the existing H5 decision; do not change the frozen gate.

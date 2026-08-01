@@ -1,6 +1,7 @@
 {
   "analysis": "assumption_driven_architecture_exploration",
   "evidence_grade": "trace_calibrated_assumption_driven_analytical_projection",
+  "figure_semantics": "All queue-sensitivity checks, the full matched capacity sweep, and the complete warning-distance bandwidth curve.",
   "human_review_complete": false,
   "inputs": {
     "artifacts/runs/h1-standard-small/analysis/architecture/ax1_envelope.csv": "2f0d150cf9173a9628183b7adc6f76b5c48f8bf6262b51bf63e26f426a7316c7",
@@ -14,12 +15,12 @@
     "artifacts/runs/h1-standard-small/analysis/architecture/summary.json": "e6469e4fd18b97cd4af20ffe9d6c93e2f4292a5a4eb2ab6589c22cf19adc8b07"
   },
   "outputs": {
-    "artifacts/runs/h1-standard-small/analysis/architecture/figures/FIGURES.md": "06449d687af0bc0d5c33e062c73def1d4d9aa28b57c0d1f37e549a8171c271b4",
-    "artifacts/runs/h1-standard-small/analysis/architecture/figures/fig1_profitability_phase_map.pdf": "ec01b686b86464443ea6ee94fa4108b459388eaf3fb745f6ff0f8526238ed456",
-    "artifacts/runs/h1-standard-small/analysis/architecture/figures/fig1_profitability_phase_map.png": "0ba6d29ec345f4c24f0cbd59c7cc3434d0ce9fc9c06c32883ec4edb86fa36769",
-    "artifacts/runs/h1-standard-small/analysis/architecture/figures/fig2_memory_p99_pareto.pdf": "4697cacc4f1f9fd204668646e997df0ad5c529710d5ede1bcdd44c64b2c4e277",
-    "artifacts/runs/h1-standard-small/analysis/architecture/figures/fig2_memory_p99_pareto.png": "97aadc64f3daa886c77c0efd381b4652244c2c9294841d0e7dea0331b66f6853",
-    "artifacts/runs/h1-standard-small/analysis/architecture/figures/fig3_inverse_bandwidth_lookahead.pdf": "1557ba503c515617382aceeaab8c14d9abfc6775cee5eccba11875c3cbec8e7a",
-    "artifacts/runs/h1-standard-small/analysis/architecture/figures/fig3_inverse_bandwidth_lookahead.png": "10752cab81783f21aa0461f645b9b3fcc83cbcadae67ed65b56bb780096f4b48"
+    "artifacts/runs/h1-standard-small/analysis/architecture/figures/FIGURES.md": "0da750b09fa31c2bc2736ec3a526001069428952f23f3bcc388f19cab09693d1",
+    "artifacts/runs/h1-standard-small/analysis/architecture/figures/fig1_profitability_phase_map.pdf": "403ec350b7a533e8d1bed729c82529375578a761d48704f3a729e2b94539d8ad",
+    "artifacts/runs/h1-standard-small/analysis/architecture/figures/fig1_profitability_phase_map.png": "7d5f2a0be2f333bde2ba600427b62a170780765fc361260309939e92f3abf9dd",
+    "artifacts/runs/h1-standard-small/analysis/architecture/figures/fig2_memory_p99_pareto.pdf": "7605c639a699567c2d0ed131e8b7647bbfaa9b1edab9fc604b782e7ce686a517",
+    "artifacts/runs/h1-standard-small/analysis/architecture/figures/fig2_memory_p99_pareto.png": "425e6772a093fceb6e14260b2b48224ac86e39548726ba3307e08795e4b67c2d",
+    "artifacts/runs/h1-standard-small/analysis/architecture/figures/fig3_inverse_bandwidth_lookahead.pdf": "07aaa951e26b6c400c2477c299f438eaa0ac1cba1f7ebdffcc2289a6b28d8826",
+    "artifacts/runs/h1-standard-small/analysis/architecture/figures/fig3_inverse_bandwidth_lookahead.png": "dff5691995910a46e3adbe4fc062d8b9d811689bfdac10bfac2898076771ea0a"
   }
 }

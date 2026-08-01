@@ -7,12 +7,16 @@ from pathlib import Path
 from typing import Any
 
 from ep_predict.tracing.storage import write_json
-from ep_predict.visualize.h1 import (
-    DOMAIN_COLORS,
-    DOMAIN_LABELS,
-    _configure_matplotlib,
-    _save_figure,
-)
+from ep_predict.visualize.h1 import _configure_matplotlib, _save_figure
+
+
+TEXT = "#20242B"
+MUTED = "#5E6875"
+GRID = "#D9DEE7"
+BASE = "#6B7280"
+INSTRUCT = "#3266A8"
+UNCHANGED = "#2A8C72"
+CHANGED = "#D97732"
 
 
 def _read_csv(path: Path) -> list[dict[str, str]]:
@@ -34,86 +38,72 @@ def _plot_predictability(
     capacity: int,
     output_dir: Path,
 ) -> list[Path]:
-    import numpy as np
-    from matplotlib.ticker import PercentFormatter
-
     _mpl, plt = _configure_matplotlib()
-    colors = {"base": "#6B7280", "instruct": "#0072B2"}
-    labels = {"base": "Base", "instruct": "Instruct (SFT+DPO+RLVR)"}
     scoped = [
         row
         for row in rows
         if row["domain"] == "__domain_balanced__"
         and int(row["capacity"]) == capacity
+        and int(row["delta"]) == 15
     ]
-    figure, axes = plt.subplots(
-        1,
-        2,
-        figsize=(7.2, 3.0),
-        sharex=True,
-        layout="constrained",
-    )
-    for checkpoint in ("base", "instruct"):
-        series = sorted(
-            (row for row in scoped if row["checkpoint"] == checkpoint),
-            key=lambda row: int(row["delta"]),
-        )
-        x = np.asarray([int(row["delta"]) for row in series])
-        axes[0].plot(
-            x,
-            [float(row["selection_gain_over_static"]) for row in series],
-            color=colors[checkpoint],
-            marker="o",
-            markersize=3.2,
-            markevery=[0, 2, 5, 9, 14],
-            label=labels[checkpoint],
-        )
-        axes[1].plot(
-            x,
-            [float(row["transition_complete_coverage"]) for row in series],
-            color=colors[checkpoint],
-            marker="o",
-            markersize=3.2,
-            markevery=[0, 2, 5, 9, 14],
-            label=labels[checkpoint],
-        )
-        for axis, key in (
-            (axes[0], "selection_gain_over_static"),
-            (axes[1], "transition_complete_coverage"),
-        ):
-            final = series[-1]
-            axis.annotate(
-                f"{100 * float(final[key]):.1f}%",
-                xy=(int(final["delta"]), float(final[key])),
-                xytext=(-4, 7 if checkpoint == "instruct" else -11),
-                textcoords="offset points",
-                ha="right",
-                color=colors[checkpoint],
-                fontsize=7.5,
-            )
+    values = {
+        row["checkpoint"]: 100 * float(row["selection_gain_over_static"])
+        for row in scoped
+    }
+    checkpoints = ["base", "instruct"]
+    labels = ["Base", "Instruct"]
+    heights = [values[name] for name in checkpoints]
 
-    axes[0].set_title("(a) Conditional value beyond popularity", loc="left")
-    axes[0].set_ylabel("Transition gain over static popularity")
-    axes[1].set_title("(b) Strict complete-route prediction", loc="left")
-    axes[1].set_ylabel("Tokens with all 8 future experts covered")
-    for axis in axes:
-        axis.set_xlabel("Target depth from source layer 0, Δ")
-        axis.set_xlim(1, 15)
-        axis.set_xticks([1, 3, 6, 10, 15])
-        axis.set_ylim(bottom=0)
-        axis.yaxis.set_major_formatter(PercentFormatter(1.0))
-        axis.grid(axis="y", color="#E6E6E6", linewidth=0.5)
-    handles, labels_list = axes[0].get_legend_handles_labels()
-    figure.legend(
-        handles,
-        labels_list,
-        loc="outside lower center",
-        ncol=2,
-        frameon=False,
+    figure, axis = plt.subplots(figsize=(6.8, 4.25))
+    figure.subplots_adjust(left=0.16, right=0.96, bottom=0.19, top=0.70)
+    bars = axis.bar(
+        labels,
+        heights,
+        color=[BASE, INSTRUCT],
+        width=0.52,
     )
+    for bar, value in zip(bars, heights, strict=True):
+        axis.text(
+            bar.get_x() + bar.get_width() / 2,
+            value + 0.35,
+            f"+{value:.1f} points",
+            ha="center",
+            va="bottom",
+            fontweight="bold",
+            fontsize=10.5,
+        )
+    difference = heights[1] - heights[0]
+    axis.annotate(
+        f"change: {difference:+.1f} points",
+        xy=(1, heights[1]),
+        xytext=(0.5, max(heights) + 2.2),
+        ha="center",
+        fontsize=10,
+        fontweight="bold",
+        arrowprops={
+            "arrowstyle": "-",
+            "color": MUTED,
+            "connectionstyle": "arc3,rad=0",
+        },
+    )
+    axis.set_ylim(0, max(heights) + 4.3)
+    axis.set_ylabel("Prediction gain beyond simple popularity")
+    axis.grid(axis="y", color=GRID, linewidth=0.7)
     figure.suptitle(
-        f"Post-training leaves trajectory predictability largely unchanged  K={capacity}",
-        fontsize=10.5,
+        "Post-training changes long-range route predictability by only 1.6 points",
+        x=0.02,
+        y=0.98,
+        ha="left",
+        fontsize=13.8,
+        fontweight="bold",
+    )
+    figure.text(
+        0.02,
+        0.84,
+        "Observed on identical prefill tokens from layer 0 to layer 15. "
+        "The preregistered material-change threshold was 5 points.",
+        fontsize=9.1,
+        color=MUTED,
     )
     return _save_figure(
         figure, output_dir / "fig1_base_instruct_predictability"
@@ -125,55 +115,87 @@ def _plot_route_agreement(
     *,
     output_dir: Path,
 ) -> list[Path]:
-    from matplotlib.ticker import PercentFormatter
-
     _mpl, plt = _configure_matplotlib()
-    domains = ["code", "math", "general", "conversation"]
-    figure, axis = plt.subplots(figsize=(6.8, 3.25), layout="constrained")
-    balanced = sorted(
-        (row for row in rows if row["domain"] == "__domain_balanced__"),
-        key=lambda row: int(row["layer_id"]),
-    )
-    for domain in domains:
-        series = sorted(
+    domain_colors = {
+        "code": "#3266A8",
+        "math": "#D97732",
+        "general": "#2A8C72",
+        "conversation": "#8657A6",
+    }
+    domain_labels = {
+        "code": "Code",
+        "math": "Mathematics",
+        "general": "General prose",
+        "conversation": "Conversation",
+    }
+    figure, axis = plt.subplots(figsize=(8.2, 4.8))
+    figure.subplots_adjust(left=0.13, right=0.97, bottom=0.19, top=0.72)
+    for domain in ("code", "math", "general", "conversation"):
+        selected = sorted(
             (row for row in rows if row["domain"] == domain),
             key=lambda row: int(row["layer_id"]),
         )
         axis.plot(
-            [int(row["layer_id"]) for row in series],
-            [float(row["selection_agreement"]) for row in series],
-            color=DOMAIN_COLORS[domain],
-            linewidth=1.2,
-            alpha=0.78,
-            label=DOMAIN_LABELS[domain],
+            [int(row["layer_id"]) for row in selected],
+            [
+                8 * (1 - float(row["selection_agreement"]))
+                for row in selected
+            ],
+            color=domain_colors[domain],
+            linewidth=1.5,
+            marker="o",
+            markersize=3.5,
+            label=domain_labels[domain],
         )
+    balanced = sorted(
+        (row for row in rows if row["domain"] == "__domain_balanced__"),
+        key=lambda row: int(row["layer_id"]),
+    )
     axis.plot(
         [int(row["layer_id"]) for row in balanced],
-        [float(row["selection_agreement"]) for row in balanced],
-        color="#222222",
-        linewidth=2.2,
+        [
+            8 * (1 - float(row["selection_agreement"]))
+            for row in balanced
+        ],
+        color=TEXT,
+        linewidth=2.5,
         marker="o",
-        markersize=3.2,
+        markersize=4,
         label="Domain-balanced mean",
         zorder=5,
     )
-    axis.set_title(
-        "How much of each token’s top-8 route survives post-training",
-        loc="left",
+    axis.axhline(1, color=MUTED, linestyle="--", linewidth=1.0)
+    axis.text(
+        0.2,
+        1.04,
+        "one of eight experts changed",
+        fontsize=8.5,
+        color=MUTED,
+        va="bottom",
     )
-    axis.set_xlabel("MoE layer")
-    axis.set_ylabel("Base–Instruct expert-selection agreement")
-    axis.set_xticks([0, 3, 6, 9, 12, 15])
     axis.set_xlim(0, 15)
-    axis.set_ylim(0, 1)
-    axis.yaxis.set_major_formatter(PercentFormatter(1.0))
-    axis.grid(axis="y", color="#E6E6E6", linewidth=0.5)
-    axis.legend(
-        loc="lower left",
-        ncol=3,
-        frameon=False,
-        handlelength=1.8,
-        columnspacing=1.2,
+    axis.set_ylim(0, 1.85)
+    axis.set_xticks([0, 3, 6, 9, 12, 15])
+    axis.set_xlabel("MoE layer")
+    axis.set_ylabel("Experts changed out of each top-8 route")
+    axis.grid(axis="y", color=GRID, linewidth=0.7)
+    axis.legend(loc="upper left", ncol=2, frameon=False, fontsize=8.5)
+    figure.suptitle(
+        "Post-training usually changes fewer than one of eight experts at every layer",
+        x=0.02,
+        y=0.98,
+        ha="left",
+        fontsize=13.8,
+        fontweight="bold",
+    )
+    figure.text(
+        0.02,
+        0.82,
+        "Observed on exactly matched Base and Instruct tokens. Domain lines "
+        "expose where the average hides localized substitutions; mathematics "
+        "at the final layer is the clearest exception.",
+        fontsize=9.1,
+        color=MUTED,
     )
     return _save_figure(figure, output_dir / "fig2_matched_route_agreement")
 
@@ -187,6 +209,7 @@ def plot_checkpoint_trajectories(
     destination = (
         Path(output_dir) if output_dir is not None else analysis_dir / "figures"
     )
+    destination.mkdir(parents=True, exist_ok=True)
     inputs = {
         "predictability": analysis_dir / "predictability_by_horizon.csv",
         "route_overlap": analysis_dir / "matched_route_overlap.csv",
@@ -218,7 +241,6 @@ def plot_checkpoint_trajectories(
         float(row["selection_agreement"]) for row in balanced
     ) / len(balanced)
     notes = destination / "FIGURES.md"
-    notes.parent.mkdir(parents=True, exist_ok=True)
     notes.write_text(
         "\n".join(
             [
@@ -228,28 +250,21 @@ def plot_checkpoint_trajectories(
                 "",
                 f"Formal decision: **{gate['decision']}**. At layer 0→15 and "
                 f"K={capacity}, the Instruct-minus-Base change in conditional "
-                "selection gain is "
+                f"selection gain is "
                 f"{100 * gate['instruct_minus_base_gain']:+.1f} percentage "
-                f"points. Matched Base/Instruct routes retain "
-                f"{100 * mean_agreement:.1f}% of selected expert IDs on average "
-                "across depth.",
-                "",
-                "Figure 1 holds the source layer fixed at layer 0, avoiding the "
-                "changing-source composition problem in a global horizon mean. "
-                "Figure 2 uses only held-out requests with exactly matching "
-                "input token IDs.",
+                f"points. Matched routes retain "
+                f"{100 * mean_agreement:.1f}% of selected expert IDs.",
                 "",
                 "## Human visual-review checkpoint",
                 "",
-                "- [x] Programmatic check: exact token matching and the 96/32 "
-                "request split pass.",
-                "- [x] Programmatic/visual check: conditional gain is "
-                "distinguished from raw coverage/skew.",
-                "- [x] Visual check: complete top-8 coverage is not described "
-                "as hardware benefit.",
-                "- [x] Visual check: domain and layer heterogeneity in Figure 2 "
-                "is visible and recorded in `docs/C0_RESULTS.md`.",
-                "- [ ] The Base–Instruct endpoint result justifies or rejects adding SFT/DPO.",
+                "- [x] Figure 1 holds the source layer fixed at layer 0 and "
+                "shows the preregistered endpoint comparison.",
+                "- [x] Figure 2 translates selection agreement into the number "
+                "of unchanged slots in a top-8 route.",
+                "- [x] Both figures use only requests with exactly matching "
+                "input token IDs.",
+                "- [ ] The Base–Instruct endpoint result justifies or rejects "
+                "adding SFT/DPO.",
                 "",
             ]
         ),
@@ -270,10 +285,9 @@ def plot_checkpoint_trajectories(
         "semantics": {
             "phase": "matched-token prefill",
             "split_unit": "request",
-            "prediction_view": "fixed source layer 0 across all future layers",
+            "prediction_view": "fixed source layer 0 to target layer 15",
             "route_agreement": (
-                "intersection of Base and Instruct top-8 selected expert IDs "
-                "divided by eight"
+                "changed expert slots out of eight by MoE layer and domain"
             ),
         },
     }

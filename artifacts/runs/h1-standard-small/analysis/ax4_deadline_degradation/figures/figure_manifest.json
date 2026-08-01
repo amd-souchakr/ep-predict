@@ -1,6 +1,7 @@
 {
   "analysis": "AX4_deadline_bounded_graceful_expert_degradation",
   "evidence_grade": "trace_calibrated_assumption_driven_architecture_projection",
+  "figure_semantics": "Full bandwidth/residency boundary, incidence and worst case for formal passes, and the complete formal-gate outcome matrix.",
   "human_review_complete": false,
   "inputs": {
     "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/deadline_envelope.csv": "ef6a9951643178c7e0148c941bc6f8c8127544aa4d0c30f6e6a43051270c9dd7",
@@ -14,12 +15,12 @@
     "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/weight_semantics_integrity.csv": "76de56e90bed4c26c2cca1e0cc51c924900874461c962faf8d4c8fa52ca8f900"
   },
   "outputs": {
-    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/FIGURES.md": "75fd35536b64ddce22fc951904a04037337d4fd652ac3ed526ddd697ea949f34",
-    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig1_deadline_quality_latency_frontier.pdf": "b0279175cb7a1855fbbfc4c79547fe7b1f8041b385340a2c370da13e6baf44e0",
-    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig1_deadline_quality_latency_frontier.png": "6ff3189e3723d859edd86ab4eacd31c4f4ff8360621de902bca6af5d946ae624",
-    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig2_capacity_throughput_degradation_pareto.pdf": "8ca301ea01d0a5bbdc5b67ad80849aeebf1e7a49514f373e78a0f547446a64ff",
-    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig2_capacity_throughput_degradation_pareto.png": "fbf23bb4902e0d1c7f45b3902757cb05d313f8d526f6157792cfeefae7395c89",
-    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig3_deadline_hardware_phase_map.pdf": "255194f3447a8b5a03ff17227e4b0b10a4d635c91cb079f3e314fb61d8103b4d",
-    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig3_deadline_hardware_phase_map.png": "22813d27e04cf2b181f91fa263caba43003cb31d9d5a46ceb9efa49d3a942227"
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/FIGURES.md": "9f79238f345eb444bdd9cdff3dba6131877b425c820271ae3b711ca66de50dea",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig1_deadline_quality_latency_frontier.pdf": "dac41f5c41bcabb445d477993f499044310afbe574ff987074003351b759835b",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig1_deadline_quality_latency_frontier.png": "ddf15b9695adfcbfb91a1c568f53b53d8b5efc3560a115f8427b730b3d80e279",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig2_capacity_throughput_degradation_pareto.pdf": "b166ab3fc97b8909aba6cafaf69642b38fbba5b24688d07cb438d7818b229e4f",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig2_capacity_throughput_degradation_pareto.png": "daefc63065cd4bcd43e7e2ceedb6990ea64acbdb162bed5af7882768d2dd6f53",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig3_deadline_hardware_phase_map.pdf": "7ed49647f8abab244d563658195c8ea33239ff2ba428a9990520eba7c46fcf6c",
+    "artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/figures/fig3_deadline_hardware_phase_map.png": "21c1dbdf0ef16286cdccd3239e65a43d6147cb77cac66fe759106f32929f6a78"
   }
 }

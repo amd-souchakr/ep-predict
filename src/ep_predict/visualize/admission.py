@@ -10,9 +10,11 @@ from ep_predict.tracing.storage import write_json
 
 
 TEXT = "#20242B"
+MUTED = "#5E6875"
 GRID = "#D9DEE7"
-POLICY_COLORS = {"transition": "#3266A8", "linear": "#2A8C72"}
-CLASS_COLORS = {"useful_cold": "#D85C41", "useless": "#66758A"}
+USEFUL = "#2A8C72"
+WASTED = "#D97732"
+BLUE = "#3266A8"
 
 
 def _read_csv(path: Path) -> list[dict[str, str]]:
@@ -34,9 +36,9 @@ def _style() -> None:
     mpl.rcParams.update(
         {
             "font.family": "DejaVu Sans",
-            "font.size": 9.5,
+            "font.size": 10,
             "axes.titlesize": 11,
-            "axes.labelsize": 10,
+            "axes.labelsize": 10.5,
             "axes.edgecolor": "#7A828E",
             "axes.linewidth": 0.8,
             "axes.spines.top": False,
@@ -46,6 +48,8 @@ def _style() -> None:
             "text.color": TEXT,
             "axes.labelcolor": TEXT,
             "legend.frameon": False,
+            "pdf.fonttype": 42,
+            "ps.fonttype": 42,
         }
     )
 
@@ -63,287 +67,172 @@ def _save(figure: Any, stem: Path) -> list[Path]:
     return [png, pdf]
 
 
-def _frontier_plot(
+def _plot_coverage_at_budget(
     *,
     output: Path,
     frontier: list[dict[str, str]],
-    best: list[dict[str, str]],
-    raw_policy: list[dict[str, str]],
 ) -> list[Path]:
     import matplotlib.pyplot as plt
-    from matplotlib.lines import Line2D
 
-    figure, axes = plt.subplots(1, 2, figsize=(10.7, 4.8), sharey=True)
+    colors = {"transition": "#6B7280", "linear": BLUE}
+    figure, axes = plt.subplots(1, 2, figsize=(10.0, 4.8), sharey=True)
     figure.subplots_adjust(
-        left=0.08, right=0.985, bottom=0.23, top=0.72, wspace=0.14
+        left=0.10, right=0.98, bottom=0.25, top=0.72, wspace=0.12
     )
-    for axis, delta in zip(axes, (3, 9), strict=True):
-        axis.axvspan(1.0, 2.0, color="#E1EFE6", alpha=0.9)
-        axis.axvline(2.0, color="#596273", linestyle="--", linewidth=1.1)
-        axis.axhline(50.0, color="#596273", linestyle=":", linewidth=1.1)
+    for axis, lookahead in zip(axes, (3, 9), strict=True):
+        axis.axvspan(1, 2, color="#DDEFE4", alpha=0.85)
+        axis.axvline(2, color=TEXT, linestyle="--", linewidth=1.0)
+        axis.axhline(50, color=TEXT, linestyle=":", linewidth=1.0)
         for policy in ("transition", "linear"):
             selected = sorted(
                 (
                     row
                     for row in frontier
-                    if int(row["lookahead"]) == delta
+                    if int(row["lookahead"]) == lookahead
                     and row["policy"] == policy
-                    and float(row["candidate_transfer_amplification"]) < 10
-                ),
-                key=lambda row: float(row["standardized_score_threshold"]),
-            )
-            axis.plot(
-                [float(row["candidate_transfer_amplification"]) for row in selected],
-                [100 * float(row["complete_cold_set_coverage"]) for row in selected],
-                color=POLICY_COLORS[policy],
-                linewidth=2.0,
-                label=policy,
-            )
-            reference = min(
-                (
-                    row
-                    for row in selected
-                    if float(row["complete_cold_set_coverage"]) >= 0.50
+                    and 1 <= float(row["candidate_transfer_amplification"]) <= 7
                 ),
                 key=lambda row: float(row["candidate_transfer_amplification"]),
             )
-            reference_x = float(reference["candidate_transfer_amplification"])
-            reference_y = 100 * float(reference["complete_cold_set_coverage"])
-            axis.scatter(
-                reference_x,
-                reference_y,
-                s=46,
-                marker="s",
-                facecolor="white",
-                edgecolor=POLICY_COLORS[policy],
-                linewidth=1.5,
-                zorder=4,
+            frontier_x: list[float] = []
+            frontier_y: list[float] = []
+            best_coverage = -1.0
+            for row in selected:
+                coverage = 100 * float(row["complete_cold_set_coverage"])
+                if coverage <= best_coverage + 1e-9:
+                    continue
+                frontier_x.append(
+                    float(row["candidate_transfer_amplification"])
+                )
+                frontier_y.append(coverage)
+                best_coverage = coverage
+            axis.plot(
+                frontier_x,
+                frontier_y,
+                color=colors[policy],
+                linewidth=2.2,
+                label=policy.capitalize(),
             )
-            axis.annotate(
-                f"{reference_x:.1f}×",
-                (reference_x, reference_y),
-                xytext=(4, 4 if policy == "linear" else -12),
-                textcoords="offset points",
-                fontsize=7.3,
-                color=POLICY_COLORS[policy],
-            )
-            operating = next(
-                row
-                for row in best
-                if int(row["lookahead"]) == delta and row["policy"] == policy
-            )
-            x_value = float(operating["candidate_transfer_amplification"])
-            y_value = 100 * float(operating["complete_cold_set_coverage"])
-            within = operating["within_2x_window"].lower() == "true"
-            axis.scatter(
-                x_value,
-                y_value,
-                s=56,
-                color=POLICY_COLORS[policy],
-                marker="o" if within else "D",
-                edgecolor="white",
-                linewidth=0.8,
-                zorder=4,
-            )
-            axis.annotate(
-                (
-                    f"{y_value:.0f}% @ {x_value:.1f}×"
-                    if within
-                    else f"no 2× crossing\nmin {x_value:.1f}×"
-                ),
-                (x_value, y_value),
-                xytext=(5, 8),
-                textcoords="offset points",
-                fontsize=7.4,
-                color=POLICY_COLORS[policy],
-            )
-            raw = next(
-                row
-                for row in raw_policy
-                if int(row["capacity"]) == 32
-                and int(row["lookahead"]) == delta
-                and row["policy"] == policy
-            )
-            axis.scatter(
-                float(raw["candidate_transfer_amplification"]),
-                100 * float(raw["complete_cold_set_coverage"]),
-                s=50,
-                marker="x",
-                color=POLICY_COLORS[policy],
-                linewidth=1.7,
-                zorder=3,
-            )
-        axis.set_xlim(1.0, 7.25)
-        axis.set_ylim(0, 100)
-        axis.set_xlabel("Transferred candidates / useful cold experts")
+        axis.set_xlim(1, 7)
+        axis.set_ylim(0, 88)
+        axis.set_xlabel("Copies made per expert actually needed")
         axis.set_title(
-            f"K=32 resident tier, lookahead Δ={delta}",
+            f"{lookahead} layers ahead",
             loc="left",
             fontweight="bold",
         )
         axis.grid(axis="y", color=GRID, linewidth=0.7)
-        axis.text(
-            1.08,
-            93,
-            "≤2× traffic",
-            fontsize=8.2,
-            color="#356B4D",
-            va="top",
-        )
-    axes[0].set_ylabel("Complete cold-set coverage (%)")
-    handles = [
-        Line2D([0], [0], color=POLICY_COLORS["transition"], lw=2, label="Transition"),
-        Line2D([0], [0], color=POLICY_COLORS["linear"], lw=2, label="Linear"),
-        Line2D(
-            [0], [0], marker="x", linestyle="none", color="#596273",
-            label="Unfiltered K=32",
-        ),
-        Line2D(
-            [0], [0], marker="o", linestyle="none", color="#596273",
-            label="Best threshold at A≤2×",
-        ),
-        Line2D(
-            [0], [0], marker="D", linestyle="none", color="#596273",
-            label="Minimum A; no 2× crossing",
-        ),
-        Line2D(
-            [0], [0], marker="s", markerfacecolor="white", linestyle="none",
-            color="#596273", label="Minimum A at C≥50%",
-        ),
-    ]
+    axes[0].set_ylabel("Cold requests whose missing experts are all found")
+    handles, legend_labels = axes[0].get_legend_handles_labels()
     figure.legend(
-        handles=handles,
+        handles,
+        legend_labels,
         loc="lower center",
         bbox_to_anchor=(0.5, 0.01),
-        ncol=3,
-        fontsize=8.5,
+        ncol=2,
+    )
+    axes[0].text(
+        1.12,
+        82,
+        "acceptable\ntraffic",
+        fontsize=8.2,
+        color=USEFUL,
+        va="top",
     )
     figure.suptitle(
-        "Score thresholding cuts traffic—but reveals the coverage price",
+        "Filtering exposes the full tradeoff between traffic and protected requests",
         x=0.02,
         y=0.98,
         ha="left",
-        fontsize=14.7,
+        fontsize=14.2,
         fontweight="bold",
     )
     figure.text(
         0.02,
         0.855,
-        "Held-out decode; thresholds act on all 64 expert scores after K=32 "
-        "resident filtering. Green marks the H5 traffic budget; 50% is the "
-        "saturated-headroom coverage reference.",
+        "Observed threshold sweep with 32 experts resident. Green allows at "
+        "most one unnecessary copy per useful copy; the dotted line marks half "
+        "of cold requests protected.",
         fontsize=9.2,
-        color="#555E6B",
+        color=MUTED,
     )
     return _save(figure, output / "fig1_admission_frontier")
 
 
-def _separation_plot(
+def _plot_useful_share_at_half_coverage(
     *,
     output: Path,
-    histograms: list[dict[str, str]],
-    separation: list[dict[str, str]],
+    boundary: list[dict[str, str]],
 ) -> list[Path]:
     import matplotlib.pyplot as plt
-    from matplotlib.lines import Line2D
 
-    figure, axes = plt.subplots(
-        2, 2, figsize=(10.7, 6.8), sharex=True, sharey="row"
+    selected = sorted(
+        (row for row in boundary if row["policy"] == "linear"),
+        key=lambda row: int(row["lookahead"]),
     )
-    figure.subplots_adjust(
-        left=0.08, right=0.985, bottom=0.16, top=0.76, wspace=0.12, hspace=0.25
+    labels = [f"{row['lookahead']} layers ahead" for row in selected]
+    useful = [100 * float(row["candidate_precision"]) for row in selected]
+    wasted = [100 - value for value in useful]
+    positions = list(range(len(selected)))
+
+    figure, axis = plt.subplots(figsize=(7.4, 4.6))
+    figure.subplots_adjust(left=0.21, right=0.97, bottom=0.20, top=0.72)
+    axis.barh(positions, useful, color=USEFUL, height=0.56)
+    axis.barh(
+        positions,
+        wasted,
+        left=useful,
+        color=WASTED,
+        height=0.56,
     )
-    for row_index, policy in enumerate(("transition", "linear")):
-        for column_index, delta in enumerate((3, 9)):
-            axis = axes[row_index][column_index]
-            for candidate_class in ("useless", "useful_cold"):
-                selected = sorted(
-                    (
-                        row
-                        for row in histograms
-                        if row["policy"] == policy
-                        and int(row["lookahead"]) == delta
-                        and row["candidate_class"] == candidate_class
-                    ),
-                    key=lambda row: float(row["bin_center"]),
-                )
-                x = [float(row["bin_center"]) for row in selected]
-                y = [float(row["density"]) for row in selected]
-                axis.plot(
-                    x,
-                    y,
-                    color=CLASS_COLORS[candidate_class],
-                    linewidth=1.8,
-                )
-                axis.fill_between(
-                    x,
-                    y,
-                    color=CLASS_COLORS[candidate_class],
-                    alpha=0.13,
-                )
-            stats = next(
-                row
-                for row in separation
-                if row["policy"] == policy and int(row["lookahead"]) == delta
-            )
-            axis.text(
-                0.97,
-                0.92,
-                f"AUROC {float(stats['useful_vs_useless_auroc']):.3f}\n"
-                f"JS {float(stats['score_js_divergence_bits']):.3f} bits",
-                transform=axis.transAxes,
-                ha="right",
-                va="top",
-                fontsize=8.3,
-                color="#555E6B",
-            )
-            axis.set_xlim(-2.5, 4.5)
-            axis.grid(axis="y", color=GRID, linewidth=0.7)
-            axis.set_title(
-                f"{policy.capitalize()}, Δ={delta}",
-                loc="left",
-                fontweight="bold",
-            )
-            if column_index == 0:
-                axis.set_ylabel("Density")
-            if row_index == 1:
-                axis.set_xlabel(
-                    "Within-wave standardized expert score\n"
-                    "(linear logit / transition score)"
-                )
-    handles = [
-        Line2D(
-            [0], [0], color=CLASS_COLORS["useful_cold"], lw=2,
-            label="Actually demanded cold expert",
-        ),
-        Line2D(
-            [0], [0], color=CLASS_COLORS["useless"], lw=2,
-            label="Useless nonresident expert",
-        ),
-    ]
-    figure.legend(
-        handles=handles,
+    for position, good, bad in zip(positions, useful, wasted, strict=True):
+        axis.text(
+            good / 2,
+            position,
+            f"{good:.0f}% useful",
+            ha="center",
+            va="center",
+            color="white",
+            fontweight="bold",
+        )
+        axis.text(
+            good + bad / 2,
+            position,
+            f"{bad:.0f}% wasted",
+            ha="center",
+            va="center",
+            color="white",
+            fontweight="bold",
+        )
+    axis.set_yticks(positions, labels)
+    axis.invert_yaxis()
+    axis.set_xlim(0, 100)
+    axis.set_xlabel("Share of admitted transfers")
+    axis.grid(axis="x", color=GRID, linewidth=0.7)
+    axis.legend(
+        handles=[
+            plt.Rectangle((0, 0), 1, 1, color=USEFUL, label="Useful"),
+            plt.Rectangle((0, 0), 1, 1, color=WASTED, label="Unnecessary"),
+        ],
         loc="lower center",
-        bbox_to_anchor=(0.5, 0.01),
+        bbox_to_anchor=(0.5, -0.28),
         ncol=2,
-        fontsize=8.7,
     )
     figure.suptitle(
-        "Useful cold experts score higher, but the distributions still overlap",
+        "Even after filtering, two of every three transfers are wasted",
         x=0.02,
         y=0.98,
         ha="left",
-        fontsize=14.7,
+        fontsize=14.2,
         fontweight="bold",
     )
     figure.text(
         0.02,
-        0.87,
-        "Every distribution scores all nonresident expert IDs in each held-out "
-        "cold wave. Per-wave standardization removes head-specific logit scale; "
-        "JS quantifies the class-conditional score divergence (1 bit maximum).",
+        0.855,
+        "Observed operating points chosen to protect at least half of cold "
+        "requests. This exposes the rare-useful-candidate problem directly.",
         fontsize=9.2,
-        color="#555E6B",
+        color=MUTED,
     )
     return _save(figure, output / "fig2_expert_score_separation")
 
@@ -353,6 +242,8 @@ def plot_admission(
     *,
     output_dir: str | Path | None = None,
 ) -> dict[str, Any]:
+    import matplotlib.pyplot as plt
+
     _style()
     analysis = Path(experiment_config["output_dir"])
     inputs = [
@@ -370,26 +261,20 @@ def plot_admission(
     output = Path(output_dir) if output_dir else analysis / "figures"
     output.mkdir(parents=True, exist_ok=True)
     frontier = _read_csv(analysis / "admission_frontier.csv")
-    best = _read_csv(analysis / "best_at_2x.csv")
-    histograms = _read_csv(analysis / "score_histograms.csv")
-    separation = _read_csv(analysis / "score_separation.csv")
-    raw = _read_csv(Path(experiment_config["h5_analysis"]) / "h5_policy_placement.csv")
+    boundary = _read_csv(analysis / "boundary_at_reference_coverage.csv")
+
     outputs: list[Path] = []
     outputs.extend(
-        _frontier_plot(
-            output=output,
-            frontier=frontier,
-            best=best,
-            raw_policy=raw,
-        )
+        _plot_coverage_at_budget(output=output, frontier=frontier)
     )
     outputs.extend(
-        _separation_plot(
+        _plot_useful_share_at_half_coverage(
             output=output,
-            histograms=histograms,
-            separation=separation,
+            boundary=boundary,
         )
     )
+    plt.close("all")
+
     note = output / "FIGURES.md"
     note.write_text(
         "\n".join(
@@ -398,21 +283,21 @@ def plot_admission(
                 "",
                 "## Human review checklist",
                 "",
-                "- [ ] The threshold curve uses held-out labels only for "
-                "evaluation, not threshold fitting.",
-                "- [ ] K=32 means resident capacity; thresholded candidate "
-                "count is allowed to vary by wave.",
-                "- [ ] A≤2× is read together with complete cold-set coverage.",
-                "- [ ] Standardized scores are recognized as within-wave "
-                "linear logits or transition scores, not calibrated "
-                "probabilities.",
-                "- [ ] AUROC is treated as descriptive separation, not the "
-                "hardware decision metric.",
-                "- [ ] One next action is recorded.",
+                "- [ ] Figure 1 shows the full held-out threshold frontier for "
+                "both unchanged policies and both frozen lookaheads.",
+                "- [ ] The green region fixes the prior H5 traffic budget at at "
+                "most two total copies per useful copy.",
+                "- [ ] Figure 2 fixes complete cold-request coverage at at least "
+                "50% and reports useful versus unnecessary admitted transfers.",
+                "- [ ] The useful-transfer share is not confused with AUROC or "
+                "the 7–8% unfiltered useful base rate.",
+                "- [ ] Headline values agree with `best_at_2x.csv` and "
+                "`boundary_at_reference_coverage.csv`.",
                 "",
                 "## One next action",
                 "",
-                "Pending researcher review.",
+                "Use the figures to review why ranking separation does not "
+                "produce an affordable admission policy.",
                 "",
             ]
         ),
@@ -425,6 +310,10 @@ def plot_admission(
         "inputs": {str(path): _sha256(path) for path in inputs},
         "outputs": {str(path): _sha256(path) for path in outputs},
         "human_review_complete": False,
+        "figure_semantics": (
+            "Full threshold traffic/coverage frontiers and useful-transfer "
+            "share when half of cold requests are protected."
+        ),
     }
     write_json(output / "figure_manifest.json", manifest)
     return manifest

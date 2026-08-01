@@ -37,9 +37,9 @@ def _style() -> None:
     mpl.rcParams.update(
         {
             "font.family": "DejaVu Sans",
-            "font.size": 9.2,
-            "axes.titlesize": 10.5,
-            "axes.labelsize": 9.7,
+            "font.size": 10,
+            "axes.titlesize": 11,
+            "axes.labelsize": 10.5,
             "axes.edgecolor": "#7A828E",
             "axes.linewidth": 0.8,
             "axes.spines.top": False,
@@ -68,83 +68,130 @@ def _save(figure: Any, stem: Path) -> list[Path]:
     return [png, pdf]
 
 
-def _phase_map(
+def _queue_tail(
     output: Path,
-    phase_rows: list[dict[str, str]],
+    rows: list[dict[str, str]],
 ) -> list[Path]:
     import matplotlib.pyplot as plt
-    import numpy as np
-    from matplotlib.colors import ListedColormap
-    from matplotlib.lines import Line2D
 
-    amplifications = [1.0, 2.0, 4.0]
-    x_values = np.geomspace(0.08, 64.0, 500)
-    y_values = np.linspace(0.50, 1.0, 400)
-    x_grid, y_grid = np.meshgrid(x_values, y_values)
-    cmap = ListedColormap(["#F3E5E2", "#F5E7C8", "#DDEFE4"])
-    figure, axes = plt.subplots(1, 3, figsize=(11.1, 4.25), sharey=True)
-    figure.subplots_adjust(left=0.075, right=0.985, bottom=0.20, top=0.76, wspace=0.12)
-
-    marker_capacities = {8: "o", 16: "s", 32: "^"}
-    for axis, amplification in zip(axes, amplifications, strict=True):
-        effective = x_grid / amplification
-        oracle = np.minimum(1.0, x_grid)
-        benefit = y_grid * np.minimum(1.0, effective)
-        recovery = benefit / oracle
-        profitable = (benefit >= 0.25) & (recovery >= 0.50)
-        slo = profitable & (y_grid >= 0.99) & (effective >= 1.25)
-        category = profitable.astype(int) + slo.astype(int)
-        axis.pcolormesh(
-            x_values,
-            100 * y_values,
-            category,
-            cmap=cmap,
-            shading="auto",
-            vmin=0,
-            vmax=2,
-            rasterized=True,
-        )
-        axis.contour(
-            x_grid,
-            100 * y_grid,
-            effective,
-            levels=[1.0],
-            colors=["#8B6A2B"],
-            linestyles=["--"],
-            linewidths=1.0,
-        )
-        axis.axhline(99, color="#356B4D", linestyle=":", linewidth=1.0)
-        markers = [
-            row
-            for row in phase_rows
-            if float(row["amplification"]) == amplification
-            and float(row["coverage"]) == 0.99
-            and abs(float(row["bandwidth_gbps"]) - 24.1354255944) < 0.01
-            and int(row["lookahead_layers"]) in {3, 9}
+    figure, axis = plt.subplots(figsize=(9.0, 5.1))
+    figure.subplots_adjust(left=0.13, right=0.80, bottom=0.18, top=0.72)
+    colors = [BLUE, ORANGE, GREEN, PURPLE]
+    label_offsets = [-10, 0, 10, 0]
+    for color, row, y_offset in zip(
+        colors, rows, label_offsets, strict=True
+    ):
+        values = [
+            float(row["wave_local_p99_stall_ms"]),
+            float(row["p99_queue_replay_stall_ms"]),
         ]
-        for row in markers:
-            capacity = int(row["capacity_experts_per_layer"])
-            delta = int(row["lookahead_layers"])
-            x = float(row["raw_cold_service_headroom"])
-            axis.scatter(
-                x,
-                99,
-                marker=marker_capacities[capacity],
-                s=48,
-                facecolor="white" if delta == 3 else TEXT,
-                edgecolor=TEXT,
-                linewidth=1.1,
-                zorder=3,
-            )
-        axis.set_xscale("log")
-        axis.set_xlim(0.08, 64)
-        axis.set_ylim(50, 100.2)
-        axis.grid(axis="y", color=GRID, linewidth=0.7)
-        axis.set_title(f"Amplification A = {amplification:g}×", loc="left", fontweight="bold")
-        axis.set_xlabel("Raw cold-service headroom H")
-    axes[0].set_ylabel("Complete cold-set coverage C (%)")
+        axis.plot(
+            [0, 1],
+            values,
+            color=color,
+            marker="o",
+            markersize=7,
+            linewidth=2.0,
+        )
+        label = (
+            f"K={row['capacity_experts_per_layer']}, "
+            f"{row['lookahead_layers']} ahead, "
+            f"C={100 * float(row['coverage']):.1f}%, "
+            f"A={float(row['amplification']):.1f}×, "
+            f"{float(row['bandwidth_gbps']):.0f} GB/s"
+        )
+        axis.annotate(
+            f"{values[1]:.1f} ms  {label}",
+            (1, values[1]),
+            xytext=(7, y_offset),
+            textcoords="offset points",
+            va="center",
+            fontsize=8.0,
+            color=color,
+        )
+    axis.set_xticks([0, 1], ["Wave-local estimate", "Trace-ordered queue"])
+    axis.set_xlim(-0.12, 1.65)
+    axis.set_ylim(0, 72)
+    axis.set_ylabel("Delay in the worst 1% of waves")
+    axis.grid(axis="y", color=GRID, linewidth=0.7)
     figure.suptitle(
-        "Prediction reliability and transfer headroom define the profitable region",
+        "Trace ordering raises the P99 stall in all four boundary checks",
+        x=0.02,
+        y=0.98,
+        ha="left",
+        fontsize=14.4,
+        fontweight="bold",
+    )
+    figure.text(
+        0.02,
+        0.855,
+        "Each line holds capacity, warning distance, predictor quality, traffic, "
+        "and bandwidth fixed. The rise is caused by bursty candidates sharing "
+        "one FCFS transfer queue.",
+        fontsize=9.1,
+        color=MUTED,
+    )
+    return _save(figure, output / "fig1_profitability_phase_map")
+
+
+def _memory_equivalence(
+    output: Path,
+    rows: list[dict[str, str]],
+) -> list[Path]:
+    import matplotlib.pyplot as plt
+
+    reactive = sorted(
+        (row for row in rows if row["policy"] == "reactive_offload"),
+        key=lambda row: float(row["fast_tier_expert_gib"]),
+    )
+    predictive = sorted(
+        (
+            row
+            for row in rows
+            if row["quality_profile"] == "predictive_C99_A1.5"
+        ),
+        key=lambda row: float(row["fast_tier_expert_gib"]),
+    )
+    figure, axis = plt.subplots(figsize=(8.0, 4.8))
+    figure.subplots_adjust(left=0.14, right=0.97, bottom=0.19, top=0.72)
+    for selected, color, label, marker in (
+        (reactive, ORANGE, "Reactive offload", "o"),
+        (
+            predictive,
+            BLUE,
+            "Assumed predictor: 99% coverage, 1.5× traffic",
+            "s",
+        ),
+    ):
+        axis.plot(
+            [float(row["fast_tier_expert_gib"]) for row in selected],
+            [float(row["modeled_p99_tpot_ms"]) for row in selected],
+            color=color,
+            marker=marker,
+            markersize=7,
+            linewidth=2.2,
+            label=label,
+        )
+        for row in selected:
+            axis.annotate(
+                f"K={row['capacity_experts_per_layer']}",
+                (
+                    float(row["fast_tier_expert_gib"]),
+                    float(row["modeled_p99_tpot_ms"]),
+                ),
+                xytext=(5, 5),
+                textcoords="offset points",
+                fontsize=8,
+                color=color,
+            )
+    axis.set_xlim(1.1, 6.4)
+    axis.set_ylim(25, 77)
+    axis.set_xlabel("Local memory used for expert weights (GiB)")
+    axis.set_ylabel("Modeled P99 decode time (ms)")
+    axis.grid(color=GRID, linewidth=0.7)
+    axis.legend(loc="upper right", fontsize=8.5)
+    figure.suptitle(
+        "The full capacity sweep shows how assumed prediction trades memory for tail latency",
         x=0.02,
         y=0.98,
         ha="left",
@@ -153,202 +200,96 @@ def _phase_map(
     )
     figure.text(
         0.02,
-        0.865,
-        "Green: P99-SLO candidate (C≥99%, H/A≥1.25). "
-        "Amber: mean benefit but tail risk. Red: <25% stall reduction or <50% oracle recovery.",
-        fontsize=9.0,
-        color=MUTED,
-    )
-    handles = [
-        Line2D([0], [0], marker="o", color="none", markeredgecolor=TEXT, label="K=8"),
-        Line2D([0], [0], marker="s", color="none", markeredgecolor=TEXT, label="K=16"),
-        Line2D([0], [0], marker="^", color="none", markeredgecolor=TEXT, label="K=32"),
-        Line2D([0], [0], marker="o", color="none", markeredgecolor=TEXT, markerfacecolor="white", label="Δ=3"),
-        Line2D([0], [0], marker="o", color="none", markeredgecolor=TEXT, markerfacecolor=TEXT, label="Δ=9"),
-    ]
-    figure.legend(
-        handles=handles,
-        ncol=5,
-        loc="lower center",
-        bbox_to_anchor=(0.5, 0.015),
-        fontsize=8.3,
-    )
-    figure.text(
-        0.985,
-        0.025,
-        "Markers: measured PCIe + trace demand; y=99% is assumed",
-        ha="right",
-        fontsize=7.5,
-        color=MUTED,
-    )
-    return _save(figure, output / "fig1_profitability_phase_map")
-
-
-def _pareto(
-    output: Path,
-    rows: list[dict[str, str]],
-) -> list[Path]:
-    import matplotlib.pyplot as plt
-
-    figure, axis = plt.subplots(figsize=(7.2, 4.6))
-    figure.subplots_adjust(left=0.12, right=0.97, bottom=0.20, top=0.77)
-    styles = {
-        "reactive_offload": (ORANGE, "o", "--", "Reactive offload"),
-        "predictive_C99_A1.5": (BLUE, "s", "-", "Predictive C=99%, A=1.5×"),
-        "predictive_C999_A1.25": (GREEN, "^", "-", "Predictive C=99.9%, A=1.25×"),
-        "oracle_offload": (PURPLE, "D", ":", "Oracle C=100%, A=1×"),
-    }
-    for key, (color, marker, linestyle, label) in styles.items():
-        if key == "reactive_offload":
-            selected = [row for row in rows if row["policy"] == key]
-        elif key == "oracle_offload":
-            selected = [row for row in rows if row["policy"] == key]
-        else:
-            selected = [row for row in rows if row["quality_profile"] == key]
-        selected.sort(key=lambda row: float(row["fast_tier_expert_gib"]))
-        axis.plot(
-            [float(row["fast_tier_expert_gib"]) for row in selected],
-            [float(row["modeled_p99_tpot_ms"]) for row in selected],
-            color=color,
-            marker=marker,
-            linestyle=linestyle,
-            linewidth=1.7,
-            markersize=6,
-            label=label,
-        )
-        if "predictive" in key:
-            for row in selected:
-                axis.annotate(
-                    f"Δ={row['selected_lookahead']}",
-                    (
-                        float(row["fast_tier_expert_gib"]),
-                        float(row["modeled_p99_tpot_ms"]),
-                    ),
-                    xytext=(4, 5),
-                    textcoords="offset points",
-                    fontsize=7.3,
-                    color=color,
-                )
-    resident = next(row for row in rows if row["policy"] == "all_resident_reference")
-    axis.scatter(
-        float(resident["fast_tier_expert_gib"]),
-        float(resident["modeled_p99_tpot_ms"]),
-        marker="*",
-        s=115,
-        color=TEXT,
-        label="All-resident measured reference",
-        zorder=4,
-    )
-    axis.grid(color=GRID, linewidth=0.7)
-    axis.set_xlabel("HBM capacity used for expert weights (GiB)")
-    axis.set_ylabel("Modeled P99 decode TPOT (ms)")
-    axis.legend(loc="upper right", fontsize=8.0)
-    figure.suptitle(
-        "Better routing reliability converts HBM capacity into lower offload tail",
-        x=0.02,
-        y=0.98,
-        ha="left",
-        fontsize=14.0,
-        fontweight="bold",
-    )
-    figure.text(
-        0.02,
-        0.865,
-        "Measured PCIe anchor; trace-derived LRU cold demand; correlated wave misses. "
-        "Offload is compared with reactive offload, not claimed faster than all-HBM.",
-        fontsize=8.8,
+        0.835,
+        "Projected on the same measured PCIe hierarchy. The 1.5 GiB predictive "
+        "point reaches 48.0 ms versus 50.6 ms for reactive offload at 6 GiB; "
+        "all three capacities remain visible.",
+        fontsize=9.1,
         color=MUTED,
     )
     return _save(figure, output / "fig2_memory_p99_pareto")
 
 
-def _inverse(
+def _bandwidth_warning(
     output: Path,
     rows: list[dict[str, str]],
     measured_startup_us: float,
+    measured_bandwidth_gbps: float,
 ) -> list[Path]:
     import matplotlib.pyplot as plt
-    from matplotlib.lines import Line2D
 
-    figure, axes = plt.subplots(1, 2, figsize=(10.8, 4.45), sharey=True)
-    figure.subplots_adjust(left=0.08, right=0.98, bottom=0.20, top=0.76, wspace=0.14)
-    capacity_colors = {8: ORANGE, 16: BLUE, 32: GREEN}
-    for capacity in (8, 16, 32):
-        for amplification, linestyle in ((1.0, "-"), (2.0, "--")):
-            selected = [
-                row
-                for row in rows
-                if row["demand_source"] == "trace_derived_olmoe"
-                and int(row["capacity_experts_per_layer"]) == capacity
-                and float(row["object_size_mib"]) == 12.0
-                and float(row["amplification"]) == amplification
-                and abs(float(row["startup_latency_us"]) - measured_startup_us) < 0.1
-                and int(row["transfer_concurrency"]) == 1
-            ]
-            selected.sort(key=lambda row: int(row["lookahead_layers"]))
-            axes[0].plot(
-                [int(row["lookahead_layers"]) for row in selected],
-                [float(row["minimum_bandwidth_gbps"]) for row in selected],
-                color=capacity_colors[capacity],
-                linestyle=linestyle,
-                marker="o",
-                markersize=3.8,
-                linewidth=1.5,
-            )
-    object_colors = {12.0: PURPLE, 4.0: BLUE, 1.0: GREEN, 0.25: ORANGE}
-    for object_mib in (12.0, 4.0, 1.0, 0.25):
-        selected = [
+    selected = sorted(
+        (
             row
             for row in rows
-            if row["demand_source"] == "normalized_sensitivity"
-            and float(row["unique_cold_objects_per_wave"]) == 2.0
-            and float(row["object_size_mib"]) == object_mib
-            and float(row["amplification"]) == 1.5
-            and abs(float(row["startup_latency_us"]) - measured_startup_us) < 0.1
+            if row["demand_source"] == "trace_derived_olmoe"
+            and int(row["capacity_experts_per_layer"]) == 16
+            and float(row["object_size_mib"]) == 12.0
+            and float(row["amplification"]) == 1.0
+            and abs(float(row["startup_latency_us"]) - measured_startup_us)
+            < 0.1
             and int(row["transfer_concurrency"]) == 1
-        ]
-        selected.sort(key=lambda row: int(row["lookahead_layers"]))
-        axes[1].plot(
-            [int(row["lookahead_layers"]) for row in selected],
-            [float(row["minimum_bandwidth_gbps"]) for row in selected],
-            color=object_colors[object_mib],
-            marker="o",
-            markersize=3.8,
-            linewidth=1.5,
-            label=f"{object_mib:g} MiB",
+        ),
+        key=lambda row: int(row["lookahead_layers"]),
+    )
+    deltas = [int(row["lookahead_layers"]) for row in selected]
+    values = [float(row["minimum_bandwidth_gbps"]) for row in selected]
+
+    figure, axis = plt.subplots(figsize=(8.0, 4.7))
+    figure.subplots_adjust(left=0.14, right=0.97, bottom=0.20, top=0.72)
+    axis.plot(
+        deltas,
+        values,
+        color=BLUE,
+        marker="o",
+        markersize=5,
+        linewidth=2.2,
+    )
+    axis.axhline(
+        measured_bandwidth_gbps,
+        color=TEXT,
+        linestyle="--",
+        linewidth=1.2,
+    )
+    axis.text(
+        14.8,
+        measured_bandwidth_gbps + 1.4,
+        f"measured link: {measured_bandwidth_gbps:.1f} GB/s",
+        ha="right",
+        fontsize=8.6,
+        color=MUTED,
+    )
+    for delta in (1, 3, 6, 9):
+        value = values[deltas.index(delta)]
+        axis.annotate(
+            f"{value:.1f}",
+            (delta, value),
+            xytext=(0, 7),
+            textcoords="offset points",
+            ha="center",
+            fontweight="bold",
+            fontsize=9,
         )
-    for axis in axes:
-        axis.axhline(24.1354, color=TEXT, linestyle=":", linewidth=1.1)
-        axis.set_yscale("log")
-        axis.set_xticks([1, 2, 3, 6, 9, 12, 15])
-        axis.grid(color=GRID, linewidth=0.7)
-        axis.set_xlabel("Lookahead Δ (MoE layers)")
-    axes[0].set_ylabel("Minimum interconnect bandwidth (GB/s)")
-    axes[0].set_title("Trace-derived whole experts", loc="left", fontweight="bold")
-    axes[1].set_title("Normalized U=2, A=1.5×", loc="left", fontweight="bold")
-    axes[1].legend(title="Transfer object", fontsize=8.0, title_fontsize=8.2)
-    capacity_handles = [
-        Line2D([0], [0], color=capacity_colors[k], lw=1.7, label=f"K={k}")
-        for k in (8, 16, 32)
-    ] + [
-        Line2D([0], [0], color=TEXT, lw=1.5, linestyle="-", label="A=1×"),
-        Line2D([0], [0], color=TEXT, lw=1.5, linestyle="--", label="A=2×"),
-    ]
-    axes[0].legend(handles=capacity_handles, ncol=2, fontsize=7.8)
+    axis.set_ylim(0, max(values) + 12)
+    axis.set_xlim(1, 15)
+    axis.set_xticks([1, 3, 6, 9, 12, 15])
+    axis.set_xlabel("Layers of advance warning")
+    axis.set_ylabel("Minimum average link bandwidth (GB/s)")
+    axis.grid(axis="y", color=GRID, linewidth=0.7)
     figure.suptitle(
-        "Lookahead buys bandwidth; amplification and object size spend it",
+        "The full inverse curve shows how advance warning buys bandwidth",
         x=0.02,
         y=0.98,
         ha="left",
-        fontsize=14.0,
+        fontsize=14.1,
         fontweight="bold",
     )
     figure.text(
         0.02,
-        0.865,
-        "Inverse first-order bound including measured 2.8 μs startup. "
-        "Dotted line is measured PCIe bandwidth; lower curves are easier to serve.",
-        fontsize=8.9,
+        0.855,
+        "First-order K=16 whole-expert bound with no unnecessary traffic. "
+        "Queue bursts and prediction misses remain separate tail constraints.",
+        fontsize=9.1,
         color=MUTED,
     )
     return _save(figure, output / "fig3_inverse_bandwidth_lookahead")
@@ -359,6 +300,8 @@ def plot_architecture(
     *,
     output_dir: str | Path | None = None,
 ) -> dict[str, Any]:
+    import matplotlib.pyplot as plt
+
     _style()
     analysis = Path(experiment_config["output_dir"])
     inputs = [
@@ -374,19 +317,33 @@ def plot_architecture(
     ]
     for path in inputs:
         if not path.is_file():
-            raise FileNotFoundError(f"run architecture analysis before plotting: {path}")
+            raise FileNotFoundError(
+                f"run architecture analysis before plotting: {path}"
+            )
     output = Path(output_dir) if output_dir else analysis / "figures"
     output.mkdir(parents=True, exist_ok=True)
-    phase = _read_csv(analysis / "ax2_phase_points.csv")
     pareto = _read_csv(analysis / "ax1_pareto.csv")
+    queue = _read_csv(analysis / "ax1_queue_sensitivity.csv")
     inverse = _read_csv(analysis / "ax2_inverse_bounds.csv")
     summary = json.loads((analysis / "summary.json").read_text(encoding="utf-8"))
     startup = float(summary["measured_inputs"]["h2d_startup_latency_us"])
+    measured_bandwidth = float(
+        summary["measured_inputs"]["h2d_bandwidth_gbps"]
+    )
 
     outputs: list[Path] = []
-    outputs.extend(_phase_map(output, phase))
-    outputs.extend(_pareto(output, pareto))
-    outputs.extend(_inverse(output, inverse, startup))
+    outputs.extend(_queue_tail(output, queue))
+    outputs.extend(_memory_equivalence(output, pareto))
+    outputs.extend(
+        _bandwidth_warning(
+            output,
+            inverse,
+            startup,
+            measured_bandwidth,
+        )
+    )
+    plt.close("all")
+
     note = output / "FIGURES.md"
     note.write_text(
         "\n".join(
@@ -399,23 +356,22 @@ def plot_architecture(
                 "",
                 "## Review checklist",
                 "",
-                "- [ ] The phase-map axes are complete cold-set coverage and "
-                "raw service headroom; amplification is applied within each panel.",
-                "- [ ] Green is read as an SLO candidate, not a demonstrated system.",
-                "- [ ] The Pareto comparison is predictive versus reactive offload "
-                "on the same measured PCIe hierarchy.",
-                "- [ ] The all-resident point is a capacity/performance reference, "
-                "not the baseline that predictive CPU offload must beat.",
-                "- [ ] The inverse curve is a necessary first-order bandwidth "
-                "bound; queue and reliability tails remain separate constraints.",
-                "- [ ] AX3's 192/384 MiB whole-expert double-buffer bounds are "
-                "checked against `ax3_staging.csv`.",
-                "- [ ] One architectural point is selected before any optional "
-                "live asynchronous calibration.",
+                "- [ ] Figure 1 includes all four selected queue-sensitivity "
+                "checks and holds each line's scenario fixed.",
+                "- [ ] Figure 2 compares predictive and reactive offload on the "
+                "same hierarchy and does not claim equivalence to all-resident "
+                "execution.",
+                "- [ ] Figure 2 includes all K=8/16/32 capacity points; its 99% "
+                "coverage and 1.5× traffic are assumed future-predictor properties.",
+                "- [ ] Figure 3 is a necessary first-order average-bandwidth "
+                "bound; queue and reliability tails remain separate.",
+                "- [ ] AX3's 192/384 MiB whole-expert double-buffer bounds remain "
+                "recorded in `ax3_staging.csv` and `REPORT.md`.",
                 "",
                 "## One next action",
                 "",
-                "Pending researcher review.",
+                "Review the queue-sensitive capacity point before selecting any "
+                "live asynchronous calibration.",
                 "",
             ]
         ),
@@ -428,6 +384,10 @@ def plot_architecture(
         "inputs": {str(path): _sha256(path) for path in inputs},
         "outputs": {str(path): _sha256(path) for path in outputs},
         "human_review_complete": False,
+        "figure_semantics": (
+            "All queue-sensitivity checks, the full matched capacity sweep, "
+            "and the complete warning-distance bandwidth curve."
+        ),
     }
     write_json(output / "figure_manifest.json", manifest)
     return manifest

@@ -1,10 +1,11 @@
 # H6 figure review
 
-- [ ] Confirm phase, capacity, source-layer, and lookahead semantics.
-- [ ] Confirm each cell compares against the strongest matched static/domain/LRU baseline.
-- [ ] Confirm the dashed Δ=3 column matches the frozen gate.
-- [ ] Inspect whether positive cells form a broad layer/horizon regime or isolated artifacts.
-- [ ] Compare the visual pattern with `gate.json` and `REPORT.md`.
-- [ ] Record accept/reject interpretation and one next action.
+- [ ] All policies use the same resident capacity and runtime movement budget.
+- [ ] Residual cold demand is read as lower-is-better.
+- [ ] Useful insertion fraction means the admitted expert earns a later hit before eviction.
+- [ ] LRU is the direct operational comparator.
+- [ ] The oracle is a policy ceiling, not an implementable predictor.
+- [ ] Headline values agree with `summary.csv`, `gate.json`, and `REPORT.md`.
+- [ ] The negative gate remains unchanged.
 
 **Human review complete:** no

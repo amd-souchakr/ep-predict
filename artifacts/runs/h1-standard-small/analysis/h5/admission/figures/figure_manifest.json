@@ -1,6 +1,7 @@
 {
   "analysis": "h5_admission_separation",
   "evidence_grade": "held_out_trace_driven_analytical_pilot",
+  "figure_semantics": "Full threshold traffic/coverage frontiers and useful-transfer share when half of cold requests are protected.",
   "human_review_complete": false,
   "inputs": {
     "artifacts/runs/h1-standard-small/analysis/h5/admission/admission_frontier.csv": "6eee5f8ce6b4cdf36f5927f15c45a2017623ea40b30da88de08bef6e4d60b62a",
@@ -12,10 +13,10 @@
     "artifacts/runs/h1-standard-small/analysis/h5/h5_policy_placement.csv": "a6a9e5192329d623825a7a57b81633f32331d5a454bd55f89c1cbf29e8ddf07c"
   },
   "outputs": {
-    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/FIGURES.md": "474e0807e0cb65f1beaca7aa2e552cca5206dc9027b6b6ba3285336ac5350582",
-    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/fig1_admission_frontier.pdf": "88289e72848e11da04abf37f4374bccaa5dae1e106ec20aa9a154121c233d44b",
-    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/fig1_admission_frontier.png": "caacef0df4e3b6bcb249f05081516e3209951bda0e12503bb8747eb4f188fd6d",
-    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/fig2_expert_score_separation.pdf": "42282975ff1ce54dde586730115e3dde97e064c158021c9105a5076487a26a47",
-    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/fig2_expert_score_separation.png": "4879226b911f269b801533f5a720669b4c5977d386c202d8de3830cc5c3e5831"
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/FIGURES.md": "b3f7ea11c47fdf13cd52116baac98a47316012824ae5e71e7001c6149617923a",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/fig1_admission_frontier.pdf": "dfe1e2d1d8119ca8a2e2b9610fa68e1226dced144687b32bc0f97ee343aa1266",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/fig1_admission_frontier.png": "cfefd27cd397394e49a215786ca50620124c20a3d965e4218d7e855e2b95709b",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/fig2_expert_score_separation.pdf": "d0b8d0684246bb4d48bf59af0022b5d8e46593848f7293bd4e2464d28369c455",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/fig2_expert_score_separation.png": "690737604443e483ecb80ac625cc30c515e01116e0d059a32730ccee5acbf367"
   }
 }

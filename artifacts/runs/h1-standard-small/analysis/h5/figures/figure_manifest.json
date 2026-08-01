@@ -1,6 +1,7 @@
 {
   "analysis": "h5_first_order_codesign",
   "evidence_grade": "trace_driven_analytical_pilot",
+  "figure_semantics": "All preregistered policy transfer streams and the full lookahead inverse-requirement sweep at the frozen traffic budget.",
   "human_review_complete": false,
   "inputs": {
     "artifacts/runs/h1-standard-small/analysis/h5/gate.json": "8f931d1fec02b0a58098f8faa7b6cfee78d8e51db854bd6b2a38c328e422bb49",
@@ -10,10 +11,10 @@
     "artifacts/runs/h1-standard-small/analysis/h5/summary.json": "f552ff4586d7969b2bce5c61409cb056c1d0786c576f9c5748a31b9f68b47871"
   },
   "outputs": {
-    "artifacts/runs/h1-standard-small/analysis/h5/figures/FIGURES.md": "59b3e46ec468b11691a4143562a7c3c6c5c415c004551dcff262550805c6b1c2",
-    "artifacts/runs/h1-standard-small/analysis/h5/figures/fig1_h5_profitability_phase_diagram.pdf": "1c4b88faa5d04892004ea96faad27760911558793ef155fa1dbfb79b29aa6377",
-    "artifacts/runs/h1-standard-small/analysis/h5/figures/fig1_h5_profitability_phase_diagram.png": "56e6581e628325914b6568625a91d05fd93c8f146eb526e62271d165beba4359",
-    "artifacts/runs/h1-standard-small/analysis/h5/figures/fig2_h5_inverse_prediction_requirement.pdf": "f49aa358b78d65cbfcc55bfd333158571af1f884a0c3b158e7d4fed647affe39",
-    "artifacts/runs/h1-standard-small/analysis/h5/figures/fig2_h5_inverse_prediction_requirement.png": "aef396a737cecca81d6e5fc88de8ee225c799a3b29458103eb26d1a9d216ffac"
+    "artifacts/runs/h1-standard-small/analysis/h5/figures/FIGURES.md": "64d8d010349f5d7874a06716010a1ee93692e24c151f7833b6def6b90ec1c059",
+    "artifacts/runs/h1-standard-small/analysis/h5/figures/fig1_h5_profitability_phase_diagram.pdf": "709f689ba8b1d78ba19c3d3b95334c9c177f6103bc01af69ba11a17c7122a2f4",
+    "artifacts/runs/h1-standard-small/analysis/h5/figures/fig1_h5_profitability_phase_diagram.png": "7fabebbd355b92dd08f8d94bf5952d7908000d5d0e71b890af1509e6cb1599b0",
+    "artifacts/runs/h1-standard-small/analysis/h5/figures/fig2_h5_inverse_prediction_requirement.pdf": "708219f0caf808ecf7c8fa2baaf37d9b3fa407ff091fc19b7641b08adf7029b5",
+    "artifacts/runs/h1-standard-small/analysis/h5/figures/fig2_h5_inverse_prediction_requirement.png": "58b77fa8627532c072fdacf2f570786b417d503736d25e19dc741d707895a453"
   }
 }
