@@ -41,3 +41,10 @@ could be partly architecture-specific because each token requests eight small
 experts. If H1–H4 reveal a sharp top-k sensitivity, repeat only the decisive
 trace/simulator experiments on a top-2 or top-4 model. Do not add a second
 model before the first decision boundary is understood.
+
+## Future testbeds
+
+Adding another checkpoint is a deliberate, model-specific qualification task;
+the project does not need a universal adapter first. Naming, evidence
+isolation, comparable capacity semantics, and cross-model reporting rules are
+in [ADDING_MODEL_TESTBED.md](ADDING_MODEL_TESTBED.md).

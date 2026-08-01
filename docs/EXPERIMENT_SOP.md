@@ -7,6 +7,10 @@ decision path without adding a tracking system or notebook ceremony.
 
 - State one simple decisive question, one primary scope, and one stop/go rule.
 - Pin model, dataset, generation, and analysis configurations.
+- Treat every gate and conclusion as scoped to the pinned model revision. When
+  introducing another checkpoint, follow
+  `docs/ADDING_MODEL_TESTBED.md` so results and insights remain separated until
+  an explicit cross-model synthesis.
 - Keep cheap descriptive and post-hoc analysis non-gating. Do not preregister
   every possible layer, domain, or hardware interaction.
 

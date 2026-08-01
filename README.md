@@ -60,6 +60,11 @@ The BF16 checkpoint is about 13.8 GB and fits the target 24 GB GPU. The
 implementation discovers routers by module behavior and attributes rather than
 hard-coding OLMoE into the trace format.
 
+Future checkpoints may use one-time model-specific loading and hook wiring.
+Before adding one, follow
+[docs/ADDING_MODEL_TESTBED.md](docs/ADDING_MODEL_TESTBED.md) to keep run
+artifacts, status, conclusions, and publication insights scoped by model.
+
 ## Quick start
 
 Install the inference dependencies:
