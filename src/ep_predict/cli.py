@@ -88,6 +88,38 @@ def _plot_h2(args: argparse.Namespace) -> int:
     return 0
 
 
+def _analyze_h3(args: argparse.Namespace) -> int:
+    from ep_predict.analysis.h3 import analyze_h3
+
+    summary = analyze_h3(args.run, load_toml(args.config))
+    print(json.dumps(summary["gate"], indent=2, sort_keys=True))
+    return 0
+
+
+def _plot_h3(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.h3 import plot_h3
+
+    manifest = plot_h3(
+        args.run,
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
+def _plot_extended_horizon(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.extended_horizon import plot_extended_horizon
+
+    manifest = plot_extended_horizon(
+        args.run,
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ep-predict",
@@ -157,6 +189,35 @@ def build_parser() -> argparse.ArgumentParser:
         help="figure directory (default: RUN/analysis/h2/figures)",
     )
     h2_plot_parser.set_defaults(function=_plot_h2)
+
+    h3_parser = subparsers.add_parser(
+        "analyze-h3",
+        help="train and evaluate the held-out linear hidden-state predictor",
+    )
+    h3_parser.add_argument("--run", required=True, type=Path)
+    h3_parser.add_argument("--config", required=True, type=Path)
+    h3_parser.set_defaults(function=_analyze_h3)
+
+    h3_plot_parser = subparsers.add_parser(
+        "plot-h3", help="generate publication-style H3 decision figures"
+    )
+    h3_plot_parser.add_argument("--run", required=True, type=Path)
+    h3_plot_parser.add_argument("--config", required=True, type=Path)
+    h3_plot_parser.add_argument(
+        "--output",
+        type=Path,
+        help="figure directory (default: RUN/analysis/h3/figures)",
+    )
+    h3_plot_parser.set_defaults(function=_plot_h3)
+
+    horizon_plot_parser = subparsers.add_parser(
+        "plot-extended-horizon",
+        help="plot post-hoc H2/H3 coverage through the final MoE layer",
+    )
+    horizon_plot_parser.add_argument("--run", required=True, type=Path)
+    horizon_plot_parser.add_argument("--config", required=True, type=Path)
+    horizon_plot_parser.add_argument("--output", type=Path)
+    horizon_plot_parser.set_defaults(function=_plot_extended_horizon)
     return parser
 
 

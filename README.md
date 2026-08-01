@@ -8,14 +8,18 @@ Follow a "tracer bullet" development approach that develops a narrow vertical sl
 
 The project advances one research gate at a time. H1 was mixed: one
 workload-agnostic static tier failed, while domain-conditioned demand was
-strong. H2 is now pilot-supported: held-out layer-transition tables strongly
-beat per-layer marginal popularity, with substantial candidate churn. See
-[STATUS.md](STATUS.md), [docs/H2_PROTOCOL.md](docs/H2_PROTOCOL.md), and
-[docs/H2_RESULTS.md](docs/H2_RESULTS.md).
+strong. H2 was pilot-supported: held-out layer-transition tables strongly beat
+per-layer marginal popularity. H3 did not support replacing that simple policy
+with a fixed linear hidden-state sidecar: selection coverage was essentially
+tied, complete-route gains were domain-dependent, and candidate churn rose.
+See [STATUS.md](STATUS.md), [docs/H3_PROTOCOL.md](docs/H3_PROTOCOL.md), and
+[docs/H3_RESULTS.md](docs/H3_RESULTS.md).
 
-The current evidence supports routing-conditioned placement research for the
-pinned OLMoE checkpoint. It does not yet establish transfer feasibility,
-latency improvement, or universal MoE behavior.
+The current evidence supports routing-transition-guided placement research for
+the pinned OLMoE checkpoint. It does not justify a learned sidecar for this
+checkpoint and does not establish transfer feasibility, latency improvement,
+or universal MoE behavior. After human review, the next gate is the minimum H4
+hardware-feasibility study using the simpler transition policy.
 
 ## Testbed
 
@@ -90,10 +94,42 @@ uv run ep-predict plot-h2 \
   --config configs/experiment/h2-standard-small.toml
 ```
 
-The collector writes one compressed JSONL trace per request. This is
-deliberately simple, crash-safe, and resumable. It is sufficient for the pilot;
-Arrow/Parquet should be added only when hidden-state features or million-event
-traces make JSON decoding a bottleneck.
+Run the hook-only H3 feature collection, fixed linear analysis, and figures:
+
+```bash
+uv run ep-predict collect \
+  --model-config configs/model/olmoe-1b-7b-instruct.toml \
+  --experiment-config configs/experiment/h3-standard-small.toml
+
+uv run ep-predict analyze-h3 \
+  --run artifacts/runs/h3-standard-small \
+  --config configs/experiment/h3-standard-small.toml
+
+uv run ep-predict plot-h3 \
+  --run artifacts/runs/h3-standard-small \
+  --config configs/experiment/h3-standard-small.toml
+```
+
+Reuse the same H3 artifacts for the post-hoc all-layer horizon analysis:
+
+```bash
+uv run ep-predict analyze-h3 \
+  --run artifacts/runs/h3-standard-small \
+  --config configs/experiment/h23-extended-horizon.toml
+
+uv run ep-predict plot-extended-horizon \
+  --run artifacts/runs/h3-standard-small \
+  --config configs/experiment/h23-extended-horizon.toml
+```
+
+This trains the same fixed linear recipe for all 120 valid source-target pairs
+per phase; it performs no additional inference. See
+[docs/H23_EXTENDED_HORIZON_RESULTS.md](docs/H23_EXTENDED_HORIZON_RESULTS.md).
+
+The collector writes one compressed JSONL routing trace per request. H3 also
+writes one aligned numeric NPZ shard containing compact projected router
+inputs. Both are crash-safe and resumable at request granularity; no full
+hidden states or Python pickle artifacts are stored.
 
 `data/prompts/h1-pilot.jsonl` remains only an instrumentation smoke fixture.
 Research evidence uses the revision-pinned standard mixture described in

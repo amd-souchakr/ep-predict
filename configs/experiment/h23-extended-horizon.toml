@@ -1,0 +1,46 @@
+# Post-hoc descriptive extension of H2/H3. This config is analysis-only and
+# reuses the immutable H3 routing and projected-feature collection.
+run_id = "h3-standard-small"
+output_dir = "artifacts/runs/h3-standard-small"
+
+[hidden_features]
+enabled = true
+point = "router_input"
+dimension = 128
+projection_seed = 31
+storage_dtype = "float16"
+
+[analysis]
+analysis_id = "h23-extended-horizon"
+output_name = "h23_extended_horizon"
+reference_split = "artifacts/runs/h1-standard-small/analysis/h2/split.json"
+split_seed = 17
+test_requests_per_domain = 8
+capacities = [8, 16, 32]
+lookaheads = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
+[linear_predictor]
+kind = "multilabel_logistic_regression"
+per_phase = true
+standardize_features = true
+training_seed = 23
+epochs = 30
+batch_size = 1024
+learning_rate = 0.01
+weight_decay = 0.0001
+positive_class_weight = 7.0
+device = "cuda:0"
+
+# Retained only to verify that the original H3 primary decision reproduces.
+# This post-hoc extension cannot alter that decision.
+[decision_gate]
+phase = "decode"
+lookahead = 1
+capacity_experts = 16
+baseline = "linear"
+comparator = "transition"
+min_mean_selection_coverage_gain = 0.03
+min_mean_complete_token_coverage_gain = 0.02
+min_positive_selection_scope_fraction = 0.75
+min_positive_complete_scope_fraction = 0.75
+min_positive_domains = 3

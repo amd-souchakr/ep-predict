@@ -118,8 +118,8 @@ This does not invalidate H2. It changes the likely use:
 2. The condition for trying a lightweight external predictor is met. Start
    with a linear/low-rank sidecar and require it to beat the transition table
    at the same K, not merely static popularity.
-3. Preserve the one-hypothesis and visual-review gate: review the H2 figures
-   before beginning H3.
+3. The simplified H2 figures were human-reviewed on 2026-08-01 and approved as
+   clear evidence to advance to a minimal H3 proof/disproof experiment.
 4. Before substantial predictor tuning, execute the minimum H4 oracle timing
    kill switch using unhooked layer time, exact 12 MiB expert bytes, and a
    measured PCIe transfer curve. Strong information has no latency value if

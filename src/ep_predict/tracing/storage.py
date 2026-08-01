@@ -50,6 +50,72 @@ class RequestTraceStore:
         return destination
 
 
+class RequestFeatureStore:
+    """Atomic numeric NPZ feature shard aligned one-to-one with trace records."""
+
+    def __init__(self, run_dir: str | Path) -> None:
+        self.run_dir = Path(run_dir)
+        self.feature_dir = self.run_dir / "features"
+        self.feature_dir.mkdir(parents=True, exist_ok=True)
+
+    def path_for(self, request_id: int, sample_id: str) -> Path:
+        safe_id = RequestTraceStore._safe_sample_id(sample_id)
+        return self.feature_dir / f"request-{request_id:05d}-{safe_id}.npz"
+
+    def completed(self, request_id: int, sample_id: str) -> bool:
+        return self.path_for(request_id, sample_id).is_file()
+
+    def write_request(
+        self,
+        request_id: int,
+        sample_id: str,
+        records: list[TraceRecord],
+        hidden_features: Any,
+    ) -> Path:
+        import numpy as np
+
+        features = hidden_features.detach().cpu().numpy()
+        if features.ndim != 2 or len(features) != len(records):
+            raise ValueError("feature matrix must align one-to-one with records")
+        phase_codes = {"prefill": 0, "decode": 1}
+        try:
+            phases = np.asarray(
+                [phase_codes[record.phase] for record in records],
+                dtype=np.uint8,
+            )
+        except KeyError as error:
+            raise ValueError(f"unsupported trace phase {error.args[0]!r}") from error
+
+        destination = self.path_for(request_id, sample_id)
+        temporary = destination.with_suffix(destination.suffix + ".tmp")
+        with temporary.open("wb") as handle:
+            np.savez_compressed(
+                handle,
+                hidden_feature=features.astype(np.float16, copy=False),
+                request_id=np.asarray(request_id, dtype=np.int64),
+                sample_id=np.asarray(sample_id),
+                phase=phases,
+                token_position=np.asarray(
+                    [record.token_position for record in records],
+                    dtype=np.int32,
+                ),
+                input_token_id=np.asarray(
+                    [record.input_token_id for record in records],
+                    dtype=np.int32,
+                ),
+                layer_id=np.asarray(
+                    [record.layer_id for record in records],
+                    dtype=np.int16,
+                ),
+                moe_layer_index=np.asarray(
+                    [record.moe_layer_index for record in records],
+                    dtype=np.int16,
+                ),
+            )
+        os.replace(temporary, destination)
+        return destination
+
+
 def iter_trace_records(run_dir: str | Path) -> Iterator[dict[str, Any]]:
     paths = sorted((Path(run_dir) / "trace").glob("request-*.jsonl.gz"))
     if not paths:

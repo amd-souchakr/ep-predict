@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import math
 import re
 from dataclasses import dataclass
 from typing import Any
@@ -20,6 +22,71 @@ class RouterSpec:
     num_experts: int
     top_k: int
     module: torch.nn.Module
+
+
+class RouterInputProjector:
+    """Fixed random-sign projection applied to the tensor entering a router."""
+
+    def __init__(
+        self,
+        *,
+        input_dimension: int,
+        output_dimension: int,
+        seed: int,
+        storage_dtype: str = "float16",
+    ) -> None:
+        if input_dimension <= 0 or output_dimension <= 0:
+            raise ValueError("projection dimensions must be positive")
+        if storage_dtype != "float16":
+            raise ValueError("the H3 prototype supports float16 feature storage")
+        generator = torch.Generator(device="cpu")
+        generator.manual_seed(seed)
+        bits = torch.randint(
+            0,
+            2,
+            (input_dimension, output_dimension),
+            dtype=torch.uint8,
+            generator=generator,
+        )
+        self.input_dimension = input_dimension
+        self.output_dimension = output_dimension
+        self.seed = seed
+        self.storage_dtype = storage_dtype
+        self.scale = 1.0 / math.sqrt(output_dimension)
+        self._signs = bits.to(torch.int8).mul_(2).sub_(1)
+        self._matrix_cache: dict[tuple[str, torch.dtype], torch.Tensor] = {}
+        self.matrix_sha256 = hashlib.sha256(memoryview(bits.numpy())).hexdigest()
+
+    def project(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        if hidden_states.shape[-1] != self.input_dimension:
+            raise ValueError(
+                f"router input dimension {hidden_states.shape[-1]} does not "
+                f"match projection input {self.input_dimension}"
+            )
+        key = (str(hidden_states.device), hidden_states.dtype)
+        matrix = self._matrix_cache.get(key)
+        if matrix is None:
+            matrix = self._signs.to(
+                device=hidden_states.device,
+                dtype=hidden_states.dtype,
+            )
+            matrix.mul_(self.scale)
+            self._matrix_cache[key] = matrix
+        projected = hidden_states.reshape(-1, self.input_dimension) @ matrix
+        return projected.detach().to(device="cpu", dtype=torch.float16)
+
+    def report(self) -> dict[str, Any]:
+        return {
+            "enabled": True,
+            "point": "router_input_positional_argument_0",
+            "input_dimension": self.input_dimension,
+            "output_dimension": self.output_dimension,
+            "projection_family": "rademacher",
+            "projection_seed": self.seed,
+            "projection_scale": self.scale,
+            "matrix_sha256": self.matrix_sha256,
+            "storage_dtype": self.storage_dtype,
+        }
 
 
 def _integer_attribute(module: torch.nn.Module, *names: str) -> int | None:
@@ -143,6 +210,7 @@ class RouterTracer:
         *,
         fail_on_router_mismatch: bool = True,
         fail_on_missing_router: bool = True,
+        feature_projector: RouterInputProjector | None = None,
     ) -> None:
         if not routers:
             raise ValueError("no router modules discovered")
@@ -150,7 +218,9 @@ class RouterTracer:
         self.routers = routers
         self.fail_on_router_mismatch = fail_on_router_mismatch
         self.fail_on_missing_router = fail_on_missing_router
+        self.feature_projector = feature_projector
         self.records: list[TraceRecord] = []
+        self.hidden_features: list[torch.Tensor] = []
         self.context: RequestContext | None = None
         self._request_forward_count = 0
         self._batch_id = -1
@@ -185,11 +255,14 @@ class RouterTracer:
             raise RuntimeError("finish the active request before starting another")
         self.context = context
         self.records = []
+        self.hidden_features = []
         self._request_forward_count = 0
         self._call_router_counts = []
         self.router_validation_mismatches = 0
 
-    def finish_request(self) -> tuple[list[TraceRecord], dict[str, Any]]:
+    def finish_request(
+        self,
+    ) -> tuple[list[TraceRecord], torch.Tensor | None, dict[str, Any]]:
         if self.context is None:
             raise RuntimeError("no active request")
         missing_calls = [
@@ -208,8 +281,19 @@ class RouterTracer:
                 "match top-k logits"
             )
         records = self.records
+        features = (
+            torch.stack(self.hidden_features)
+            if self.feature_projector is not None
+            else None
+        )
+        if features is not None and len(features) != len(records):
+            raise RuntimeError(
+                f"captured {len(features)} hidden features for {len(records)} "
+                "routing records"
+            )
         summary = {
             "records": len(records),
+            "hidden_feature_records": len(self.hidden_features),
             "model_forward_calls": self._request_forward_count,
             "router_count": len(self.routers),
             "router_validation_mismatches": self.router_validation_mismatches,
@@ -217,7 +301,8 @@ class RouterTracer:
         }
         self.context = None
         self.records = []
-        return records, summary
+        self.hidden_features = []
+        return records, features, summary
 
     def _root_pre_hook(
         self,
@@ -293,6 +378,14 @@ class RouterTracer:
             if self.context is None:
                 return
             logits, weights, selected = _extract_router_output(output, spec.top_k)
+            projected_cpu: torch.Tensor | None = None
+            if self.feature_projector is not None:
+                if not _inputs or not isinstance(_inputs[0], torch.Tensor):
+                    raise TypeError(
+                        f"router {spec.name} did not expose a tensor as "
+                        "positional input zero"
+                    )
+                projected_cpu = self.feature_projector.project(_inputs[0])
             logits_2d = logits.reshape(-1, logits.shape[-1])
             selected_2d = selected.reshape(-1, selected.shape[-1])
             weights_2d = (
@@ -338,6 +431,14 @@ class RouterTracer:
                         domain=self.context.domain,
                     )
                 )
+                if projected_cpu is not None:
+                    if flat_row >= projected_cpu.shape[0]:
+                        raise ValueError(
+                            f"router {spec.name} projected "
+                            f"{projected_cpu.shape[0]} rows, but trace requested "
+                            f"row {flat_row}"
+                        )
+                    self.hidden_features.append(projected_cpu[flat_row].clone())
             self._routers_seen.add(spec.name)
 
         return hook

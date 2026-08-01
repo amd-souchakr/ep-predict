@@ -12,9 +12,13 @@ from ep_predict.modeling import (
     inspect_loaded_model,
     load_model_and_tokenizer,
 )
-from ep_predict.tracing.hooks import RouterTracer
+from ep_predict.tracing.hooks import RouterInputProjector, RouterTracer
 from ep_predict.tracing.schema import RequestContext, TRACE_SCHEMA_VERSION
-from ep_predict.tracing.storage import RequestTraceStore, write_json
+from ep_predict.tracing.storage import (
+    RequestFeatureStore,
+    RequestTraceStore,
+    write_json,
+)
 
 
 def _load_prompts(path: str | Path) -> list[dict[str, str]]:
@@ -126,6 +130,25 @@ def collect_run(
     )
     write_json(run_dir / "model_report.json", model_report)
 
+    feature_config = experiment_config.get("hidden_features", {})
+    features_enabled = bool(feature_config.get("enabled", False))
+    feature_projector: RouterInputProjector | None = None
+    feature_store: RequestFeatureStore | None = None
+    if features_enabled:
+        if feature_config.get("point", "router_input") != "router_input":
+            raise ValueError("only the explicit router_input hook point is supported")
+        hidden_size = model_report.get("hidden_size")
+        if not isinstance(hidden_size, int) or hidden_size <= 0:
+            raise ValueError("model report does not expose a valid hidden size")
+        feature_projector = RouterInputProjector(
+            input_dimension=hidden_size,
+            output_dimension=int(feature_config["dimension"]),
+            seed=int(feature_config["projection_seed"]),
+            storage_dtype=str(feature_config.get("storage_dtype", "float16")),
+        )
+        feature_store = RequestFeatureStore(run_dir)
+        write_json(run_dir / "projection_report.json", feature_projector.report())
+
     store = RequestTraceStore(run_dir)
     request_summaries: list[dict[str, Any]] = []
     with RouterTracer(
@@ -137,10 +160,17 @@ def collect_run(
         fail_on_missing_router=bool(
             trace_config.get("fail_on_missing_router", True)
         ),
+        feature_projector=feature_projector,
     ) as tracer:
         for request_id, prompt_record in enumerate(prompts):
             sample_id = prompt_record["sample_id"]
-            if store.completed(request_id, sample_id):
+            trace_complete = store.completed(request_id, sample_id)
+            feature_complete = (
+                feature_store.completed(request_id, sample_id)
+                if feature_store is not None
+                else True
+            )
+            if trace_complete and feature_complete:
                 request_summaries.append(
                     {
                         "request_id": request_id,
@@ -184,7 +214,17 @@ def collect_run(
                 )
             with torch.inference_mode():
                 model.generate(**encoded, **generation_args)
-            records, summary = tracer.finish_request()
+            records, hidden_features, summary = tracer.finish_request()
+            feature_path: Path | None = None
+            if feature_store is not None:
+                if hidden_features is None:
+                    raise RuntimeError("feature collection enabled but no features exist")
+                feature_path = feature_store.write_request(
+                    request_id,
+                    sample_id,
+                    records,
+                    hidden_features,
+                )
             trace_path = store.write_request(request_id, sample_id, records)
             request_summaries.append(
                 {
@@ -193,6 +233,7 @@ def collect_run(
                     "domain": prompt_record["domain"],
                     "state": "complete",
                     "trace": str(trace_path),
+                    "features": str(feature_path) if feature_path else None,
                     **summary,
                 }
             )
@@ -211,6 +252,9 @@ def collect_run(
         "experiment_config": experiment_config,
         "prompt_file_sha256": prompt_file_sha256,
         "model_report_path": str(run_dir / "model_report.json"),
+        "projection_report": (
+            feature_projector.report() if feature_projector is not None else None
+        ),
         "environment": environment_report(),
         "requests": request_summaries,
     }
