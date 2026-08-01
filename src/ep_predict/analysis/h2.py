@@ -477,10 +477,10 @@ def _evaluate_gate(
         "lookaheads": delta_rows,
         "interpretation": (
             "At least one routing-only transition baseline passed the held-out "
-            "decode gate; proceed to a lightweight external predictor after "
+            f"{phase} gate; proceed to a lightweight external predictor after "
             "human figure review."
             if supported
-            else "No routing-only transition baseline passed the held-out decode "
+            else f"No routing-only transition baseline passed the held-out {phase} "
             "gate; do not start a learned skip-layer predictor for this "
             "checkpoint without a revised hypothesis."
         ),

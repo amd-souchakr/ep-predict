@@ -120,6 +120,25 @@ def _plot_extended_horizon(args: argparse.Namespace) -> int:
     return 0
 
 
+def _analyze_checkpoint_trajectories(args: argparse.Namespace) -> int:
+    from ep_predict.analysis.checkpoint import analyze_checkpoint_trajectories
+
+    summary = analyze_checkpoint_trajectories(load_toml(args.config))
+    print(json.dumps(summary["gate"], indent=2, sort_keys=True))
+    return 0
+
+
+def _plot_checkpoint_trajectories(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.checkpoint import plot_checkpoint_trajectories
+
+    manifest = plot_checkpoint_trajectories(
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
 def _measure_h4(args: argparse.Namespace) -> int:
     from ep_predict.hardware.h4 import measure_h4
 
@@ -336,6 +355,21 @@ def build_parser() -> argparse.ArgumentParser:
     horizon_plot_parser.add_argument("--config", required=True, type=Path)
     horizon_plot_parser.add_argument("--output", type=Path)
     horizon_plot_parser.set_defaults(function=_plot_extended_horizon)
+
+    checkpoint_parser = subparsers.add_parser(
+        "analyze-checkpoint-trajectories",
+        help="compare matched Base and Instruct routing trajectories",
+    )
+    checkpoint_parser.add_argument("--config", required=True, type=Path)
+    checkpoint_parser.set_defaults(function=_analyze_checkpoint_trajectories)
+
+    checkpoint_plot_parser = subparsers.add_parser(
+        "plot-checkpoint-trajectories",
+        help="plot matched Base versus Instruct trajectory evidence",
+    )
+    checkpoint_plot_parser.add_argument("--config", required=True, type=Path)
+    checkpoint_plot_parser.add_argument("--output", type=Path)
+    checkpoint_plot_parser.set_defaults(function=_plot_checkpoint_trajectories)
 
     h4_measure_parser = subparsers.add_parser(
         "measure-h4",

@@ -1,0 +1,28 @@
+run_id = "olmoe-instruct-c0-paired"
+prompt_file = "artifacts/datasets/h1-standard-small/prompts.jsonl"
+output_dir = "artifacts/runs/olmoe-instruct-c0-paired"
+seed = 7
+prompt_format = "raw"
+max_prompt_tokens = 384
+max_new_tokens = 1
+do_sample = false
+temperature = 1.0
+top_p = 1.0
+
+[trace]
+fail_on_router_mismatch = true
+fail_on_missing_router = true
+
+[analysis]
+window_sizes = [256, 512]
+top_n = [1, 2, 4, 8, 16]
+
+# H1 is descriptive context in C0, not a new universal-hotness gate.
+[decision_gate]
+phase = "prefill"
+capacity_experts = 8
+min_coverage_lift_over_uniform = 2.0
+window_size = 512
+min_hotset_jaccard = 0.50
+min_lagged_oracle_ratio = 0.80
+min_passing_layer_fraction = 0.50

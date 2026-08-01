@@ -1,0 +1,82 @@
+{
+  "analysis_id": "c0-base-instruct-trajectories",
+  "checkpoints": {
+    "base": {
+      "model_commit": "9b0c1aa87e34a20052389dce1f0cf01da783f654",
+      "run": "artifacts/runs/olmoe-base-c0-paired"
+    },
+    "instruct": {
+      "model_commit": "caada7d7b70f4b852b14108479e0812223a8794f",
+      "run": "artifacts/runs/olmoe-instruct-c0-paired"
+    }
+  },
+  "config_fingerprint": "8baad934f6be6aff1b32f11dd09405a51ddd50ecbb01ac6e2e837d81d2a3001c",
+  "gate": {
+    "capacity_experts": 16,
+    "consistent_domains": 3,
+    "decision": "PILOT_DOES_NOT_SUPPORT_POSTTRAINING_PREDICTABILITY_EFFECT",
+    "domain_differences": {
+      "code": 0.04961277831558564,
+      "conversation": 0.01039192399049882,
+      "general": 0.013583333333333392,
+      "math": -0.009689922480620117
+    },
+    "hypothesis": "C0",
+    "instruct_minus_base_gain": 0.015974528289699433,
+    "lookahead": 15,
+    "metric": "transition selection-coverage gain over static popularity",
+    "min_abs_gain_difference": 0.05,
+    "pass": false,
+    "phase": "prefill",
+    "question": "Does post-training materially change long-horizon conditional routing predictability under identical input tokens?",
+    "required_consistent_domains": 3,
+    "source_layer": 0,
+    "target_layer": 15
+  },
+  "hypothesis": "C0",
+  "integrity": {
+    "all_input_token_id_mismatches": 0,
+    "all_matched_token_layer_records": 222688,
+    "all_matched_tokens": 13918,
+    "all_requests_checked": 128,
+    "domains": [
+      "code",
+      "conversation",
+      "general",
+      "math"
+    ],
+    "held_out_requests": 32,
+    "input_token_id_mismatches": 0,
+    "layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "matched_token_layer_records": 55520,
+    "phase": "prefill",
+    "routing_top_k": 8,
+    "self_transfer_max_abs_difference": 0.0,
+    "test_requests": 32,
+    "train_requests": 96
+  },
+  "outputs": {
+    "cross_checkpoint_transfer": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/cross_checkpoint_transfer.csv",
+    "gate": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/gate.json",
+    "matched_route_overlap": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/matched_route_overlap.csv",
+    "predictability_by_horizon": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/predictability_by_horizon.csv",
+    "report": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/REPORT.md"
+  }
+}

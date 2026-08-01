@@ -45,7 +45,22 @@ def _file_sha256(path: str | Path) -> str:
     return digest.hexdigest()
 
 
-def _tokenize_prompt(tokenizer: Any, prompt: str, max_tokens: int):
+def _tokenize_prompt(
+    tokenizer: Any,
+    prompt: str,
+    max_tokens: int,
+    *,
+    prompt_format: str = "auto",
+):
+    if prompt_format not in {"auto", "raw"}:
+        raise ValueError("prompt_format must be 'auto' or 'raw'")
+    if prompt_format == "raw":
+        return tokenizer(
+            prompt,
+            return_tensors="pt",
+            truncation=True,
+            max_length=max_tokens,
+        )
     messages = [{"role": "user", "content": prompt}]
     if getattr(tokenizer, "chat_template", None):
         return tokenizer.apply_chat_template(
@@ -63,6 +78,18 @@ def _tokenize_prompt(tokenizer: Any, prompt: str, max_tokens: int):
         truncation=True,
         max_length=max_tokens,
     )
+
+
+def _input_ids_report(encoded: dict[str, Any]) -> dict[str, Any]:
+    input_ids = encoded.get("input_ids")
+    if input_ids is None:
+        raise ValueError("tokenizer output does not contain input_ids")
+    flattened = [int(value) for value in input_ids.detach().cpu().reshape(-1).tolist()]
+    serialized = ",".join(str(value) for value in flattened).encode("ascii")
+    return {
+        "input_token_count": len(flattened),
+        "input_token_ids_sha256": hashlib.sha256(serialized).hexdigest(),
+    }
 
 
 def collect_run(
@@ -106,18 +133,24 @@ def collect_run(
             },
         )
 
+    existing_request_summaries: dict[tuple[int, str], dict[str, Any]] = {}
     if manifest_path.exists():
         existing = json.loads(manifest_path.read_text(encoding="utf-8"))
         if existing.get("config_fingerprint") != fingerprint:
             raise RuntimeError(
                 f"{run_dir} belongs to a different configuration; choose a new run_id"
             )
+        existing_request_summaries = {
+            (int(summary["request_id"]), str(summary["sample_id"])): summary
+            for summary in existing.get("requests", [])
+        }
 
     prompts = _load_prompts(prompt_path)
     if limit is not None:
         prompts = prompts[:limit]
 
     seed = int(experiment_config.get("seed", 0))
+    prompt_format = str(experiment_config.get("prompt_format", "auto"))
     random.seed(seed)
     torch.manual_seed(seed)
     if torch.cuda.is_available():
@@ -171,20 +204,33 @@ def collect_run(
                 else True
             )
             if trace_complete and feature_complete:
-                request_summaries.append(
-                    {
-                        "request_id": request_id,
-                        "sample_id": sample_id,
-                        "state": "already_complete",
-                    }
+                previous_summary = existing_request_summaries.get(
+                    (request_id, sample_id)
                 )
+                if previous_summary is not None:
+                    request_summaries.append(
+                        {
+                            **previous_summary,
+                            "state": "already_complete",
+                        }
+                    )
+                else:
+                    request_summaries.append(
+                        {
+                            "request_id": request_id,
+                            "sample_id": sample_id,
+                            "state": "already_complete",
+                        }
+                    )
                 continue
 
             encoded = _tokenize_prompt(
                 tokenizer,
                 prompt_record["prompt"],
                 int(experiment_config.get("max_prompt_tokens", 384)),
+                prompt_format=prompt_format,
             )
+            input_report = _input_ids_report(encoded)
             encoded = {name: tensor.to(model.device) for name, tensor in encoded.items()}
             tracer.start_request(
                 RequestContext(
@@ -234,6 +280,8 @@ def collect_run(
                     "state": "complete",
                     "trace": str(trace_path),
                     "features": str(feature_path) if feature_path else None,
+                    "prompt_format": prompt_format,
+                    **input_report,
                     **summary,
                 }
             )
@@ -251,6 +299,7 @@ def collect_run(
         "model_config": model_config,
         "experiment_config": experiment_config,
         "prompt_file_sha256": prompt_file_sha256,
+        "prompt_format": prompt_format,
         "model_report_path": str(run_dir / "model_report.json"),
         "projection_report": (
             feature_projector.report() if feature_projector is not None else None

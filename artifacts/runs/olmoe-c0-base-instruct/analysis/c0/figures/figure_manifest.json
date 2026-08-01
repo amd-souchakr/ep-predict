@@ -1,0 +1,50 @@
+{
+  "analysis": "c0-base-instruct-trajectories",
+  "figure_grade": "pilot",
+  "inputs": {
+    "cross_transfer": {
+      "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/cross_checkpoint_transfer.csv",
+      "sha256": "f378af3c4ac2dcfda924ec9516845661e6a15ec07472592421dd3b361e6f66be"
+    },
+    "gate": {
+      "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/gate.json",
+      "sha256": "1afd0f559c2581f1bb9a4f8738c8b6b227162bfa7bc7cd512f06e9bb8a136f68"
+    },
+    "predictability": {
+      "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/predictability_by_horizon.csv",
+      "sha256": "2e02927e4f95cf4de639668b0bf3b7043c0ff233ec5a5b13af3f7e613a1d6f1f"
+    },
+    "route_overlap": {
+      "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/matched_route_overlap.csv",
+      "sha256": "59c0a5f63c136cb6c1e1b9876e1deb68fc5d9fce23145811b9be51ad51ff0fe9"
+    }
+  },
+  "outputs": [
+    {
+      "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/figures/fig1_base_instruct_predictability.png",
+      "sha256": "2daf69ccb6b439220f72356ca1aa9eb9a85e46ddd4a995ca3f910b881c326a50"
+    },
+    {
+      "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/figures/fig1_base_instruct_predictability.pdf",
+      "sha256": "58efd3a213242cd5e164530ecaec6e59a74c49948637fee00ea3d51fa30d7da3"
+    },
+    {
+      "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/figures/fig2_matched_route_agreement.png",
+      "sha256": "bd2770ec5ab2582c58c641097ba0ff713de946c5be60ad290669faa684236aa6"
+    },
+    {
+      "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/figures/fig2_matched_route_agreement.pdf",
+      "sha256": "84d4466fa4cec909b8175f4457a44296cc81cef6e47c24ca6871cea46c1d0963"
+    },
+    {
+      "path": "artifacts/runs/olmoe-c0-base-instruct/analysis/c0/figures/FIGURES.md",
+      "sha256": "68a45cb2f2fa94cb57d925e92133583dfc14d1bbc7ff805a60094e8df8c74d06"
+    }
+  ],
+  "semantics": {
+    "phase": "matched-token prefill",
+    "prediction_view": "fixed source layer 0 across all future layers",
+    "route_agreement": "intersection of Base and Instruct top-8 selected expert IDs divided by eight",
+    "split_unit": "request"
+  }
+}

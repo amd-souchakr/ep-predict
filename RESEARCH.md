@@ -468,6 +468,32 @@ intervention.
 
 ---
 
+## C0: Post-training materially changes routing-trajectory predictability
+
+This within-family confirmation compared the OLMoE Base checkpoint with its
+final SFT+DPO+RLVR Instruct descendant under exactly matched input tokens.
+
+### Current pilot result
+
+The tested claim is not supported. At the preregistered prefill layer-0→15,
+K=16 gate, transition selection gain over static popularity changes from
++11.0 points for Base to +12.6 points for Instruct. The +1.6-point difference
+is below the frozen 5-point threshold.
+
+The stronger result is stability:
+
+- 89.7% of selected expert IDs are shared across checkpoints;
+- exact top-8 route sets match for 35.7% of token-layer events;
+- K=16 hot sets have 84.6% Jaccard overlap;
+- transition tables transfer across endpoints with small average penalties.
+
+For this lineage, post-training makes local expert substitutions while
+preserving the pretrained trajectory scaffold and its predictability.
+Do not add the intermediate SFT/DPO checkpoints after the failed endpoint
+gate. See [docs/C0_RESULTS.md](docs/C0_RESULTS.md).
+
+---
+
 ## C1: The trajectory result transfers to a more sparsely routed checkpoint
 
 Before making a general MoE claim, repeat the decisive trace and normalized

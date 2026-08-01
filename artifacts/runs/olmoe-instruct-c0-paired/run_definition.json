@@ -1,0 +1,57 @@
+{
+  "config_fingerprint": "87a2fbb8affb98f544677f82c4e34c2acfa45a31a8cf6c6362a23920e69d751e",
+  "experiment_config": {
+    "analysis": {
+      "top_n": [
+        1,
+        2,
+        4,
+        8,
+        16
+      ],
+      "window_sizes": [
+        256,
+        512
+      ]
+    },
+    "decision_gate": {
+      "capacity_experts": 8,
+      "min_coverage_lift_over_uniform": 2.0,
+      "min_hotset_jaccard": 0.5,
+      "min_lagged_oracle_ratio": 0.8,
+      "min_passing_layer_fraction": 0.5,
+      "phase": "prefill",
+      "window_size": 512
+    },
+    "do_sample": false,
+    "max_new_tokens": 1,
+    "max_prompt_tokens": 384,
+    "output_dir": "artifacts/runs/olmoe-instruct-c0-paired",
+    "prompt_file": "artifacts/datasets/h1-standard-small/prompts.jsonl",
+    "prompt_format": "raw",
+    "run_id": "olmoe-instruct-c0-paired",
+    "seed": 7,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "trace": {
+      "fail_on_missing_router": true,
+      "fail_on_router_mismatch": true
+    }
+  },
+  "model_config": {
+    "attention_implementation": "sdpa",
+    "device": "cuda:0",
+    "dtype": "bfloat16",
+    "model_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "router_name_contains": [
+      ".mlp.gate"
+    ],
+    "tokenizer_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "tokenizer_revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "trust_remote_code": false,
+    "use_cache": true
+  },
+  "prompt_file_sha256": "4e08d5b4753ed1d06e6922359ea63249d4e4d215c9bc5081204533adf369fcf1",
+  "run_id": "olmoe-instruct-c0-paired"
+}

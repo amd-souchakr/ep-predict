@@ -1,0 +1,219 @@
+{
+  "gate": {
+    "capacity_experts": 8,
+    "decision": "PILOT_DOES_NOT_SUPPORT",
+    "eligible_layers": 16,
+    "hypothesis": "H1",
+    "interpretation": "The configured hot tier does not pass the model-wide pilot gate. Inspect domain-specific rows before deciding whether H1 is locally mixed or should be rejected for this testbed.",
+    "layers": [
+      {
+        "coverage": 0.2505478517028309,
+        "coverage_lift_over_uniform": 2.004382813622647,
+        "layer_id": 0,
+        "mean_jaccard": 0.28277875970183664,
+        "mean_lagged_oracle_ratio": 0.8186473469588562,
+        "pass": false,
+        "skew_pass": true,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.23270225607127462,
+        "coverage_lift_over_uniform": 1.861618048570197,
+        "layer_id": 1,
+        "mean_jaccard": 0.31959664267356575,
+        "mean_lagged_oracle_ratio": 0.7850393583630755,
+        "pass": false,
+        "skew_pass": false,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.2162217991090674,
+        "coverage_lift_over_uniform": 1.729774392872539,
+        "layer_id": 2,
+        "mean_jaccard": 0.2568969492046415,
+        "mean_lagged_oracle_ratio": 0.6904432514507877,
+        "pass": false,
+        "skew_pass": false,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.23055575513723237,
+        "coverage_lift_over_uniform": 1.844446041097859,
+        "layer_id": 3,
+        "mean_jaccard": 0.26295755526524756,
+        "mean_lagged_oracle_ratio": 0.697972131896341,
+        "pass": false,
+        "skew_pass": false,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.2562778416439144,
+        "coverage_lift_over_uniform": 2.050222733151315,
+        "layer_id": 4,
+        "mean_jaccard": 0.23490611952150414,
+        "mean_lagged_oracle_ratio": 0.6796974116985252,
+        "pass": false,
+        "skew_pass": true,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.25849619198160656,
+        "coverage_lift_over_uniform": 2.0679695358528525,
+        "layer_id": 5,
+        "mean_jaccard": 0.21458029150336844,
+        "mean_lagged_oracle_ratio": 0.6582564352225826,
+        "pass": false,
+        "skew_pass": true,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.2822154763615462,
+        "coverage_lift_over_uniform": 2.2577238108923696,
+        "layer_id": 6,
+        "mean_jaccard": 0.2959280036203113,
+        "mean_lagged_oracle_ratio": 0.6843311384713643,
+        "pass": false,
+        "skew_pass": true,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.25962782008909324,
+        "coverage_lift_over_uniform": 2.077022560712746,
+        "layer_id": 7,
+        "mean_jaccard": 0.29499218729987964,
+        "mean_lagged_oracle_ratio": 0.7110118864740453,
+        "pass": false,
+        "skew_pass": true,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.25528991234372755,
+        "coverage_lift_over_uniform": 2.0423192987498204,
+        "layer_id": 8,
+        "mean_jaccard": 0.3239683393529547,
+        "mean_lagged_oracle_ratio": 0.7364835324340693,
+        "pass": false,
+        "skew_pass": true,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.24425204770800402,
+        "coverage_lift_over_uniform": 1.9540163816640321,
+        "layer_id": 9,
+        "mean_jaccard": 0.2958938497400036,
+        "mean_lagged_oracle_ratio": 0.7452375208049753,
+        "pass": false,
+        "skew_pass": false,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.22543648512717346,
+        "coverage_lift_over_uniform": 1.8034918810173877,
+        "layer_id": 10,
+        "mean_jaccard": 0.29248358479127706,
+        "mean_lagged_oracle_ratio": 0.7387622707754716,
+        "pass": false,
+        "skew_pass": false,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.26885148728265557,
+        "coverage_lift_over_uniform": 2.1508118982612445,
+        "layer_id": 11,
+        "mean_jaccard": 0.3537138075599614,
+        "mean_lagged_oracle_ratio": 0.723503824567772,
+        "pass": false,
+        "skew_pass": true,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.25069155051013076,
+        "coverage_lift_over_uniform": 2.005532404081046,
+        "layer_id": 12,
+        "mean_jaccard": 0.2694382540536387,
+        "mean_lagged_oracle_ratio": 0.7057778385482523,
+        "pass": false,
+        "skew_pass": true,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.24876059778703838,
+        "coverage_lift_over_uniform": 1.990084782296307,
+        "layer_id": 13,
+        "mean_jaccard": 0.2409419640188871,
+        "mean_lagged_oracle_ratio": 0.6566906418105865,
+        "pass": false,
+        "skew_pass": false,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.229253484696077,
+        "coverage_lift_over_uniform": 1.834027877568616,
+        "layer_id": 14,
+        "mean_jaccard": 0.19881742189434498,
+        "mean_lagged_oracle_ratio": 0.609578335090716,
+        "pass": false,
+        "skew_pass": false,
+        "stability_pass": false
+      },
+      {
+        "coverage": 0.25763399913780716,
+        "coverage_lift_over_uniform": 2.0610719931024573,
+        "layer_id": 15,
+        "mean_jaccard": 0.2927790158559389,
+        "mean_lagged_oracle_ratio": 0.6774314955178161,
+        "pass": false,
+        "skew_pass": true,
+        "stability_pass": false
+      }
+    ],
+    "passing_layer_fraction": 0.0,
+    "passing_layers": 0,
+    "phase": "prefill",
+    "required_layer_fraction": 0.5,
+    "thresholds": {
+      "min_coverage_lift_over_uniform": 2.0,
+      "min_hotset_jaccard": 0.5,
+      "min_lagged_oracle_ratio": 0.8
+    },
+    "window_size": 512
+  },
+  "integrity": {
+    "errors": [],
+    "layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "passed": true,
+    "record_count": 222688,
+    "request_count": 128,
+    "schema_versions": [
+      1
+    ],
+    "top_k_values": [
+      8
+    ]
+  },
+  "outputs": {
+    "domain_comparison": "artifacts/runs/olmoe-base-c0-paired/analysis/h1/domain_comparison.csv",
+    "popularity": "artifacts/runs/olmoe-base-c0-paired/analysis/h1/popularity.csv",
+    "rank_frequency": "artifacts/runs/olmoe-base-c0-paired/analysis/h1/rank_frequency.csv",
+    "window_stability": "artifacts/runs/olmoe-base-c0-paired/analysis/h1/window_stability.csv",
+    "within_domain_stability": "artifacts/runs/olmoe-base-c0-paired/analysis/h1/within_domain_stability.csv"
+  },
+  "run_id": "olmoe-base-c0-paired"
+}

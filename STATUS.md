@@ -1,8 +1,8 @@
 # Project status
 
-**Current hypothesis:** H6 — prediction-guided residency
-**Current stage:** frozen H6 gate complete and not supported; awaiting human
-review of the H6 heatmap before closing the current mechanism
+**Current hypothesis:** C0 — post-training trajectory stability
+**Current stage:** Base–Instruct endpoint gate complete and not supported;
+awaiting human review of the two C0 figures before closing the comparison
 **Last updated:** 2026-08-01
 
 | Gate | Question | State | Exit evidence |
@@ -16,8 +16,9 @@ review of the H6 heatmap before closing the current mechanism
 | H5-B | What predictor quality is required to enter that window? | Complete | 25–50% minimum complete cold-set coverage in nonempty windows |
 | H5-C | Where do existing transition/linear policies land? | Raw streams not supported | 3.4–6.7× transfer amplification; no representative row passes |
 | H5-D | Do existing scores separate useful from useless cold candidates? | Mixed; strong ranking, insufficient threshold | Linear AUROC 0.883/0.861 at Δ=3/9; C≥50% needs A≈3.0–3.3× |
-| H6 | Does prediction-guided residency beat static/domain/LRU placement? | Pilot not supported; review pending | At decode K=16, Δ=3, transition/linear lose 3.9/2.5 pp expert-stall reduction and 0.7/0.6 pp complete hits versus the strongest matched baseline |
+| H6 | Does prediction-guided residency beat static/domain/LRU placement? | Pilot not supported; reviewed | At decode K=16, Δ=3, transition/linear lose 3.9/2.5 pp expert-stall reduction and 0.7/0.6 pp complete hits versus the strongest matched baseline |
 | H7 | Can routing be made more predictable without harming loss or balance? | Deferred after H6 failure | Requires a new mechanism and explicit permission |
+| C0 | Does post-training materially change matched-token trajectory predictability? | Pilot not supported; review pending | Base/Instruct retain 89.7% of selections; layer-0→15 conditional-gain change is +1.6 pp versus a 5 pp gate |
 | C1 | Does the result transfer to a top-1/top-2 checkpoint? | Deferred; explicit permission required | No model download or testbed change authorized |
 
 ## Immediate run checklist
@@ -89,15 +90,30 @@ review of the H6 heatmap before closing the current mechanism
 - [x] Generate the compact layer/lookahead/capacity gain heatmap and hash its
       inputs.
 - [x] Apply the H6 gate unchanged: neither guided policy passes.
-- [ ] Complete human review of the H6 heatmap and record the final
+- [x] Complete human review of the H6 heatmap and record the final
       interpretation.
 - [x] Defer overlap microbenchmarks, MLPs, fresh routing collection, H7, C1,
       and timing
       fidelity until a selective policy identifies a worthwhile mechanism.
+- [x] Preregister C0 before Base collection with exact matched-token
+      serialization and a fixed layer-0→15 conditional-gain gate.
+- [x] Download and qualify OLMoE Base only after explicit researcher approval;
+      verify identical 16-layer, 64-expert, top-8 geometry.
+- [x] Collect Base and Instruct raw-prefill traces on the same 128 prompts with
+      one forward per request and zero router mismatches.
+- [x] Verify all 13,918 input tokens match exactly across checkpoints.
+- [x] Fit H2 tables independently on the same 96 requests and evaluate the same
+      32 held-out requests through Δ=15.
+- [x] Apply the C0 gate unchanged: +1.6 pp is below the 5 pp stage-effect
+      threshold.
+- [x] Generate and programmatically inspect the predictability and matched-route
+      figures with hashed inputs.
+- [ ] Complete researcher visual review; do not add SFT/DPO unless that review
+      overturns the frozen endpoint stop decision.
 
 Full plan: [docs/NEXT_EXPERIMENTS.md](docs/NEXT_EXPERIMENTS.md).
 Prior result: [docs/H4_RESULTS.md](docs/H4_RESULTS.md).
-Current result: [docs/H6_RESULTS.md](docs/H6_RESULTS.md).
+Current result: [docs/C0_RESULTS.md](docs/C0_RESULTS.md).
 
 ## Evidence policy
 

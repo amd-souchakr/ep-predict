@@ -19,6 +19,8 @@ decision path without adding a tracking system or notebook ceremony.
 - Run the smallest instrumentation smoke test.
 - Require trace/schema/router integrity before scaling.
 - Confirm that resumed artifacts match the frozen configuration fingerprint.
+- For paired-checkpoint experiments, force one shared serialization and require
+  exact input-token-ID equality before interpreting route differences.
 
 ## 3. Collect
 
@@ -36,6 +38,8 @@ decision path without adding a tracking system or notebook ceremony.
 
 - Generate machine-readable tables before figures.
 - Keep layer, phase, domain, and top-k semantics explicit.
+- In checkpoint comparisons, report conditional gain over the checkpoint's own
+  marginal baseline; raw accuracy alone can confound predictability with skew.
 - Apply the frozen decision gate before exploratory interpretation.
 - Then run cheap broad scans over structure already present in the artifacts,
   such as all source-target layer pairs. These scans may narrow the conclusion

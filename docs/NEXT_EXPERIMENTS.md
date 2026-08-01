@@ -1,8 +1,8 @@
 # Next experiments: first-order co-design and predictable routing
 
 **Updated:** 2026-08-01  
-**Current next action:** human review of the completed negative H6 residency
-result; no automatic follow-on experiment
+**Current next action:** human review of the completed C0 Base–Instruct
+figures; do not add SFT/DPO after the failed endpoint gate
 **Operating rule:** use the cheapest existing artifacts first; model broad
 viability and expected benefit before improving timing fidelity or predictors.
 
@@ -25,12 +25,20 @@ This plan separates three questions that should not be conflated:
 | H5-D | Do existing scores separate useful from useless cold candidates? | No | Complete; signal present, shared threshold insufficient |
 | H6 | Does prediction-guided on-demand residency beat static/domain/LRU at equal capacity and movement budget? | No | Complete; frozen gate failed |
 | H7 | Can a routing-predictability objective improve modeled benefit without harming loss or load balance? | Yes; small controlled intervention | Deferred after H6 failure |
+| C0 | Does Base→Instruct post-training materially change matched-token trajectory predictability? | Yes; two endpoint traces | Complete; frozen stage-effect gate failed |
 | C1 | Does the trajectory/co-design result transfer to one newer top-1/top-2 checkpoint? | Yes; one trace collection | Deferred; explicit permission required |
 
 Detailed timing validation, concurrent-copy microbenchmarks, multi-GPU
 extrapolation, MLPs, predictor tuning, new inference, and model downloads
 remain deferred. H6 did not establish placement value for the current depth
 predictors.
+
+C0 adds a within-family control, not a new placement mechanism. Base and
+Instruct preserve 89.7% of expert selections and differ by only +1.6 points on
+the frozen long-range conditional-predictability metric. Do not spend two more
+checkpoint downloads on SFT/DPO stage localization. The next generalization
+experiment, if explicitly approved later, should change routing architecture
+rather than add another OLMoE post-training stage.
 
 ## H5-A — Controlled prediction × hardware sweep
 

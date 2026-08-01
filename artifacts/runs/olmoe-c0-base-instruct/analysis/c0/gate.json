@@ -1,0 +1,22 @@
+{
+  "capacity_experts": 16,
+  "consistent_domains": 3,
+  "decision": "PILOT_DOES_NOT_SUPPORT_POSTTRAINING_PREDICTABILITY_EFFECT",
+  "domain_differences": {
+    "code": 0.04961277831558564,
+    "conversation": 0.01039192399049882,
+    "general": 0.013583333333333392,
+    "math": -0.009689922480620117
+  },
+  "hypothesis": "C0",
+  "instruct_minus_base_gain": 0.015974528289699433,
+  "lookahead": 15,
+  "metric": "transition selection-coverage gain over static popularity",
+  "min_abs_gain_difference": 0.05,
+  "pass": false,
+  "phase": "prefill",
+  "question": "Does post-training materially change long-horizon conditional routing predictability under identical input tokens?",
+  "required_consistent_domains": 3,
+  "source_layer": 0,
+  "target_layer": 15
+}

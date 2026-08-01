@@ -312,7 +312,45 @@ The immutable run manifest and metrics remain the source of truth.
 - Figure: one triangular source-layer × lookahead heatmap for K=8/16/32,
   saved as PDF and 450-DPI PNG with hashed inputs under
   `analysis/h6/figures`.
-- Human visual review: pending.
+- Human visual review: completed through the subsequent checkerboard/oracle
+  interpretation review; the negative gate stands.
 - One next action: review the H6 heatmap, then close this placement mechanism.
   Do not fit an admission head, tune an MLP, start H7, collect confirmation,
   or download a second model without a new explicitly approved hypothesis.
+
+### `c0-base-instruct-trajectories` — 2026-08-01
+
+- Hypothesis: C0 — Base→Instruct post-training materially changes matched-token
+  routing-trajectory predictability.
+- Config/protocol: `configs/experiment/c0-posttraining-trajectory.toml` and
+  `docs/C0_PROTOCOL.md`; endpoint runs are
+  `olmoe-base-c0-paired` and `olmoe-instruct-c0-paired`.
+- Checkpoints: Base revision `9b0c1aa87e34a20052389dce1f0cf01da783f654`
+  and Instruct revision `caada7d7b70f4b852b14108479e0812223a8794f`.
+- Inputs: the same 128 standard-small prompts under forced raw serialization
+  and one prefill forward per request. All 13,918 input tokens and 222,688
+  token-layer records match exactly across checkpoints.
+- Split: preserved 96/32 request split, 24/8 per domain. Popularity and
+  transition tables use train requests only.
+- Formal result:
+  `PILOT_DOES_NOT_SUPPORT_POSTTRAINING_PREDICTABILITY_EFFECT`. At prefill
+  layer 0→15 and K=16, transition-over-static selection gain is +11.0 pp for
+  Base and +12.6 pp for Instruct. The +1.6 pp change is below the frozen 5 pp
+  threshold.
+- Trajectory result: 89.7% selection agreement, 82.6% route Jaccard, 35.7%
+  exact top-8 equality, 84.6% K=16 hot-set Jaccard, and 0.0029 nats
+  popularity JS divergence across held-out layers/domains.
+- Policy transfer: cross-checkpoint transition penalties are generally below
+  one point through Δ=12; the symmetric primary layer-0→15 penalty is 1.6 pp.
+- Interpretation: structured routing already exists in Base. SFT+DPO+RLVR make
+  frequent small expert substitutions while preserving the trajectory
+  scaffold, skew, and predictability.
+- Figures: fixed-source predictability and matched-route agreement saved as
+  PDF/450-DPI PNG with hashed inputs under
+  `artifacts/runs/olmoe-c0-base-instruct/analysis/c0/figures`.
+- Programmatic visual inspection: completed; axes, units, fixed-source
+  semantics, and headline values agree. Researcher review is pending.
+- Decision: do not download SFT or DPO after the endpoint gate failure.
+- One next action: human review of the two C0 figures; retain C1 sparse-model
+  transfer as the higher-value future confirmation requiring explicit
+  permission.

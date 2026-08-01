@@ -1,0 +1,264 @@
+{
+  "analysis_id": "c0-olmoe-instruct-h2",
+  "config_fingerprint": "1fa9ef06901a69736ebd73a4f8994a645e2fe172d19cd9e1c5f7f39f0d8be428",
+  "evidence_grade": "pilot",
+  "gate": {
+    "baseline": "transition",
+    "capacity_experts": 16,
+    "comparator": "static",
+    "decision": "PILOT_SUPPORT",
+    "hypothesis": "H2",
+    "interpretation": "At least one routing-only transition baseline passed the held-out prefill gate; proceed to a lightweight external predictor after human figure review.",
+    "lookaheads": [
+      {
+        "delta": 1,
+        "domain_mean_selection_gains": {
+          "code": 0.26980477573410777,
+          "conversation": 0.4415676959619953,
+          "general": 0.4355777777777778,
+          "math": 0.42571059431524544
+        },
+        "eligible_scopes": 60,
+        "mean_complete_token_coverage_gain": 0.22378311623249916,
+        "mean_selection_coverage_gain": 0.3931652109472816,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 2,
+        "domain_mean_selection_gains": {
+          "code": 0.25854826441709305,
+          "conversation": 0.42331184255174753,
+          "general": 0.41822023809523806,
+          "math": 0.40270279623477295
+        },
+        "eligible_scopes": 56,
+        "mean_complete_token_coverage_gain": 0.21258327210851286,
+        "mean_selection_coverage_gain": 0.37569578532471287,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 3,
+        "domain_mean_selection_gains": {
+          "code": 0.250828431007521,
+          "conversation": 0.4048967659418966,
+          "general": 0.40135897435897433,
+          "math": 0.3876714370900417
+        },
+        "eligible_scopes": 52,
+        "mean_complete_token_coverage_gain": 0.19420182095291946,
+        "mean_selection_coverage_gain": 0.3611889020996084,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 4,
+        "domain_mean_selection_gains": {
+          "code": 0.24178162310422713,
+          "conversation": 0.3895734362628662,
+          "general": 0.38442361111111106,
+          "math": 0.3709423449612403
+        },
+        "eligible_scopes": 48,
+        "mean_complete_token_coverage_gain": 0.18160433216855723,
+        "mean_selection_coverage_gain": 0.3466802538598612,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 5,
+        "domain_mean_selection_gains": {
+          "code": 0.23291604329842466,
+          "conversation": 0.378589937378536,
+          "general": 0.37012121212121213,
+          "math": 0.3591878083157153
+        },
+        "eligible_scopes": 44,
+        "mean_complete_token_coverage_gain": 0.17403458836343383,
+        "mean_selection_coverage_gain": 0.335203750278472,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 6,
+        "domain_mean_selection_gains": {
+          "code": 0.2292473378509196,
+          "conversation": 0.3633016627078385,
+          "general": 0.3536916666666666,
+          "math": 0.343047480620155
+        },
+        "eligible_scopes": 40,
+        "mean_complete_token_coverage_gain": 0.16696579431986094,
+        "mean_selection_coverage_gain": 0.32232203696139494,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 7,
+        "domain_mean_selection_gains": {
+          "code": 0.22929439604173385,
+          "conversation": 0.34814594879915545,
+          "general": 0.3474907407407407,
+          "math": 0.3345714900947459
+        },
+        "eligible_scopes": 36,
+        "mean_complete_token_coverage_gain": 0.1596496345305748,
+        "mean_selection_coverage_gain": 0.314875643919094,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 8,
+        "domain_mean_selection_gains": {
+          "code": 0.22436168925459826,
+          "conversation": 0.3384426959619953,
+          "general": 0.3360416666666667,
+          "math": 0.32497577519379844
+        },
+        "eligible_scopes": 32,
+        "mean_complete_token_coverage_gain": 0.1403422888831142,
+        "mean_selection_coverage_gain": 0.30595545676926467,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 9,
+        "domain_mean_selection_gains": {
+          "code": 0.21824436454155718,
+          "conversation": 0.3147692568713946,
+          "general": 0.3127261904761905,
+          "math": 0.3021179401993356
+        },
+        "eligible_scopes": 28,
+        "mean_complete_token_coverage_gain": 0.12871125988376225,
+        "mean_selection_coverage_gain": 0.2869644380221194,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 10,
+        "domain_mean_selection_gains": {
+          "code": 0.212649241690868,
+          "conversation": 0.2773159144893112,
+          "general": 0.2750138888888889,
+          "math": 0.2668362403100775
+        },
+        "eligible_scopes": 24,
+        "mean_complete_token_coverage_gain": 0.10464367757162114,
+        "mean_selection_coverage_gain": 0.2579538213447864,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 11,
+        "domain_mean_selection_gains": {
+          "code": 0.2007260406582768,
+          "conversation": 0.2558194774346793,
+          "general": 0.24441666666666667,
+          "math": 0.245203488372093
+        },
+        "eligible_scopes": 20,
+        "mean_complete_token_coverage_gain": 0.09992919911673186,
+        "mean_selection_coverage_gain": 0.23654141828292893,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 12,
+        "domain_mean_selection_gains": {
+          "code": 0.19273354307841237,
+          "conversation": 0.22773159144893113,
+          "general": 0.2230625,
+          "math": 0.21087693798449614
+        },
+        "eligible_scopes": 16,
+        "mean_complete_token_coverage_gain": 0.0864912072174681,
+        "mean_selection_coverage_gain": 0.2136011431279599,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 13,
+        "domain_mean_selection_gains": {
+          "code": 0.18017909002904156,
+          "conversation": 0.19358669833729217,
+          "general": 0.19169444444444447,
+          "math": 0.19024547803617572
+        },
+        "eligible_scopes": 12,
+        "mean_complete_token_coverage_gain": 0.07468439739945894,
+        "mean_selection_coverage_gain": 0.18892642771173848,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 14,
+        "domain_mean_selection_gains": {
+          "code": 0.19609148112294283,
+          "conversation": 0.16211401425178149,
+          "general": 0.16762500000000002,
+          "math": 0.1520106589147287
+        },
+        "eligible_scopes": 8,
+        "mean_complete_token_coverage_gain": 0.06525032289863619,
+        "mean_selection_coverage_gain": 0.16946028857236325,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      },
+      {
+        "delta": 15,
+        "domain_mean_selection_gains": {
+          "code": 0.17013552758954498,
+          "conversation": 0.10748218527315917,
+          "general": 0.1246666666666667,
+          "math": 0.10004844961240311
+        },
+        "eligible_scopes": 4,
+        "mean_complete_token_coverage_gain": 0.046129893404948205,
+        "mean_selection_coverage_gain": 0.12558320728544348,
+        "pass": true,
+        "positive_domains": 4,
+        "positive_scope_fraction": 1.0
+      }
+    ],
+    "phase": "prefill",
+    "thresholds": {
+      "min_mean_complete_token_coverage_gain": 0.02,
+      "min_mean_selection_coverage_gain": 0.03,
+      "min_positive_domains": 3,
+      "min_positive_scope_fraction": 0.75
+    }
+  },
+  "hypothesis": "H2",
+  "new_inference_collection": false,
+  "num_experts": 64,
+  "outputs": {
+    "entropy": "artifacts/runs/olmoe-instruct-c0-paired/analysis/h2/entropy.csv",
+    "gate": "artifacts/runs/olmoe-instruct-c0-paired/analysis/h2/gate.json",
+    "metrics": "artifacts/runs/olmoe-instruct-c0-paired/analysis/h2/metrics.csv",
+    "report": "artifacts/runs/olmoe-instruct-c0-paired/analysis/h2/REPORT.md",
+    "split": "artifacts/runs/olmoe-instruct-c0-paired/analysis/h2/split.json",
+    "summary": "artifacts/runs/olmoe-instruct-c0-paired/analysis/h2/summary.csv"
+  },
+  "routing_top_k": 8,
+  "run_id": "olmoe-instruct-c0-paired",
+  "test_requests": 32,
+  "token_routes": 13918,
+  "trace_reused": "artifacts/runs/olmoe-instruct-c0-paired",
+  "train_requests": 96
+}

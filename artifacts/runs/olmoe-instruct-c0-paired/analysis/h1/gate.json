@@ -1,0 +1,179 @@
+{
+  "capacity_experts": 8,
+  "decision": "PILOT_DOES_NOT_SUPPORT",
+  "eligible_layers": 16,
+  "hypothesis": "H1",
+  "interpretation": "The configured hot tier does not pass the model-wide pilot gate. Inspect domain-specific rows before deciding whether H1 is locally mixed or should be rejected for this testbed.",
+  "layers": [
+    {
+      "coverage": 0.23657314269291566,
+      "coverage_lift_over_uniform": 1.8925851415433252,
+      "layer_id": 0,
+      "mean_jaccard": 0.3026563180409334,
+      "mean_lagged_oracle_ratio": 0.8114246885881767,
+      "pass": false,
+      "skew_pass": false,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.23700423911481536,
+      "coverage_lift_over_uniform": 1.8960339129185229,
+      "layer_id": 1,
+      "mean_jaccard": 0.37951279489741024,
+      "mean_lagged_oracle_ratio": 0.8056269056244075,
+      "pass": false,
+      "skew_pass": false,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.2300707716625952,
+      "coverage_lift_over_uniform": 1.8405661733007617,
+      "layer_id": 2,
+      "mean_jaccard": 0.30924460155229383,
+      "mean_lagged_oracle_ratio": 0.7256290638510552,
+      "pass": false,
+      "skew_pass": false,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.23782152608133353,
+      "coverage_lift_over_uniform": 1.9025722086506682,
+      "layer_id": 3,
+      "mean_jaccard": 0.2751120674197597,
+      "mean_lagged_oracle_ratio": 0.7109413753768401,
+      "pass": false,
+      "skew_pass": false,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.2639567466590027,
+      "coverage_lift_over_uniform": 2.1116539732720216,
+      "layer_id": 4,
+      "mean_jaccard": 0.2473475242706012,
+      "mean_lagged_oracle_ratio": 0.7002715468701554,
+      "pass": false,
+      "skew_pass": true,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.26120850696939213,
+      "coverage_lift_over_uniform": 2.089668055755137,
+      "layer_id": 5,
+      "mean_jaccard": 0.23397628013012628,
+      "mean_lagged_oracle_ratio": 0.666550471206825,
+      "pass": false,
+      "skew_pass": true,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.29434904440293147,
+      "coverage_lift_over_uniform": 2.3547923552234518,
+      "layer_id": 6,
+      "mean_jaccard": 0.34115798731183344,
+      "mean_lagged_oracle_ratio": 0.694804443609137,
+      "pass": false,
+      "skew_pass": true,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.2611995257939359,
+      "coverage_lift_over_uniform": 2.0895962063514872,
+      "layer_id": 7,
+      "mean_jaccard": 0.2754459215997678,
+      "mean_lagged_oracle_ratio": 0.7181496990661234,
+      "pass": false,
+      "skew_pass": true,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.2597086506681995,
+      "coverage_lift_over_uniform": 2.077669205345596,
+      "layer_id": 8,
+      "mean_jaccard": 0.28086272701657317,
+      "mean_lagged_oracle_ratio": 0.7501298587619148,
+      "pass": false,
+      "skew_pass": true,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.2476559132059204,
+      "coverage_lift_over_uniform": 1.9812473056473632,
+      "layer_id": 9,
+      "mean_jaccard": 0.30667281436512206,
+      "mean_lagged_oracle_ratio": 0.7746727990462691,
+      "pass": false,
+      "skew_pass": false,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.22965763759160798,
+      "coverage_lift_over_uniform": 1.8372611007328639,
+      "layer_id": 10,
+      "mean_jaccard": 0.27547153700999855,
+      "mean_lagged_oracle_ratio": 0.7356692285269962,
+      "pass": false,
+      "skew_pass": false,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.2752730277338698,
+      "coverage_lift_over_uniform": 2.2021842218709584,
+      "layer_id": 11,
+      "mean_jaccard": 0.4022054868208714,
+      "mean_lagged_oracle_ratio": 0.7459473043417415,
+      "pass": false,
+      "skew_pass": true,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.25508334530823396,
+      "coverage_lift_over_uniform": 2.0406667624658716,
+      "layer_id": 12,
+      "mean_jaccard": 0.2457977919516381,
+      "mean_lagged_oracle_ratio": 0.6935745263888832,
+      "pass": false,
+      "skew_pass": true,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.2532691478660727,
+      "coverage_lift_over_uniform": 2.0261531829285815,
+      "layer_id": 13,
+      "mean_jaccard": 0.25972318280010587,
+      "mean_lagged_oracle_ratio": 0.6627636508762907,
+      "pass": false,
+      "skew_pass": true,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.23365426066963643,
+      "coverage_lift_over_uniform": 1.8692340853570915,
+      "layer_id": 14,
+      "mean_jaccard": 0.2097372712757328,
+      "mean_lagged_oracle_ratio": 0.6252169048446193,
+      "pass": false,
+      "skew_pass": false,
+      "stability_pass": false
+    },
+    {
+      "coverage": 0.25145495042391147,
+      "coverage_lift_over_uniform": 2.0116396033912918,
+      "layer_id": 15,
+      "mean_jaccard": 0.26273555504324736,
+      "mean_lagged_oracle_ratio": 0.6676228995423189,
+      "pass": false,
+      "skew_pass": true,
+      "stability_pass": false
+    }
+  ],
+  "passing_layer_fraction": 0.0,
+  "passing_layers": 0,
+  "phase": "prefill",
+  "required_layer_fraction": 0.5,
+  "thresholds": {
+    "min_coverage_lift_over_uniform": 2.0,
+    "min_hotset_jaccard": 0.5,
+    "min_lagged_oracle_ratio": 0.8
+  },
+  "window_size": 512
+}

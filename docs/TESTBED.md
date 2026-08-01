@@ -24,6 +24,18 @@ documents the active/total parameter counts and Transformers support. The
 [Transformers implementation](https://github.com/huggingface/transformers/blob/main/src/transformers/models/olmoe/modeling_olmoe.py)
 is the source of truth for hook semantics.
 
+## Paired checkpoint control
+
+C0 additionally qualified the direct pretrained ancestor
+`allenai/OLMoE-1B-7B-0125` at revision
+`9b0c1aa87e34a20052389dce1f0cf01da783f654`. It has exactly the same routing
+geometry and BF16 expert size as the primary Instruct checkpoint.
+
+The Base checkpoint is a matched scientific control, not a second
+architecture. C0 used checkpoint-independent raw serialization and verified
+identical input IDs before comparing trajectories. The endpoint result did not
+justify downloading SFT or DPO; see [C0_RESULTS.md](C0_RESULTS.md).
+
 ## Why not the obvious alternatives
 
 | Model | Prototype issue |

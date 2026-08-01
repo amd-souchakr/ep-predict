@@ -17,7 +17,8 @@ Update it only when at least one of the following occurs:
 Routine metrics, commands, implementation changes, and transient next steps
 belong in `EXPERIMENT_LOG.md`, `STATUS.md`, and the per-hypothesis reports.
 
-**Evidence snapshot:** 2026-08-01, after H1–H6 and the all-layer H2/H3 scan.
+**Evidence snapshot:** 2026-08-01, after H1–H6, the all-layer H2/H3 scan, and
+the C0 Base–Instruct matched-token comparison.
 
 ---
 
@@ -154,6 +155,26 @@ LRU and 94.7% for the oracle.
 This negative result changes the architectural interpretation: trajectory
 information is not a generic cache-control signal. The conditioning axis must
 match the mechanism's reuse axis.
+
+### C0 shows that post-training preserves the trajectory scaffold
+
+Under identical prefill tokens, OLMoE Base and its final SFT+DPO+RLVR
+descendant share 89.7% of selected expert IDs across depth. Their K=16 hot
+sets overlap by 84.6%, while expert-popularity JS divergence is only 0.0029
+nats. Exact top-8 sets still match for just 35.7% of token-layer events:
+post-training frequently substitutes one or a few experts without replacing
+the overall path.
+
+Conditional predictability is equally stable. At layer 0→15, transition gain
+over static popularity changes from +11.0 points in Base to +12.6 points in
+Instruct, below the preregistered 5-point stage-effect gate. Transition tables
+also transfer between endpoints with small average penalties.
+
+This first checkpoint-lineage result suggests that structured routing is
+established primarily during pretraining and survives later behavioral
+alignment. Post-training edits a pretrained computational scaffold rather
+than creating trajectory predictability from scratch. This remains
+`single-family`: it is not evidence across MoE architectures.
 
 ---
 
@@ -586,6 +607,9 @@ The predictive-control thesis is broader than whole-expert PCIe prefetch.
   on-demand residency at equal capacity and movement budget.
 - A strong equal-budget next-use oracle gap remains: at decode K=16, Δ=3,
   residual cold demand is 31.2% for oracle versus 48.1% for LRU.
+- Under identical inputs, OLMoE Base and Instruct retain 89.7% of expert
+  selections, and their layer-0→15 conditional prediction gain differs by only
+  +1.6 points.
 
 ### Plausible architectural inference
 
@@ -607,6 +631,8 @@ The predictive-control thesis is broader than whole-expert PCIe prefetch.
 - The current prediction-guided transfer policy is profitable.
 - The current depth predictors improve on-demand expert residency.
 - The result generalizes beyond one top-8 OLMoE checkpoint.
+- The within-family Base–Instruct stability result generalizes across model
+  families or routing sparsities.
 - The base model learned to manage hardware resources.
 - Making routing more predictable would preserve model loss and load balance.
 - Whole-expert movement beats activation movement or additional local memory.
@@ -664,3 +690,7 @@ central trajectory result.
   reuse prediction. Existing depth scores failed equal-budget residency despite
   a strong next-use oracle ceiling, establishing the prediction-axis and
   mechanism-axis alignment principle.
+- **2026-08-01:** C0 compared matched Base and Instruct endpoints. Post-training
+  preserved about 90% of expert selections and did not materially change the
+  frozen long-range predictability metric, suggesting a pretrained trajectory
+  scaffold with local post-training edits.

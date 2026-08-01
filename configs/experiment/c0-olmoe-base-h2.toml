@@ -1,0 +1,18 @@
+analysis_id = "c0-olmoe-base-h2"
+trace_run = "artifacts/runs/olmoe-base-c0-paired"
+split_seed = 17
+test_requests_per_domain = 8
+capacities = [8, 16, 32]
+lookaheads = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+previous_window_tokens = 128
+
+# Descriptive within-checkpoint H2 gate; C0's formal decision is separate.
+[decision_gate]
+phase = "prefill"
+baseline = "transition"
+comparator = "static"
+capacity_experts = 16
+min_mean_selection_coverage_gain = 0.03
+min_mean_complete_token_coverage_gain = 0.02
+min_positive_scope_fraction = 0.75
+min_positive_domains = 3

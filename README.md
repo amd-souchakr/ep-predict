@@ -36,6 +36,14 @@ despite a strong oracle ceiling. The key distinction is that predicting a
 token's trajectory down network depth does not automatically predict expert
 reuse across later tokens. See [docs/H6_RESULTS.md](docs/H6_RESULTS.md).
 
+C0 then compared the pretrained Base checkpoint with its final
+SFT+DPO+RLVR Instruct descendant under exactly matched input tokens. The two
+checkpoints retain 89.7% of selected expert IDs across depth, and their
+layer-0→15 conditional prediction gain differs by only +1.6 points—below the
+frozen 5-point gate. The structured trajectory is already present in Base and
+largely preserved by post-training for this lineage. See
+[docs/C0_RESULTS.md](docs/C0_RESULTS.md).
+
 The active experiment queue, insight-mining questions, and visualization
 deliverables are in
 [docs/NEXT_EXPERIMENTS.md](docs/NEXT_EXPERIMENTS.md).
@@ -225,6 +233,36 @@ H6 reuses the same 96/32 split, routes, projected features, transition tables,
 and fixed linear heads. Prediction can admit only an actually demanded miss;
 it never triggers candidate-only prefetch. No inference, training, model
 download, or library modification occurs.
+
+Run the matched Base–Instruct C0 endpoint comparison:
+
+```bash
+uv run ep-predict collect \
+  --model-config configs/model/olmoe-1b-7b-base.toml \
+  --experiment-config configs/experiment/c0-olmoe-base-collect.toml
+
+uv run ep-predict collect \
+  --model-config configs/model/olmoe-1b-7b-instruct.toml \
+  --experiment-config configs/experiment/c0-olmoe-instruct-collect.toml
+
+uv run ep-predict analyze-h2 \
+  --run artifacts/runs/olmoe-base-c0-paired \
+  --config configs/experiment/c0-olmoe-base-h2.toml
+
+uv run ep-predict analyze-h2 \
+  --run artifacts/runs/olmoe-instruct-c0-paired \
+  --config configs/experiment/c0-olmoe-instruct-h2.toml
+
+uv run ep-predict analyze-checkpoint-trajectories \
+  --config configs/experiment/c0-posttraining-trajectory.toml
+
+uv run ep-predict plot-checkpoint-trajectories \
+  --config configs/experiment/c0-posttraining-trajectory.toml
+```
+
+C0 uses raw prompt serialization, one generation token, identical input-ID
+validation, and only matched prefill evidence. It does not compare divergent
+free-running outputs or train a predictor.
 
 The collector writes one compressed JSONL routing trace per request. H3 also
 writes one aligned numeric NPZ shard containing compact projected router

@@ -82,6 +82,23 @@ Preregister the new model's gate before seeing its result. Reuse the scientific
 question and metric definitions, but adjust model-dependent capacity,
 class-imbalance, horizon, and physical-calibration parameters explicitly.
 
+### Paired checkpoints from one training lineage
+
+When comparing Base, SFT, preference-trained, or RL descendants of the same
+architecture:
+
+- use one checkpoint-independent raw serialization for the causal comparison;
+- verify exact input token IDs for every request before comparing routes;
+- keep matched-token prefill/teacher-forced evidence separate from native
+  chat-template and free-running decode evidence;
+- compare conditional gain over marginal popularity so changed skew does not
+  masquerade as changed predictability;
+- use endpoint Base-versus-final first, and add intermediate checkpoints only
+  if the frozen endpoint gate reveals an effect worth localizing.
+
+C0 is the reference implementation of this pattern. Its endpoint gate failed,
+so SFT and DPO were not added.
+
 ## Result and insight tracking
 
 When a second model is active:
