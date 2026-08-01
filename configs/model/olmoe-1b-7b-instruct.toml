@@ -1,0 +1,13 @@
+model_id = "allenai/OLMoE-1B-7B-0125-Instruct"
+revision = "caada7d7b70f4b852b14108479e0812223a8794f"
+tokenizer_id = "allenai/OLMoE-1B-7B-0125-Instruct"
+tokenizer_revision = "caada7d7b70f4b852b14108479e0812223a8794f"
+device = "cuda:0"
+dtype = "bfloat16"
+attention_implementation = "sdpa"
+trust_remote_code = false
+use_cache = true
+
+# Optional safety filters for generic router discovery. OLMoE routers are named
+# model.layers.<layer>.mlp.gate and expose num_experts/top_k attributes.
+router_name_contains = [".mlp.gate"]

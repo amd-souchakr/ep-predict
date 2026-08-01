@@ -1,0 +1,20 @@
+{"sample_id":"general-01","domain":"general","prompt":"Explain why coastal cities often have milder seasonal temperatures than inland cities at the same latitude."}
+{"sample_id":"general-02","domain":"general","prompt":"Write a short magazine-style explanation of how sourdough fermentation changes the flavor and texture of bread."}
+{"sample_id":"general-03","domain":"general","prompt":"Summarize the main tradeoffs a city faces when converting a downtown street into a pedestrian-only zone."}
+{"sample_id":"general-04","domain":"general","prompt":"Describe how migrating birds use environmental cues to navigate, for a curious high-school student."}
+{"sample_id":"general-05","domain":"general","prompt":"Compare a public library, a community garden, and a local market as places that build neighborhood trust."}
+{"sample_id":"code-01","domain":"code","prompt":"Implement a Python function that merges overlapping half-open integer intervals and explain its time complexity."}
+{"sample_id":"code-02","domain":"code","prompt":"Review this design: a web service retries every failed request immediately and without a limit. Identify failure modes and propose a safer retry policy."}
+{"sample_id":"code-03","domain":"code","prompt":"Write a small Rust function that counts words case-insensitively and returns them ordered by decreasing frequency."}
+{"sample_id":"code-04","domain":"code","prompt":"Explain the difference between optimistic and pessimistic database locking using a concrete inventory-update example."}
+{"sample_id":"code-05","domain":"code","prompt":"Give pseudocode for an LRU cache with O(1) get and put operations, including the eviction case."}
+{"sample_id":"math-01","domain":"math","prompt":"A fair coin is tossed until either HHT or THH appears. Which pattern is more likely to appear first? Reason carefully."}
+{"sample_id":"math-02","domain":"math","prompt":"Derive the closed form for the sum of the first n odd positive integers and give both an algebraic and geometric explanation."}
+{"sample_id":"math-03","domain":"math","prompt":"A tank contains 100 liters of water. Brine enters at 3 liters per minute and the well-mixed solution leaves at the same rate. Set up the differential equation for the amount of salt."}
+{"sample_id":"math-04","domain":"math","prompt":"Explain why every finite tree with at least two vertices has at least two leaves, using a proof by considering a longest path."}
+{"sample_id":"math-05","domain":"math","prompt":"Find all integers x such that x squared minus 5x plus 6 equals zero, then explain how the factorization reveals the solutions."}
+{"sample_id":"conversation-01","domain":"conversation","prompt":"I keep postponing a difficult email because I want it to be perfect. Help me make a practical plan to send it today."}
+{"sample_id":"conversation-02","domain":"conversation","prompt":"I'm hosting four friends for dinner, one is vegetarian, and I only have an hour. Suggest a simple menu and timeline."}
+{"sample_id":"conversation-03","domain":"conversation","prompt":"My teammate and I disagree about priorities for the next sprint. How can I start a constructive conversation without sounding accusatory?"}
+{"sample_id":"conversation-04","domain":"conversation","prompt":"I have never visited an art museum and worry I will not understand anything. How should I approach a two-hour visit?"}
+{"sample_id":"conversation-05","domain":"conversation","prompt":"Help me choose between taking an evening class and keeping that time free for rest. Ask what matters, then offer a decision framework."}
