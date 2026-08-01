@@ -19,8 +19,14 @@ decision path without adding a tracking system or notebook ceremony.
 ## 3. Collect
 
 - Write restartable request-level artifacts.
-- Preserve raw traces; never repair them in place after analysis.
+- Never repair raw traces in place after analysis. Routing traces, projected
+  hidden features, full hidden states, and activations are local replay inputs:
+  they are ignored by Git and may be discarded once the derived evidence is
+  safely committed.
 - Record environment, hardware, revisions, and request completion.
+- Keep the compact run definition, run manifest, model report, dataset
+  manifest, and exact prepared prompts under `artifacts/`; these are durable
+  Git-tracked provenance, not disposable trace data.
 
 ## 4. Analyze
 
@@ -50,6 +56,9 @@ decision path without adding a tracking system or notebook ceremony.
   truth.
 - Save vector PDF and high-resolution PNG plus a manifest that hashes the
   figure inputs.
+- Write figures beside their canonical analysis tables under
+  `artifacts/runs/<run-id>/analysis/`. Do not copy them into a second results
+  tree or manually edit a duplicate for publication.
 - Label selection-, token-, wave-, and step-level quantities precisely.
 - Avoid uncertainty marks until the corresponding resampling unit is defined.
 
@@ -73,6 +82,8 @@ result. Post-hoc findings must remain explicitly exploratory.
 - Update `EXPERIMENT_LOG.md` with the formal result and human interpretation.
 - Update `STATUS.md` with supported, mixed, rejected, or inconclusive.
 - Link the metric report, figures, and review note.
+- Run the artifact-retention closeout below and commit its staged outputs with
+  the code, configs, and documentation that produced or interpreted them.
 - Advance only after the human has reviewed the result.
 - Once a held-out set drives post-hoc policy discovery, treat it as development
   data. Use fresh requests only if the physical gate justifies confirmation.
@@ -80,3 +91,47 @@ result. Post-hoc findings must remain explicitly exploratory.
 For a fast prototype, a Markdown checklist in the generated figure directory
 is sufficient evidence of review. Do not introduce an experiment-tracking
 service unless artifact discovery becomes a real bottleneck.
+
+## 8. Artifact-retention closeout
+
+The native `artifacts/` paths are the single source of truth for publication
+evidence. Ordinary Git tracks all compact and derived products, including:
+
+- CSV analysis tables and measured samples;
+- JSON definitions, manifests, summaries, gates, and integrity results;
+- Markdown reports and figure-review notes;
+- PDF and PNG figures;
+- compact fitted analysis outputs such as linear-predictor NPZ files;
+- prepared dataset manifests and exact prompts.
+
+Only large replay inputs are ignored:
+
+- `artifacts/runs/*/trace/`;
+- `artifacts/runs/*/features/`;
+- `artifacts/runs/*/hidden_states/`;
+- `artifacts/runs/*/activations/`.
+
+Treat these ignored files as disposable until external archival storage is
+deliberately introduced. Do not let a result document depend on an ignored raw
+file when a compact supporting table can be generated instead.
+
+After every major analysis and visualization, run this fixed closeout:
+
+```bash
+uv run ep-predict audit-artifacts
+git add artifacts
+uv run ep-predict audit-artifacts --require-tracked
+```
+
+The first command checks that figure inputs and outputs exist and still match
+their recorded SHA-256 hashes, that result/status documents do not contain
+stale artifact paths, and that only approved raw-data directories are ignored.
+`git add artifacts` stages every durable product automatically while respecting
+the raw-data exclusions. The final command fails if any durable product was
+missed.
+
+Do not hand-select extensions, copy a “best results” subset, or create a second
+publication directory. If a generated artifact is no longer valuable, remove
+it and its references in the same change. The audit warns about any individual
+durable file above 50 MiB so repo growth receives an explicit human decision
+rather than silently expanding.

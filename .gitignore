@@ -9,7 +9,13 @@ wheels/
 # Virtual environments
 .venv
 
-# Generated research artifacts and model caches
-artifacts/*
-!artifacts/.gitkeep
+# Large replay-only research data. Derived evidence under artifacts/ is
+# intentionally tracked in Git; only inference traces and captured
+# hidden/feature tensors are disposable.
+artifacts/runs/*/trace/
+artifacts/runs/*/features/
+artifacts/runs/*/hidden_states/
+artifacts/runs/*/activations/
+
+# Model caches remain local.
 .cache/

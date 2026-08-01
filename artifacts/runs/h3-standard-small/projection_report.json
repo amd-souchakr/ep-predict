@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "input_dimension": 2048,
+  "matrix_sha256": "bbf5b1a3a45256c86d0b59acc4ba6dddf854a7eb3db297b9a02659adbf0a9bb1",
+  "output_dimension": 128,
+  "point": "router_input_positional_argument_0",
+  "projection_family": "rademacher",
+  "projection_scale": 0.08838834764831843,
+  "projection_seed": 31,
+  "storage_dtype": "float16"
+}

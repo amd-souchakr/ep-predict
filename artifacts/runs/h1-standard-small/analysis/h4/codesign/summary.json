@@ -1,0 +1,18 @@
+{
+  "analysis": "h4_codesign_map",
+  "category_counts": {
+    "candidate_codesign_region": 7,
+    "physics_and_prediction_limited": 18,
+    "physics_limited": 4,
+    "prediction_limited": 13
+  },
+  "interpretation": "The upper-right region is a candidate for policy replay, not evidence of profitability. Profit requires learned/oracle recovery and measured copy/compute overlap.",
+  "points": 42,
+  "status": "post_hoc_descriptive",
+  "thresholds": {
+    "cold_service_headroom_ratio": 1.0,
+    "complete_route_coverage": 0.5,
+    "deadline_feasible_cold_fraction": 0.5,
+    "oracle_stall_reduction": 0.5
+  }
+}

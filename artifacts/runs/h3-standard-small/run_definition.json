@@ -1,0 +1,81 @@
+{
+  "config_fingerprint": "4d8b71873682fd7a36d43fa575ef79bbda1c8ab9755f9af30c56f555331c4d37",
+  "experiment_config": {
+    "analysis": {
+      "analysis_id": "h3-standard-small",
+      "capacities": [
+        8,
+        16,
+        32
+      ],
+      "lookaheads": [
+        1,
+        2,
+        3
+      ],
+      "reference_split": "artifacts/runs/h1-standard-small/analysis/h2/split.json",
+      "split_seed": 17,
+      "test_requests_per_domain": 8
+    },
+    "decision_gate": {
+      "baseline": "linear",
+      "capacity_experts": 16,
+      "comparator": "transition",
+      "lookahead": 1,
+      "min_mean_complete_token_coverage_gain": 0.02,
+      "min_mean_selection_coverage_gain": 0.03,
+      "min_positive_complete_scope_fraction": 0.75,
+      "min_positive_domains": 3,
+      "min_positive_selection_scope_fraction": 0.75,
+      "phase": "decode"
+    },
+    "do_sample": false,
+    "hidden_features": {
+      "dimension": 128,
+      "enabled": true,
+      "point": "router_input",
+      "projection_seed": 31,
+      "storage_dtype": "float16"
+    },
+    "linear_predictor": {
+      "batch_size": 1024,
+      "device": "cuda:0",
+      "epochs": 30,
+      "kind": "multilabel_logistic_regression",
+      "learning_rate": 0.01,
+      "per_phase": true,
+      "positive_class_weight": 7.0,
+      "standardize_features": true,
+      "training_seed": 23,
+      "weight_decay": 0.0001
+    },
+    "max_new_tokens": 64,
+    "max_prompt_tokens": 384,
+    "output_dir": "artifacts/runs/h3-standard-small",
+    "prompt_file": "artifacts/datasets/h1-standard-small/prompts.jsonl",
+    "run_id": "h3-standard-small",
+    "seed": 7,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "trace": {
+      "fail_on_missing_router": true,
+      "fail_on_router_mismatch": true
+    }
+  },
+  "model_config": {
+    "attention_implementation": "sdpa",
+    "device": "cuda:0",
+    "dtype": "bfloat16",
+    "model_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "router_name_contains": [
+      ".mlp.gate"
+    ],
+    "tokenizer_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "tokenizer_revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "trust_remote_code": false,
+    "use_cache": true
+  },
+  "prompt_file_sha256": "4e08d5b4753ed1d06e6922359ea63249d4e4d215c9bc5081204533adf369fcf1",
+  "run_id": "h3-standard-small"
+}

@@ -1,0 +1,14 @@
+{
+  "analysis": "h4_codesign_map",
+  "human_review_complete": true,
+  "inputs": {
+    "artifacts/runs/h1-standard-small/analysis/h4/codesign/codesign_points.csv": "1239ae1eea1834969c24f8611a2df5676e6e4f98816a94c6fb48345e79397c3e",
+    "artifacts/runs/h1-standard-small/analysis/h4/codesign/summary.json": "b830d504cd1bb0b8e9d373396cfe034d60466c3bb2d7c0c0710fcf34f4d16ec8"
+  },
+  "outputs": {
+    "artifacts/runs/h1-standard-small/analysis/h4/codesign/figures/FIGURES.md": "1494a1d2d424df6ad80261d883d7b883f0349612037ca5d3281cb0698bf7a27e",
+    "artifacts/runs/h1-standard-small/analysis/h4/codesign/figures/fig1_codesign_regime_map.pdf": "2d2408cfe17e9e8b7b3f8081a4857ab4b65910e88889d7a3bee537eef3836220",
+    "artifacts/runs/h1-standard-small/analysis/h4/codesign/figures/fig1_codesign_regime_map.png": "a8a33509635d3b0a38c665b9c11660a43e8d6c56d2b91d9f94c14afb6fef9b0a"
+  },
+  "status": "post_hoc_descriptive"
+}

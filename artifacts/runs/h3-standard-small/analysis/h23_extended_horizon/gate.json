@@ -1,0 +1,42 @@
+{
+  "baseline": "linear",
+  "capacity_experts": 16,
+  "comparator": "transition",
+  "decision": "PILOT_DOES_NOT_SUPPORT",
+  "domain_mean_gains": {
+    "code": {
+      "complete_gain": 0.09722222222222224,
+      "selection_gain": 0.030175264550264536
+    },
+    "conversation": {
+      "complete_gain": -0.03293650793650794,
+      "selection_gain": -0.03277116402116401
+    },
+    "general": {
+      "complete_gain": 0.00013227513227513367,
+      "selection_gain": -0.010367063492063495
+    },
+    "math": {
+      "complete_gain": 0.12208994708994708,
+      "selection_gain": 0.029580026455026463
+    }
+  },
+  "eligible_scopes": 60,
+  "hypothesis": "H3",
+  "interpretation": "The fixed linear sidecar does not materially beat the transition table on the primary gate; use the simpler transition policy in H4 and stop learned-predictor work for this checkpoint.",
+  "lookahead": 1,
+  "mean_complete_token_coverage_gain": 0.046626984126984135,
+  "mean_selection_coverage_gain": 0.004154265873015872,
+  "pass": false,
+  "phase": "decode",
+  "positive_complete_scope_fraction": 0.75,
+  "positive_domains_both_metrics": 2,
+  "positive_selection_scope_fraction": 0.5666666666666667,
+  "thresholds": {
+    "min_mean_complete_token_coverage_gain": 0.02,
+    "min_mean_selection_coverage_gain": 0.03,
+    "min_positive_complete_scope_fraction": 0.75,
+    "min_positive_domains": 3,
+    "min_positive_selection_scope_fraction": 0.75
+  }
+}

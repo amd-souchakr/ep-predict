@@ -1,0 +1,4 @@
+# Python's csv module emits CRLF records by default. Preserve the exact bytes
+# hashed by figure manifests while treating the CR as part of the line ending,
+# not trailing whitespace.
+artifacts/**/*.csv whitespace=trailing-space,cr-at-eol

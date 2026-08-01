@@ -1,0 +1,19 @@
+{
+  "features": {
+    "feature_dimension": 128,
+    "feature_dtype": "float16",
+    "feature_route_alignment": "pass",
+    "feature_rows": 377488,
+    "feature_shards": 128,
+    "non_finite_feature_rows": 0
+  },
+  "h2_transition_reproduction": {
+    "compared_transition_scopes": 1008,
+    "max_absolute_coverage_difference": 0.0,
+    "reference_metrics": "artifacts/runs/h1-standard-small/analysis/h2/metrics.csv",
+    "status": "pass"
+  },
+  "router_layers": 16,
+  "routing_top_k": 8,
+  "split_reproduction": "pass"
+}

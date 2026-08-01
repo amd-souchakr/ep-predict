@@ -1,0 +1,17 @@
+{
+  "analysis": "h4",
+  "decision": "PILOT_DOES_NOT_SUPPORT",
+  "human_review_complete": true,
+  "inputs": {
+    "artifacts/runs/h1-standard-small/analysis/h4/gate.json": "db3b0315c0bef29034518d4e52a94f18e402f8e2f3d4fd2d204e674d5a56f4a0",
+    "artifacts/runs/h1-standard-small/analysis/h4/measurement.json": "d1e6c5190fbd64c291a1192e75183b7bbcf3db239f3fc366b21cd014314b45a1",
+    "artifacts/runs/h1-standard-small/analysis/h4/oracle_metrics.csv": "6cccb4f82adacdc3d94d7f60bda127317a715c58690b9e604bbdd2565d42fc8c"
+  },
+  "outputs": {
+    "artifacts/runs/h1-standard-small/analysis/h4/figures/FIGURES.md": "2164c2156b1122825ddc52eb2029cdfbc39056f94b643b5db693d4328c4ceb99",
+    "artifacts/runs/h1-standard-small/analysis/h4/figures/fig1_h4_oracle_feasibility_heatmap.pdf": "bf89c063b330607adc42a668cd08dc46b8cbf7acb2169482996f84605c62fde7",
+    "artifacts/runs/h1-standard-small/analysis/h4/figures/fig1_h4_oracle_feasibility_heatmap.png": "fba148f9e22d580266ac8ddd1219cd3c3052b9d67aab4e92fe19c3f09a136187",
+    "artifacts/runs/h1-standard-small/analysis/h4/figures/fig2_h4_stall_reduction_curve.pdf": "ab73ec12a4abb903edb31031ed855eb74dbab092cdfeb3fce7dd03eca23bf0ab",
+    "artifacts/runs/h1-standard-small/analysis/h4/figures/fig2_h4_stall_reduction_curve.png": "34759e85ae6d5a268939bba7c9c024b5873e31f6bd61f87e43abbf08a9c2d601"
+  }
+}

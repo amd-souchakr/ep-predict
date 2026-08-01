@@ -1,0 +1,102 @@
+{
+  "decision": "PILOT_DOES_NOT_SUPPORT",
+  "evidence_grade": "trace_driven_pilot",
+  "expert_count": 64,
+  "feature_integrity": {
+    "feature_dimension": 128,
+    "feature_dtype": "float16",
+    "feature_route_alignment": "pass",
+    "feature_rows": 377488,
+    "feature_shards": 128,
+    "non_finite_feature_rows": 0
+  },
+  "gate": {
+    "candidate_policies": [
+      {
+        "eligible_layer_domain_scopes": 52,
+        "mean_complete_set_hit_gain": -0.006562881562881563,
+        "mean_expert_stall_reduction_gain": -0.039377289377289376,
+        "pass": false,
+        "policy": "transition",
+        "positive_domains_both": 0,
+        "positive_layers_both": 0,
+        "positive_scope_fraction_both": 0.09615384615384616
+      },
+      {
+        "eligible_layer_domain_scopes": 52,
+        "mean_complete_set_hit_gain": -0.006257631257631257,
+        "mean_expert_stall_reduction_gain": -0.02528331043956043,
+        "pass": false,
+        "policy": "linear",
+        "positive_domains_both": 0,
+        "positive_layers_both": 0,
+        "positive_scope_fraction_both": 0.057692307692307696
+      }
+    ],
+    "comparators": [
+      "domain",
+      "lru",
+      "static"
+    ],
+    "decision": "PILOT_DOES_NOT_SUPPORT",
+    "hypothesis": "H6",
+    "interpretation": "Neither frozen prediction-guided residency policy materially beats the strongest simple placement baseline at equal capacity and movement budget. Routing is predictable, but this pilot does not establish value for the tested residency mechanism.",
+    "primary_scope": {
+      "capacity_experts": 16,
+      "lookahead": 3,
+      "phase": "decode"
+    },
+    "thresholds": {
+      "min_mean_complete_set_hit_gain": 0.02,
+      "min_mean_expert_stall_reduction_gain": 0.02,
+      "min_positive_domains_both": 3,
+      "min_positive_layers_both": 4,
+      "min_positive_scope_fraction_both": 0.5
+    }
+  },
+  "hypothesis": "H6",
+  "new_inference_collection": false,
+  "new_predictor_training": false,
+  "outputs": {
+    "gate": "artifacts/runs/h1-standard-small/analysis/h6/gate.json",
+    "report": "artifacts/runs/h1-standard-small/analysis/h6/REPORT.md",
+    "scope_metrics": "artifacts/runs/h1-standard-small/analysis/h6/scope_metrics.csv",
+    "summary": "artifacts/runs/h1-standard-small/analysis/h6/summary.csv"
+  },
+  "replay": {
+    "capacities": [
+      8,
+      16,
+      32
+    ],
+    "expert_bytes": 12582912,
+    "lookaheads": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "movement_budget_experts_per_wave": 1,
+    "phases": [
+      "prefill",
+      "decode"
+    ],
+    "prediction_ema_alpha": 0.25
+  },
+  "router_layers": 16,
+  "scope_rows": 17280,
+  "summary_rows": 540,
+  "test_requests": 32,
+  "train_requests": 96
+}

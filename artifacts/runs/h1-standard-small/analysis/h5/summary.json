@@ -1,0 +1,52 @@
+{
+  "controlled_category_counts": {
+    "analytically_profitable": 22618,
+    "physics_and_prediction_limited": 775,
+    "physics_limited": 2356,
+    "prediction_limited": 19701,
+    "traffic_and_physics_and_prediction_limited": 3738,
+    "traffic_and_physics_limited": 5857,
+    "traffic_and_prediction_limited": 6500,
+    "traffic_limited": 6630
+  },
+  "decision": "PILOT_SUPPORTS_DESIGN_REGION_BUT_NOT_EXISTING_POLICY",
+  "evidence_grade": "trace_driven_analytical_pilot",
+  "gate": {
+    "controlled_cells": 68175,
+    "controlled_design_region_exists": true,
+    "decision": "PILOT_SUPPORTS_DESIGN_REGION_BUT_NOT_EXISTING_POLICY",
+    "evidence_grade": "trace_driven_analytical_pilot",
+    "existing_policy_passes": false,
+    "hypothesis": "H5",
+    "passing_existing_policies": [],
+    "profitable_controlled_cells": 22618,
+    "thresholds": {
+      "max_predicted_to_useful_bytes": 2.0,
+      "min_modeled_stall_reduction": 0.25,
+      "min_oracle_recovery": 0.5
+    }
+  },
+  "grid": {
+    "controlled_design_cells": 68175,
+    "inverse_cells": 675,
+    "physical_cells": 225,
+    "policy_rows": 8,
+    "window_rows": 4545
+  },
+  "hypothesis": "H5",
+  "outputs": {
+    "design_points": "artifacts/runs/h1-standard-small/analysis/h5/h5_design_points.csv",
+    "gate": "artifacts/runs/h1-standard-small/analysis/h5/gate.json",
+    "inverse_requirements": "artifacts/runs/h1-standard-small/analysis/h5/h5_inverse_requirements.csv",
+    "physical_context": "artifacts/runs/h1-standard-small/analysis/h5/h5_physical_context.csv",
+    "policy_placement": "artifacts/runs/h1-standard-small/analysis/h5/h5_policy_placement.csv",
+    "windows": "artifacts/runs/h1-standard-small/analysis/h5/h5_windows.csv"
+  },
+  "trace": {
+    "decode_tokens": 8011,
+    "decode_waves": 128176,
+    "effective_inter_moe_layer_ms": 0.6393109858036041,
+    "expert_bytes": 12582912,
+    "measured_expert_transfer_ms": 0.5240960121154785
+  }
+}

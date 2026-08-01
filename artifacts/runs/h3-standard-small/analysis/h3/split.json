@@ -1,0 +1,909 @@
+{
+  "analysis_id": "h3-standard-small",
+  "reference_split": "artifacts/runs/h1-standard-small/analysis/h2/split.json",
+  "requests": [
+    {
+      "domain": "code",
+      "request_id": 20,
+      "sample_id": "humaneval-HumanEval_87",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 30,
+      "sample_id": "humaneval-HumanEval_139",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 31,
+      "sample_id": "humaneval-HumanEval_64",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 33,
+      "sample_id": "humaneval-HumanEval_100",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 34,
+      "sample_id": "humaneval-HumanEval_121",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 42,
+      "sample_id": "humaneval-HumanEval_50",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 48,
+      "sample_id": "humaneval-HumanEval_158",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 57,
+      "sample_id": "humaneval-HumanEval_82",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 63,
+      "sample_id": "humaneval-HumanEval_106",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 67,
+      "sample_id": "humaneval-HumanEval_13",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 69,
+      "sample_id": "humaneval-HumanEval_49",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 72,
+      "sample_id": "humaneval-HumanEval_53",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 73,
+      "sample_id": "humaneval-HumanEval_72",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 77,
+      "sample_id": "humaneval-HumanEval_114",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 79,
+      "sample_id": "humaneval-HumanEval_31",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 80,
+      "sample_id": "humaneval-HumanEval_152",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 88,
+      "sample_id": "humaneval-HumanEval_143",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 90,
+      "sample_id": "humaneval-HumanEval_131",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 91,
+      "sample_id": "humaneval-HumanEval_88",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 100,
+      "sample_id": "humaneval-HumanEval_105",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 110,
+      "sample_id": "humaneval-HumanEval_19",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 114,
+      "sample_id": "humaneval-HumanEval_120",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 116,
+      "sample_id": "humaneval-HumanEval_26",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 126,
+      "sample_id": "humaneval-HumanEval_98",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 0,
+      "sample_id": "humaneval-HumanEval_149",
+      "split": "test"
+    },
+    {
+      "domain": "code",
+      "request_id": 13,
+      "sample_id": "humaneval-HumanEval_90",
+      "split": "test"
+    },
+    {
+      "domain": "code",
+      "request_id": 28,
+      "sample_id": "humaneval-HumanEval_85",
+      "split": "test"
+    },
+    {
+      "domain": "code",
+      "request_id": 43,
+      "sample_id": "humaneval-HumanEval_156",
+      "split": "test"
+    },
+    {
+      "domain": "code",
+      "request_id": 85,
+      "sample_id": "humaneval-HumanEval_27",
+      "split": "test"
+    },
+    {
+      "domain": "code",
+      "request_id": 95,
+      "sample_id": "humaneval-HumanEval_110",
+      "split": "test"
+    },
+    {
+      "domain": "code",
+      "request_id": 107,
+      "sample_id": "humaneval-HumanEval_69",
+      "split": "test"
+    },
+    {
+      "domain": "code",
+      "request_id": 125,
+      "sample_id": "humaneval-HumanEval_11",
+      "split": "test"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 3,
+      "sample_id": "mt_bench-97281954",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 12,
+      "sample_id": "mt_bench-97392077",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 14,
+      "sample_id": "mt_bench-47292991",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 15,
+      "sample_id": "mt_bench-3075696",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 18,
+      "sample_id": "mt_bench-57239570",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 23,
+      "sample_id": "mt_bench-92837357",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 26,
+      "sample_id": "mt_bench-6404588",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 27,
+      "sample_id": "mt_bench-67710207",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 35,
+      "sample_id": "mt_bench-38622539",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 37,
+      "sample_id": "mt_bench-36918905",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 44,
+      "sample_id": "mt_bench-56561594",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 45,
+      "sample_id": "mt_bench-16377588",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 46,
+      "sample_id": "mt_bench-39413040",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 50,
+      "sample_id": "mt_bench-28957987",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 53,
+      "sample_id": "mt_bench-26014682",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 54,
+      "sample_id": "mt_bench-29742357",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 65,
+      "sample_id": "mt_bench-41972921",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 66,
+      "sample_id": "mt_bench-14343420",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 68,
+      "sample_id": "mt_bench-37403084",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 93,
+      "sample_id": "mt_bench-29558191",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 94,
+      "sample_id": "mt_bench-22339468",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 97,
+      "sample_id": "mt_bench-72595869",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 108,
+      "sample_id": "mt_bench-24063625",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 122,
+      "sample_id": "mt_bench-24433994",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 21,
+      "sample_id": "mt_bench-75477827",
+      "split": "test"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 39,
+      "sample_id": "mt_bench-68280443",
+      "split": "test"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 47,
+      "sample_id": "mt_bench-36620167",
+      "split": "test"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 58,
+      "sample_id": "mt_bench-89774116",
+      "split": "test"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 70,
+      "sample_id": "mt_bench-11060974",
+      "split": "test"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 86,
+      "sample_id": "mt_bench-97487108",
+      "split": "test"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 104,
+      "sample_id": "mt_bench-34377376",
+      "split": "test"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 106,
+      "sample_id": "mt_bench-62739310",
+      "split": "test"
+    },
+    {
+      "domain": "general",
+      "request_id": 5,
+      "sample_id": "wikitext2-00011",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 7,
+      "sample_id": "wikitext2-00027",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 19,
+      "sample_id": "wikitext2-00025",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 24,
+      "sample_id": "wikitext2-00014",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 25,
+      "sample_id": "wikitext2-00000",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 29,
+      "sample_id": "wikitext2-00018",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 36,
+      "sample_id": "wikitext2-00015",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 38,
+      "sample_id": "wikitext2-00012",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 41,
+      "sample_id": "wikitext2-00026",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 51,
+      "sample_id": "wikitext2-00029",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 62,
+      "sample_id": "wikitext2-00028",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 81,
+      "sample_id": "wikitext2-00004",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 84,
+      "sample_id": "wikitext2-00022",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 92,
+      "sample_id": "wikitext2-00023",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 101,
+      "sample_id": "wikitext2-00001",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 103,
+      "sample_id": "wikitext2-00013",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 109,
+      "sample_id": "wikitext2-00003",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 113,
+      "sample_id": "wikitext2-00030",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 115,
+      "sample_id": "wikitext2-00010",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 119,
+      "sample_id": "wikitext2-00031",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 120,
+      "sample_id": "wikitext2-00020",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 121,
+      "sample_id": "wikitext2-00019",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 124,
+      "sample_id": "wikitext2-00021",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 127,
+      "sample_id": "wikitext2-00007",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 1,
+      "sample_id": "wikitext2-00002",
+      "split": "test"
+    },
+    {
+      "domain": "general",
+      "request_id": 2,
+      "sample_id": "wikitext2-00016",
+      "split": "test"
+    },
+    {
+      "domain": "general",
+      "request_id": 8,
+      "sample_id": "wikitext2-00008",
+      "split": "test"
+    },
+    {
+      "domain": "general",
+      "request_id": 40,
+      "sample_id": "wikitext2-00005",
+      "split": "test"
+    },
+    {
+      "domain": "general",
+      "request_id": 60,
+      "sample_id": "wikitext2-00009",
+      "split": "test"
+    },
+    {
+      "domain": "general",
+      "request_id": 74,
+      "sample_id": "wikitext2-00017",
+      "split": "test"
+    },
+    {
+      "domain": "general",
+      "request_id": 75,
+      "sample_id": "wikitext2-00006",
+      "split": "test"
+    },
+    {
+      "domain": "general",
+      "request_id": 83,
+      "sample_id": "wikitext2-00024",
+      "split": "test"
+    },
+    {
+      "domain": "math",
+      "request_id": 4,
+      "sample_id": "gsm8k-00024",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 6,
+      "sample_id": "gsm8k-00018",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 9,
+      "sample_id": "gsm8k-00022",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 10,
+      "sample_id": "gsm8k-00014",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 11,
+      "sample_id": "gsm8k-00013",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 16,
+      "sample_id": "gsm8k-00000",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 17,
+      "sample_id": "gsm8k-00017",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 22,
+      "sample_id": "gsm8k-00002",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 32,
+      "sample_id": "gsm8k-00016",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 49,
+      "sample_id": "gsm8k-00003",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 52,
+      "sample_id": "gsm8k-00029",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 55,
+      "sample_id": "gsm8k-00007",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 56,
+      "sample_id": "gsm8k-00008",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 59,
+      "sample_id": "gsm8k-00030",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 61,
+      "sample_id": "gsm8k-00026",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 64,
+      "sample_id": "gsm8k-00009",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 78,
+      "sample_id": "gsm8k-00025",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 87,
+      "sample_id": "gsm8k-00011",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 89,
+      "sample_id": "gsm8k-00019",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 96,
+      "sample_id": "gsm8k-00012",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 98,
+      "sample_id": "gsm8k-00031",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 99,
+      "sample_id": "gsm8k-00023",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 117,
+      "sample_id": "gsm8k-00001",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 118,
+      "sample_id": "gsm8k-00015",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 71,
+      "sample_id": "gsm8k-00006",
+      "split": "test"
+    },
+    {
+      "domain": "math",
+      "request_id": 76,
+      "sample_id": "gsm8k-00005",
+      "split": "test"
+    },
+    {
+      "domain": "math",
+      "request_id": 82,
+      "sample_id": "gsm8k-00027",
+      "split": "test"
+    },
+    {
+      "domain": "math",
+      "request_id": 102,
+      "sample_id": "gsm8k-00004",
+      "split": "test"
+    },
+    {
+      "domain": "math",
+      "request_id": 105,
+      "sample_id": "gsm8k-00028",
+      "split": "test"
+    },
+    {
+      "domain": "math",
+      "request_id": 111,
+      "sample_id": "gsm8k-00020",
+      "split": "test"
+    },
+    {
+      "domain": "math",
+      "request_id": 112,
+      "sample_id": "gsm8k-00010",
+      "split": "test"
+    },
+    {
+      "domain": "math",
+      "request_id": 123,
+      "sample_id": "gsm8k-00021",
+      "split": "test"
+    }
+  ],
+  "split_reproduction": "pass",
+  "split_seed": 17,
+  "test_request_ids": [
+    0,
+    1,
+    2,
+    8,
+    13,
+    21,
+    28,
+    39,
+    40,
+    43,
+    47,
+    58,
+    60,
+    70,
+    71,
+    74,
+    75,
+    76,
+    82,
+    83,
+    85,
+    86,
+    95,
+    102,
+    104,
+    105,
+    106,
+    107,
+    111,
+    112,
+    123,
+    125
+  ],
+  "test_requests_per_domain": 8,
+  "train_request_ids": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    11,
+    12,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    41,
+    42,
+    44,
+    45,
+    46,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    59,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    72,
+    73,
+    77,
+    78,
+    79,
+    80,
+    81,
+    84,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    103,
+    108,
+    109,
+    110,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    124,
+    126,
+    127
+  ]
+}

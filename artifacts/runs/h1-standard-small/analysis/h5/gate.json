@@ -1,0 +1,15 @@
+{
+  "controlled_cells": 68175,
+  "controlled_design_region_exists": true,
+  "decision": "PILOT_SUPPORTS_DESIGN_REGION_BUT_NOT_EXISTING_POLICY",
+  "evidence_grade": "trace_driven_analytical_pilot",
+  "existing_policy_passes": false,
+  "hypothesis": "H5",
+  "passing_existing_policies": [],
+  "profitable_controlled_cells": 22618,
+  "thresholds": {
+    "max_predicted_to_useful_bytes": 2.0,
+    "min_modeled_stall_reduction": 0.25,
+    "min_oracle_recovery": 0.5
+  }
+}

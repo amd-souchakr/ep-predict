@@ -1,0 +1,19 @@
+{
+  "analysis": "h5_first_order_codesign",
+  "evidence_grade": "trace_driven_analytical_pilot",
+  "human_review_complete": false,
+  "inputs": {
+    "artifacts/runs/h1-standard-small/analysis/h5/gate.json": "8f931d1fec02b0a58098f8faa7b6cfee78d8e51db854bd6b2a38c328e422bb49",
+    "artifacts/runs/h1-standard-small/analysis/h5/h5_design_points.csv": "2dd93d260657f56bc228d70304106d98f61623090ef6870165396bc8b2b14ace",
+    "artifacts/runs/h1-standard-small/analysis/h5/h5_inverse_requirements.csv": "55714126c67972b372de5144f7edfd028496cf1d7c67174756593c193330aa80",
+    "artifacts/runs/h1-standard-small/analysis/h5/h5_policy_placement.csv": "a6a9e5192329d623825a7a57b81633f32331d5a454bd55f89c1cbf29e8ddf07c",
+    "artifacts/runs/h1-standard-small/analysis/h5/summary.json": "f552ff4586d7969b2bce5c61409cb056c1d0786c576f9c5748a31b9f68b47871"
+  },
+  "outputs": {
+    "artifacts/runs/h1-standard-small/analysis/h5/figures/FIGURES.md": "59b3e46ec468b11691a4143562a7c3c6c5c415c004551dcff262550805c6b1c2",
+    "artifacts/runs/h1-standard-small/analysis/h5/figures/fig1_h5_profitability_phase_diagram.pdf": "1c4b88faa5d04892004ea96faad27760911558793ef155fa1dbfb79b29aa6377",
+    "artifacts/runs/h1-standard-small/analysis/h5/figures/fig1_h5_profitability_phase_diagram.png": "56e6581e628325914b6568625a91d05fd93c8f146eb526e62271d165beba4359",
+    "artifacts/runs/h1-standard-small/analysis/h5/figures/fig2_h5_inverse_prediction_requirement.pdf": "f49aa358b78d65cbfcc55bfd333158571af1f884a0c3b158e7d4fed647affe39",
+    "artifacts/runs/h1-standard-small/analysis/h5/figures/fig2_h5_inverse_prediction_requirement.png": "aef396a737cecca81d6e5fc88de8ee225c799a3b29458103eb26d1a9d216ffac"
+  }
+}

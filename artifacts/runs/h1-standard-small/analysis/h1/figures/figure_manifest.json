@@ -1,0 +1,65 @@
+{
+  "figure_grade": "pilot",
+  "inputs": {
+    "domain_comparison": {
+      "path": "artifacts/runs/h1-standard-small/analysis/h1/domain_comparison.csv",
+      "sha256": "a466b87daf7bc984cfa931540453d9bf543f6ba9449831ace10feca2848b006d"
+    },
+    "model_report": {
+      "path": "artifacts/runs/h1-standard-small/model_report.json",
+      "sha256": "f794b806ca366fd70960afa92ac2c1a541416b788132814ec994345b68131c57"
+    },
+    "popularity": {
+      "path": "artifacts/runs/h1-standard-small/analysis/h1/popularity.csv",
+      "sha256": "f93e6ef740ace7626d82079df1e7e60eae3d50545ea623b709f1a9da54897f01"
+    },
+    "rank_frequency": {
+      "path": "artifacts/runs/h1-standard-small/analysis/h1/rank_frequency.csv",
+      "sha256": "d3fdad8b0fcb9fedfc5558c9e87a79ab5c6bb9511eaff1216c69fc39e76dd6b7"
+    },
+    "window_stability": {
+      "path": "artifacts/runs/h1-standard-small/analysis/h1/window_stability.csv",
+      "sha256": "61a180f4710802175e34f53d9f482f534dc608f5064b80162cd484b7c641c88e"
+    },
+    "within_domain_stability": {
+      "path": "artifacts/runs/h1-standard-small/analysis/h1/within_domain_stability.csv",
+      "sha256": "654a6c471595c35b19276cce93dcb8d41b8c6de9680255a888391ec548c354da"
+    }
+  },
+  "outputs": [
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h1/figures/fig1_capacity_coverage.png",
+      "sha256": "f0ab6b3d33a007c1154be0ed9b041853c07552237a1bcf90802eacc07a8401a3"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h1/figures/fig1_capacity_coverage.pdf",
+      "sha256": "f60fb12ffa6442cea50df78e830fa582b8543e7d83ab56a19a6892bd7af286a8"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h1/figures/fig2_skew_stability.png",
+      "sha256": "917f29f6b929c9f153f16c2351773b6534a484547de8d38388dfaabc57d3d79a"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h1/figures/fig2_skew_stability.pdf",
+      "sha256": "68bbec21d70eb443043a9cadb8a525f3aac86e4a5fae3d478a0ec77ab7f8996e"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h1/figures/fig3_domain_shift.png",
+      "sha256": "e0e3818af75023608ac58ffae5738783feff689cc0589164678fe463b55da019"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h1/figures/fig3_domain_shift.pdf",
+      "sha256": "2e92776502f7c873342f880624311c05080a3d040b5bf325643ef8ddf19948c1"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h1/figures/FIGURES.md",
+      "sha256": "7a8b90b6d204fd98ca64c606fcb5e8d2d80be1c5a13a9aaeb08965c922f72c2e"
+    }
+  ],
+  "run_id": "h1-standard-small",
+  "semantics": {
+    "capacity_curve": "expert-selection coverage",
+    "domain_shift": "descriptive pilot comparison, no confidence interval",
+    "layer_aggregation": "equal mean of layer-local ranked distributions"
+  }
+}

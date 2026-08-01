@@ -240,6 +240,27 @@ regimes. Complex hypothesis trees, broad ablations, uncertainty on every cell,
 and confirmation workloads wait until a physical feasibility result justifies
 them.
 
+## Artifact retention
+
+The existing `artifacts/` paths are canonical and publication-ready; there is
+no duplicate results directory. Git tracks prepared workloads, run metadata,
+CSV/JSON/MD analysis products, compact fitted predictors, and both PDF and PNG
+figures. Only large request-level routing traces and captured
+feature/hidden-state tensors remain local and disposable.
+
+Close every major experiment with:
+
+```bash
+uv run ep-predict audit-artifacts
+git add artifacts
+uv run ep-predict audit-artifacts --require-tracked
+```
+
+This validates figure hashes and result-document references, then ensures every
+durable artifact is staged while ignored raw data remains excluded. The full
+policy is in [artifacts/README.md](artifacts/README.md) and
+[docs/EXPERIMENT_SOP.md](docs/EXPERIMENT_SOP.md).
+
 ## Invariants
 
 - Inference only: no model training or router modification.
@@ -247,7 +268,8 @@ them.
 - Every hook run validates selected IDs against top-k router logits.
 - Prefill and decode are never combined in headline metrics.
 - Expert IDs are always keyed by layer.
-- Raw traces and reports are artifacts, not source files.
+- Derived evidence under `artifacts/` is tracked in Git at its canonical path;
+  only raw traces and captured hidden/feature tensors are disposable.
 - No latency claim is made from a hooked run.
 
 The long-form research agenda remains in [RESEARCH.md](RESEARCH.md).

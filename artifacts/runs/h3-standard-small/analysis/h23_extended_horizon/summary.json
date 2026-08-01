@@ -1,0 +1,81 @@
+{
+  "analysis_id": "h23-extended-horizon",
+  "evidence_grade": "pilot",
+  "feature_rows": 377488,
+  "gate": {
+    "baseline": "linear",
+    "capacity_experts": 16,
+    "comparator": "transition",
+    "decision": "PILOT_DOES_NOT_SUPPORT",
+    "domain_mean_gains": {
+      "code": {
+        "complete_gain": 0.09722222222222224,
+        "selection_gain": 0.030175264550264536
+      },
+      "conversation": {
+        "complete_gain": -0.03293650793650794,
+        "selection_gain": -0.03277116402116401
+      },
+      "general": {
+        "complete_gain": 0.00013227513227513367,
+        "selection_gain": -0.010367063492063495
+      },
+      "math": {
+        "complete_gain": 0.12208994708994708,
+        "selection_gain": 0.029580026455026463
+      }
+    },
+    "eligible_scopes": 60,
+    "hypothesis": "H3",
+    "interpretation": "The fixed linear sidecar does not materially beat the transition table on the primary gate; use the simpler transition policy in H4 and stop learned-predictor work for this checkpoint.",
+    "lookahead": 1,
+    "mean_complete_token_coverage_gain": 0.046626984126984135,
+    "mean_selection_coverage_gain": 0.004154265873015872,
+    "pass": false,
+    "phase": "decode",
+    "positive_complete_scope_fraction": 0.75,
+    "positive_domains_both_metrics": 2,
+    "positive_selection_scope_fraction": 0.5666666666666667,
+    "thresholds": {
+      "min_mean_complete_token_coverage_gain": 0.02,
+      "min_mean_selection_coverage_gain": 0.03,
+      "min_positive_complete_scope_fraction": 0.75,
+      "min_positive_domains": 3,
+      "min_positive_selection_scope_fraction": 0.75
+    }
+  },
+  "integrity": {
+    "features": {
+      "feature_dimension": 128,
+      "feature_dtype": "float16",
+      "feature_route_alignment": "pass",
+      "feature_rows": 377488,
+      "feature_shards": 128,
+      "non_finite_feature_rows": 0
+    },
+    "h2_transition_reproduction": {
+      "compared_transition_scopes": 1008,
+      "max_absolute_coverage_difference": 0.0,
+      "reference_metrics": "artifacts/runs/h1-standard-small/analysis/h2/metrics.csv",
+      "status": "pass"
+    },
+    "router_layers": 16,
+    "routing_top_k": 8,
+    "split_reproduction": "pass"
+  },
+  "linear_heads": 240,
+  "outputs": {
+    "gate": "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon/gate.json",
+    "integrity": "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon/integrity.json",
+    "metrics": "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon/metrics.csv",
+    "predictors": "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon/linear_predictors.npz",
+    "report": "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon/REPORT.md",
+    "split": "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon/split.json",
+    "summary": "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon/summary.csv",
+    "training": "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon/training.csv"
+  },
+  "run_id": "h3-standard-small",
+  "test_requests": 32,
+  "token_routes": 23593,
+  "train_requests": 96
+}

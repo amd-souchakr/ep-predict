@@ -1,0 +1,49 @@
+{
+  "figure_grade": "pilot",
+  "hypothesis": "H2",
+  "inputs": {
+    "gate": {
+      "path": "artifacts/runs/h1-standard-small/analysis/h2/gate.json",
+      "sha256": "29b67705583b7dbe92d95c891352f8d5981b1f1f3f78fcf5e793ff41247015cb"
+    },
+    "split": {
+      "path": "artifacts/runs/h1-standard-small/analysis/h2/split.json",
+      "sha256": "975db1ef6a4dc73d52aac52202e03fe955afcfd886bd8b13e7763d91d2e65ad1"
+    },
+    "summary": {
+      "path": "artifacts/runs/h1-standard-small/analysis/h2/summary.csv",
+      "sha256": "d5de9301c3e33ff6f1a47808411137b76f13c1b38d48d5a2f4830e2f8454fead"
+    }
+  },
+  "outputs": [
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h2/figures/fig1_predictability_by_lookahead.png",
+      "sha256": "879e85c415e03379f68c4889d2d388a89bd5c7ed65a5a0ecd55f061bab423011"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h2/figures/fig1_predictability_by_lookahead.pdf",
+      "sha256": "c176dbb93b3351a60ac25232aed9febbf66562c1fcc20b4c57708f2046c2a303"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h2/figures/fig2_complete_route_by_lookahead.png",
+      "sha256": "0dcd30f92be499e76a6714015dcadfccddc0b8eb62293ebfaed937f81d07d5b2"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h2/figures/fig2_complete_route_by_lookahead.pdf",
+      "sha256": "e8df3205ac4963ed9d1400ba696748ff11a23daf5676f233aa65ba06d13cde11"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h2/figures/FIGURES.md",
+      "sha256": "de8f17a5253a82da94986263dd61a6672e4e91db04297a231865db6138159975"
+    }
+  ],
+  "run_id": "h1-standard-small",
+  "semantics": {
+    "aggregate": "equal mean across layer-domain scopes",
+    "complete_token_coverage": "all actual top-8 target experts covered",
+    "metric_unit": "held-out token-layer pair",
+    "primary_question": "prediction quality versus layer lookahead",
+    "selection_coverage": "fraction of actual top-8 target experts covered",
+    "split_unit": "request"
+  }
+}

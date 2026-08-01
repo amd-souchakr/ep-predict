@@ -1,0 +1,44 @@
+{
+  "candidate_policies": [
+    {
+      "eligible_layer_domain_scopes": 52,
+      "mean_complete_set_hit_gain": -0.006562881562881563,
+      "mean_expert_stall_reduction_gain": -0.039377289377289376,
+      "pass": false,
+      "policy": "transition",
+      "positive_domains_both": 0,
+      "positive_layers_both": 0,
+      "positive_scope_fraction_both": 0.09615384615384616
+    },
+    {
+      "eligible_layer_domain_scopes": 52,
+      "mean_complete_set_hit_gain": -0.006257631257631257,
+      "mean_expert_stall_reduction_gain": -0.02528331043956043,
+      "pass": false,
+      "policy": "linear",
+      "positive_domains_both": 0,
+      "positive_layers_both": 0,
+      "positive_scope_fraction_both": 0.057692307692307696
+    }
+  ],
+  "comparators": [
+    "domain",
+    "lru",
+    "static"
+  ],
+  "decision": "PILOT_DOES_NOT_SUPPORT",
+  "hypothesis": "H6",
+  "interpretation": "Neither frozen prediction-guided residency policy materially beats the strongest simple placement baseline at equal capacity and movement budget. Routing is predictable, but this pilot does not establish value for the tested residency mechanism.",
+  "primary_scope": {
+    "capacity_experts": 16,
+    "lookahead": 3,
+    "phase": "decode"
+  },
+  "thresholds": {
+    "min_mean_complete_set_hit_gain": 0.02,
+    "min_mean_expert_stall_reduction_gain": 0.02,
+    "min_positive_domains_both": 3,
+    "min_positive_layers_both": 4,
+    "min_positive_scope_fraction_both": 0.5
+  }
+}

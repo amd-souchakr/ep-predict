@@ -1,0 +1,17 @@
+{
+  "decision": "PILOT_DOES_NOT_SUPPORT",
+  "human_review_complete": true,
+  "hypothesis": "H3",
+  "inputs": {
+    "artifacts/runs/h3-standard-small/analysis/h3/gate.json": "eee7a2eefa1f72482c0b46753175d7affa4b07cd95234d24b243870426142e53",
+    "artifacts/runs/h3-standard-small/analysis/h3/metrics.csv": "cad58088337aa5c93fee296870e099d366e05818fb52f8b3d505adcbdf1ef5cd",
+    "artifacts/runs/h3-standard-small/analysis/h3/summary.csv": "95231707cad2a03f5d9c1470291a8558635d9111df79e355cabe5ec55d0afd90"
+  },
+  "outputs": {
+    "artifacts/runs/h3-standard-small/analysis/h3/figures/FIGURES.md": "c8e65ebb4ca0ec7bd1eaea5c84bace4981ae1b5865fb434b4d201859a6934849",
+    "artifacts/runs/h3-standard-small/analysis/h3/figures/fig1_h3_lookahead_comparison.pdf": "e73ecc525dcac47e6cda9856472c7a9de2f4a80998d3e4403b711c10b81a1569",
+    "artifacts/runs/h3-standard-small/analysis/h3/figures/fig1_h3_lookahead_comparison.png": "ce7c524a9e7139ea35ed5b634b47e989eefb59bd87a02aacb86e0e45b948692c",
+    "artifacts/runs/h3-standard-small/analysis/h3/figures/fig2_h3_domain_consistency.pdf": "968952e7c048b6b28c2b72c5e011fc91c19b88484dbd80b0b01f065bacee65c0",
+    "artifacts/runs/h3-standard-small/analysis/h3/figures/fig2_h3_domain_consistency.png": "b96a5bcffe8ec7184419f7cc72f6b2a3cd17a663cb77062cde4df0d7f34e239f"
+  }
+}

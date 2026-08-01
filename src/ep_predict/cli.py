@@ -227,6 +227,17 @@ def _plot_h6(args: argparse.Namespace) -> int:
     return 0
 
 
+def _audit_artifacts(args: argparse.Namespace) -> int:
+    from ep_predict.artifacts import audit_artifacts
+
+    report = audit_artifacts(
+        args.repo,
+        require_tracked=args.require_tracked,
+    )
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0 if report["state"] == "complete" else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ep-predict",
@@ -409,6 +420,23 @@ def build_parser() -> argparse.ArgumentParser:
     h6_plot_parser.add_argument("--config", required=True, type=Path)
     h6_plot_parser.add_argument("--output", type=Path)
     h6_plot_parser.set_defaults(function=_plot_h6)
+
+    audit_parser = subparsers.add_parser(
+        "audit-artifacts",
+        help="validate durable artifacts, hashes, references, and Git retention",
+    )
+    audit_parser.add_argument(
+        "--repo",
+        type=Path,
+        default=Path("."),
+        help="repository root (default: current directory)",
+    )
+    audit_parser.add_argument(
+        "--require-tracked",
+        action="store_true",
+        help="fail if any durable artifact is not staged or already tracked",
+    )
+    audit_parser.set_defaults(function=_audit_artifacts)
     return parser
 
 

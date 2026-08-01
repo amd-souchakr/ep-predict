@@ -1,0 +1,74 @@
+{
+  "config_fingerprint": "4efd35d854d4766cf7f42f3d7e1ec9178b4d8e9c828075e71e16379bfbe4220b",
+  "decode": {
+    "effective_inter_moe_layer_ms": 0.6393109858036041,
+    "mean_forward_ms": 10.238962018489838,
+    "median_forward_ms": 10.228975772857666,
+    "moe_layers": 16,
+    "p10_forward_ms": 10.151935577392578,
+    "p90_forward_ms": 10.317824363708496,
+    "samples": 80,
+    "semantics": "hook_free_cached_token_full_forward"
+  },
+  "environment": {
+    "git_commit": "d9b5767f0042943c32e4dcea7a13f36734894ab9",
+    "gpu": {
+      "capability": [
+        8,
+        6
+      ],
+      "device_count": 1,
+      "memory_bytes": 25425608704,
+      "name": "NVIDIA GeForce RTX 3090 Ti"
+    },
+    "packages": {
+      "accelerate": "1.3.0",
+      "torch": "2.6.0",
+      "transformers": "5.14.1"
+    },
+    "platform": "Linux-6.2.0-39-generic-x86_64-with-glibc2.35",
+    "python": "3.12.9",
+    "torch_cuda_version": "12.4",
+    "transformers_version": "5.14.1"
+  },
+  "state": "complete",
+  "transfer": {
+    "by_size_mib": {
+      "12": {
+        "median_ms": 0.5240960121154785,
+        "p10_ms": 0.523904025554657,
+        "p90_ms": 0.5264000296592712
+      },
+      "16": {
+        "median_ms": 0.697840005159378,
+        "p10_ms": 0.6976000070571899,
+        "p90_ms": 0.6983039975166321
+      },
+      "24": {
+        "median_ms": 1.0454720258712769,
+        "p10_ms": 1.045248031616211,
+        "p90_ms": 1.047808051109314
+      },
+      "4": {
+        "median_ms": 0.17654399573802948,
+        "p10_ms": 0.17632000148296356,
+        "p90_ms": 0.1767359972000122
+      },
+      "8": {
+        "median_ms": 0.3503359854221344,
+        "p10_ms": 0.35020801424980164,
+        "p90_ms": 0.35231998562812805
+      }
+    },
+    "exact_expert_bytes": 12582912,
+    "exact_expert_median_ms": 0.5240960121154785,
+    "fit": {
+      "effective_bandwidth_gbps": 24.135425594434384,
+      "raw_intercept_ms": 0.002755010047474471,
+      "slope_ms_per_byte": 4.14328720281858e-08,
+      "startup_ms": 0.002755010047474471
+    },
+    "samples": 250,
+    "semantics": "pinned_host_to_device_async_single_copy"
+  }
+}

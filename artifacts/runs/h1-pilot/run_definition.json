@@ -1,0 +1,56 @@
+{
+  "config_fingerprint": "420a137efe9015b800bc4cf787c3d4eb1eaa9c543e67b59b9f7b4e87b33cc294",
+  "experiment_config": {
+    "analysis": {
+      "top_n": [
+        1,
+        2,
+        4,
+        8,
+        16
+      ],
+      "window_sizes": [
+        128,
+        256
+      ]
+    },
+    "decision_gate": {
+      "capacity_experts": 8,
+      "min_coverage_lift_over_uniform": 2.0,
+      "min_hotset_jaccard": 0.5,
+      "min_lagged_oracle_ratio": 0.8,
+      "min_passing_layer_fraction": 0.5,
+      "phase": "decode",
+      "window_size": 256
+    },
+    "do_sample": false,
+    "max_new_tokens": 64,
+    "max_prompt_tokens": 384,
+    "output_dir": "artifacts/runs/h1-pilot",
+    "prompt_file": "data/prompts/h1-pilot.jsonl",
+    "run_id": "h1-pilot",
+    "seed": 7,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "trace": {
+      "fail_on_missing_router": true,
+      "fail_on_router_mismatch": true
+    }
+  },
+  "model_config": {
+    "attention_implementation": "sdpa",
+    "device": "cuda:0",
+    "dtype": "bfloat16",
+    "model_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "router_name_contains": [
+      ".mlp.gate"
+    ],
+    "tokenizer_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "tokenizer_revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "trust_remote_code": false,
+    "use_cache": true
+  },
+  "prompt_file_sha256": "d27dcced79b6ee99d0cd0fa144c5315607216e681459ee320715b12af34edfb8",
+  "run_id": "h1-pilot"
+}

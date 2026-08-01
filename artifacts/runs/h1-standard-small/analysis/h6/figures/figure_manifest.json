@@ -1,0 +1,29 @@
+{
+  "figure_semantics": "Domain-balanced complete resident-set hit gain of the better transition/linear residency policy over the strongest matched static/domain/LRU baseline.",
+  "human_review_complete": false,
+  "hypothesis": "H6",
+  "inputs": [
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h6/scope_metrics.csv",
+      "sha256": "81c6a33800776be8eb843ec8b3cc67ab4ec8636d41818e18dc3e4e3a4e1b95b8"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h6/summary.csv",
+      "sha256": "ad69119b950c1fe4a1f6f00911df4f697611e8bc2768dc22fb7d360dbdac04a6"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h6/gate.json",
+      "sha256": "70247c5c3869f700dd78ccfe858a6c25beb4a26f1636942bd506ee422ae8e287"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h6/figures/fig1_h6_residency_gain_heatmap.png",
+      "sha256": "b165993952f09706bf9ff1a938d96a547637ed45536b6f0b0bfe0c6a8709fd9b"
+    },
+    {
+      "path": "artifacts/runs/h1-standard-small/analysis/h6/figures/fig1_h6_residency_gain_heatmap.pdf",
+      "sha256": "1963cd6128d8ec96b584eef2c2a9130e3fd4c10f064ecc438d06e69735c56797"
+    }
+  ]
+}

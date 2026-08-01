@@ -1,0 +1,29 @@
+{
+  "feature_projection": {
+    "enabled": true,
+    "input_dimension": 2048,
+    "matrix_sha256": "bbf5b1a3a45256c86d0b59acc4ba6dddf854a7eb3db297b9a02659adbf0a9bb1",
+    "output_dimension": 128,
+    "point": "router_input_positional_argument_0",
+    "projection_family": "rademacher",
+    "projection_scale": 0.08838834764831843,
+    "projection_seed": 31,
+    "storage_dtype": "float16"
+  },
+  "format": "numpy_npz_numeric_arrays_no_pickle",
+  "head_count": 240,
+  "path": "artifacts/runs/h3-standard-small/analysis/h23_extended_horizon/linear_predictors.npz",
+  "sha256": "51dd873c9077935e28fea111631022856bef15c6a8df5b85190b2c309b934924",
+  "training_config": {
+    "batch_size": 1024,
+    "device": "cuda:0",
+    "epochs": 30,
+    "kind": "multilabel_logistic_regression",
+    "learning_rate": 0.01,
+    "per_phase": true,
+    "positive_class_weight": 7.0,
+    "standardize_features": true,
+    "training_seed": 23,
+    "weight_decay": 0.0001
+  }
+}

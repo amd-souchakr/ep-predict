@@ -1,0 +1,21 @@
+{
+  "analysis": "h5_admission_separation",
+  "evidence_grade": "held_out_trace_driven_analytical_pilot",
+  "human_review_complete": false,
+  "inputs": {
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/admission_frontier.csv": "6eee5f8ce6b4cdf36f5927f15c45a2017623ea40b30da88de08bef6e4d60b62a",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/best_at_2x.csv": "c87a035b0fb09c89e558380ec004feb26b97d13adab402c05802d217d6613412",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/boundary_at_reference_coverage.csv": "4d954605efd009ec0c5a9add9c23cf55015efa6e92ee044a3ae751ad09d6c552",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/score_histograms.csv": "9cde8f4e7f5234345c6eb543ed90c13d207b446dce6fabf38d0d96baff1b2b99",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/score_separation.csv": "436caa8f4336d926668ba248c11f2138e371fba2040a4b376a8ef4b20c1a9b2f",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/summary.json": "0072a5f3fe71b67edc60f4f40441f05a60317646f8b2238c9bfc5868b12c52c7",
+    "artifacts/runs/h1-standard-small/analysis/h5/h5_policy_placement.csv": "a6a9e5192329d623825a7a57b81633f32331d5a454bd55f89c1cbf29e8ddf07c"
+  },
+  "outputs": {
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/FIGURES.md": "474e0807e0cb65f1beaca7aa2e552cca5206dc9027b6b6ba3285336ac5350582",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/fig1_admission_frontier.pdf": "88289e72848e11da04abf37f4374bccaa5dae1e106ec20aa9a154121c233d44b",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/fig1_admission_frontier.png": "caacef0df4e3b6bcb249f05081516e3209951bda0e12503bb8747eb4f188fd6d",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/fig2_expert_score_separation.pdf": "42282975ff1ce54dde586730115e3dde97e064c158021c9105a5076487a26a47",
+    "artifacts/runs/h1-standard-small/analysis/h5/admission/figures/fig2_expert_score_separation.png": "4879226b911f269b801533f5a720669b4c5977d386c202d8de3830cc5c3e5831"
+  }
+}

@@ -625,6 +625,16 @@ predictive-expert-prefetch/
     └── figures/
 ```
 
+The implemented prototype uses `artifacts/runs/<run-id>/analysis/` rather than
+separate report and figure trees. These native paths are the canonical
+publication record: compact run metadata, CSV/JSON/MD results, fitted analysis
+outputs, and PDF/PNG figures are checked into ordinary Git. Large request-level
+`trace/`, projected `features/`, `hidden_states/`, and `activations/`
+directories are ignored and currently treated as disposable. A closeout audit
+validates hashes and document references before staging all durable artifacts;
+see `docs/EXPERIMENT_SOP.md`. This avoids duplicated result bundles and keeps
+paper figures directly connected to their machine-readable source tables.
+
 ---
 
 # 10. Model Selection Requirements
