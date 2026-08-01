@@ -53,6 +53,32 @@ The immutable run manifest and metrics remain the source of truth.
   as PDF and 450-DPI PNG under
   `artifacts/runs/h1-standard-small/analysis/h1/figures`; input hashes are in
   `figure_manifest.json`.
-- Human visual review: pending.
+- Human visual review: completed 2026-08-01; the mixed interpretation stands.
 - One next action: review the H1 figures with the human, then preregister H2
   conditional-locality baselines if the interpretation still holds.
+
+### `h2-standard-small` — 2026-08-01
+
+- Hypothesis: H2 — current/recent routing predicts future expert demand better
+  than per-layer marginal popularity.
+- Question: On held-out requests, do routing transition tables at Δ=1/2/3
+  improve selection and complete-token coverage at the same candidate budget?
+- Config: `configs/experiment/h2-standard-small.toml`; preregistration in
+  `docs/H2_PROTOCOL.md`.
+- Trace/run artifact: reused `artifacts/runs/h1-standard-small`; no new
+  inference. Analysis is under `analysis/h2`.
+- Result: `PILOT_SUPPORT`. At decode K=16, transition tables beat static
+  popularity by +38.0/+36.6/+35.1 pp selection coverage and
+  +23.5/+22.9/+21.5 pp complete-token coverage for Δ=1/2/3. All 168 eligible
+  layer-domain comparisons were positive.
+- Integrity checks: deterministic disjoint 96/32 request split; 24/8 per
+  domain; same-request/phase/token source-target joins; top-8 and 16-layer
+  completeness; an independent layer-0-to-1 recomputation agreed.
+- Decision: routing-only conditional information is strong enough to justify a
+  lightweight external predictor after visual review. This is not a latency
+  result: K=16 transition candidates replace about 40–43% of slots per token.
+- Figures: capacity/coverage, layer-domain gain, and coverage/churn figures
+  generated as PDF and 450-DPI PNG with hashed inputs.
+- Human visual review: pending.
+- One next action: review the H2 figures, then run the minimum H4 oracle timing
+  kill switch before substantial H3 predictor tuning.

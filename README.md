@@ -6,15 +6,16 @@ Transformers source remain unmodified.
 
 Follow a "tracer bullet" development approach that develops a narrow vertical slice to a result instead of breadth and ceremony. This is a scientist's tool for rapid prototyping and experimentation, not a production software. Keep the human in the loop. Explain your findings, analysis, and interpretation from each experiment before moving to the next one.
 
-The project advances one research gate at a time. The current gate is **H1:
-expert popularity is skewed and stable at an operationally useful scope**.
-See [STATUS.md](STATUS.md) for the live state and
-[docs/H1_PROTOCOL.md](docs/H1_PROTOCOL.md) for the preregistered pilot.
+The project advances one research gate at a time. H1 was mixed: one
+workload-agnostic static tier failed, while domain-conditioned demand was
+strong. H2 is now pilot-supported: held-out layer-transition tables strongly
+beat per-layer marginal popularity, with substantial candidate churn. See
+[STATUS.md](STATUS.md), [docs/H2_PROTOCOL.md](docs/H2_PROTOCOL.md), and
+[docs/H2_RESULTS.md](docs/H2_RESULTS.md).
 
-The completed H1 pilot did not support one mixed-workload static top-8 tier
-(2/16 layers passed), but found strong code- and math-conditioned hotness.
-See [docs/H1_RESULTS.md](docs/H1_RESULTS.md) for the findings and claim
-boundary.
+The current evidence supports routing-conditioned placement research for the
+pinned OLMoE checkpoint. It does not yet establish transfer feasibility,
+latency improvement, or universal MoE behavior.
 
 ## Testbed
 
@@ -75,6 +76,18 @@ uv run ep-predict analyze-h1 \
 uv run ep-predict plot-h1 \
   --run artifacts/runs/h1-standard-small \
   --config configs/experiment/h1-standard-small.toml
+```
+
+Reuse the trace for H2; no new inference is required:
+
+```bash
+uv run ep-predict analyze-h2 \
+  --run artifacts/runs/h1-standard-small \
+  --config configs/experiment/h2-standard-small.toml
+
+uv run ep-predict plot-h2 \
+  --run artifacts/runs/h1-standard-small \
+  --config configs/experiment/h2-standard-small.toml
 ```
 
 The collector writes one compressed JSONL trace per request. This is

@@ -1,0 +1,17 @@
+analysis_id = "h2-standard-small"
+trace_run = "artifacts/runs/h1-standard-small"
+split_seed = 17
+test_requests_per_domain = 8
+capacities = [8, 16, 32]
+lookaheads = [1, 2, 3]
+previous_window_tokens = 128
+
+[decision_gate]
+phase = "decode"
+baseline = "transition"
+comparator = "static"
+capacity_experts = 16
+min_mean_selection_coverage_gain = 0.03
+min_mean_complete_token_coverage_gain = 0.02
+min_positive_scope_fraction = 0.75
+min_positive_domains = 3

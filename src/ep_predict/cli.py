@@ -68,6 +68,26 @@ def _plot_h1(args: argparse.Namespace) -> int:
     return 0
 
 
+def _analyze_h2(args: argparse.Namespace) -> int:
+    from ep_predict.analysis.h2 import analyze_h2
+
+    summary = analyze_h2(args.run, load_toml(args.config))
+    print(json.dumps(summary["gate"], indent=2, sort_keys=True))
+    return 0
+
+
+def _plot_h2(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.h2 import plot_h2
+
+    manifest = plot_h2(
+        args.run,
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="ep-predict",
@@ -117,6 +137,26 @@ def build_parser() -> argparse.ArgumentParser:
         help="figure directory (default: RUN/analysis/h1/figures)",
     )
     plot_parser.set_defaults(function=_plot_h1)
+
+    h2_parser = subparsers.add_parser(
+        "analyze-h2",
+        help="evaluate held-out routing-conditioned future-expert baselines",
+    )
+    h2_parser.add_argument("--run", required=True, type=Path)
+    h2_parser.add_argument("--config", required=True, type=Path)
+    h2_parser.set_defaults(function=_analyze_h2)
+
+    h2_plot_parser = subparsers.add_parser(
+        "plot-h2", help="generate publication-style H2 decision figures"
+    )
+    h2_plot_parser.add_argument("--run", required=True, type=Path)
+    h2_plot_parser.add_argument("--config", required=True, type=Path)
+    h2_plot_parser.add_argument(
+        "--output",
+        type=Path,
+        help="figure directory (default: RUN/analysis/h2/figures)",
+    )
+    h2_plot_parser.set_defaults(function=_plot_h2)
     return parser
 
 
