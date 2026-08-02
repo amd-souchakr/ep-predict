@@ -1,11 +1,11 @@
 # Project status
 
-**Current focus:** Milestone C — GPT-OSS Transformers qualification
-**Current stage:** Milestone B reviewed and accepted with a narrowed
-platform-stack interpretation. Its unchanged K=16, delta 1--3 oracle gate
-passes at every horizon, but it remains regime-space evidence rather than a
-wall-clock claim. Milestone C is next and not started; no GPT-OSS weights have
-been downloaded and no inference has run.
+**Current focus:** Milestone C review — GPT-OSS Transformers qualification
+**Current stage:** Milestone C is `QUALIFIED` on the pinned GPT-OSS 20B native
+MXFP4 path and awaits researcher review. All 576 dispatch-consumed ID/weight
+pairs match with complete 24-layer coverage. The ordinary router hook is
+bypassed, so the qualified model-specific path observes the expert-dispatch
+boundary. Milestone D has not started and remains blocked on review.
 **Last updated:** 2026-08-01
 
 | Gate | Question | State | Exit evidence |
@@ -13,7 +13,7 @@ been downloaded and no inference has run.
 | M0 | Can we inspect and validate the model without source changes? | Passed | Model report, complete hook traces, and zero integrity failures |
 | AMD-A | Does pinned OLMoE run with valid hooks on one MI355X, and are matched derived NVIDIA trends retained? | Reviewed; aggregate reproduction accepted with raw parity unresolved | 128/128 requests, 222,688 records, zero router mismatches; H1 top-8 correlation 0.999962 and H2 horizon-gain correlation 0.999989; no raw-record parity claim |
 | AMD-B | Does MI355X calibration make the unchanged H4 whole-expert oracle gate feasible on measured AMD demand? | Pilot supports; reviewed with narrowed testbed interpretation | K=16 passes at delta 1/2/3; delta 3 reaches 83.9% timely cold bytes and 86.5% stall reduction |
-| AMD-C | Can Transformers expose GPT-OSS routing with IDs and weights proven identical to actual dispatch? | Next; not started | Requires pinned revisions, dispatch-path proof, hook-bypass test, and complete tensor/routing semantics before a tracer bullet |
+| AMD-C | Can Transformers expose GPT-OSS routing with IDs and weights proven identical to actual dispatch? | Qualified; review pending | 24/24 dispatch hooks, 576/576 ID-weight pairs match, zero ordinary router hooks confirms the covered MXFP4 bypass; provenance and storage semantics recorded |
 | H1 | Is hotness strong and stable enough for a fast tier? | Mixed; global gate failed | 2/16 mixed decode layers passed; code and math are locally strong |
 | H2 | Does conditional locality beat marginal popularity? | Pilot supported | All Δ=1/2/3 transition baselines passed the held-out decode gate |
 | H3 | Can a small predictor beat transition tables at equal candidate budget? | Formal pilot not supported; reviewed | Global replacement failed; post-hoc scan found strong early-layer/long-range value |
@@ -70,15 +70,17 @@ been downloaded and no inference has run.
       artifact rather than an inherent MI355X property.
 - [x] Complete the requested plain-language figure revision without dropping
       any capacity, bandwidth, lookahead, or gate-metric trends.
-- [ ] Freeze exact Transformers and GPT-OSS checkpoint revisions for
-      Milestone C before downloading weights.
-- [ ] Trace the model-specific router-to-dispatch code path and define how
+- [x] Freeze exact Transformers and GPT-OSS checkpoint revisions for
+      Milestone C before executing weights.
+- [x] Trace the model-specific router-to-dispatch code path and define how
       hook observations will be proven identical to executed expert IDs.
-- [ ] Qualify whether MXFP4/custom kernels bypass module hooks; record stored
+- [x] Qualify whether MXFP4/custom kernels bypass module hooks; record stored
       and loaded bytes, compute dtype, shared experts, top-k order, and weight
       normalization semantics.
-- [ ] Exercise only the cheapest configuration/tiny or GPT-OSS 20B path needed
+- [x] Exercise only the cheapest configuration/tiny or GPT-OSS 20B path needed
       to prove the implementation, then stop for review before Milestone D.
+- [ ] Researcher reviews the Milestone C report and figure; do not begin the
+      GPT-OSS 20B tracer bullet without explicit approval.
 
 - [x] Confirm the actual machine exposes the intended 24 GB NVIDIA GPU.
 - [x] Install the `data` and `inference` dependency groups.

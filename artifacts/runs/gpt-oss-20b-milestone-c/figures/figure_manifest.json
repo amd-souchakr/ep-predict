@@ -1,0 +1,11 @@
+{
+  "inputs": {
+    "artifacts/runs/gpt-oss-20b-milestone-c/dispatch_parity.csv": "6602605d434d9ba5cdcf17d74995da4cd4ca1752a676e6799aca9f57aa8e8ee5",
+    "artifacts/runs/gpt-oss-20b-milestone-c/qualification.json": "4c46d9643e62dc36aeb9f36561df75e0038510b384ebe0ab8397c1eca6d742dc"
+  },
+  "outputs": {
+    "artifacts/runs/gpt-oss-20b-milestone-c/figures/fig1_gpt_oss_dispatch_qualification.pdf": "d84784ebcb84128bb91c1f7284054c8cc3bd9972dc7bd10879ff9b80c996b02c",
+    "artifacts/runs/gpt-oss-20b-milestone-c/figures/fig1_gpt_oss_dispatch_qualification.png": "a5d40895eeeff72e62b3a4144f144ca564d0c4fab579c0f482c752d142478269"
+  },
+  "schema_version": 1
+}

@@ -1,0 +1,202 @@
+{
+  "checkpoint": {
+    "model_id": "openai/gpt-oss-20b",
+    "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+    "snapshot": "/home/souchakr/.cache/huggingface/hub/models--openai--gpt-oss-20b/snapshots/6cee5e81ee83917806bbde320786a8fb61efebee"
+  },
+  "checkpoint_inspection": {
+    "config_sha256": "3a2a26ded679375b7928ddeca59764df7cea83220c1961035f6d6e232659e9ce",
+    "expert_stored_bytes_per_expert": 13236480,
+    "expert_stored_bytes_per_layer": 423567360,
+    "expert_tensors_layer0": {
+      "down_proj_bias": {
+        "dtype": "BF16",
+        "payload_bytes": 184320,
+        "shape": [
+          32,
+          2880
+        ]
+      },
+      "down_proj_blocks": {
+        "dtype": "U8",
+        "payload_bytes": 132710400,
+        "shape": [
+          32,
+          2880,
+          90,
+          16
+        ]
+      },
+      "down_proj_scales": {
+        "dtype": "U8",
+        "payload_bytes": 8294400,
+        "shape": [
+          32,
+          2880,
+          90
+        ]
+      },
+      "gate_up_proj_bias": {
+        "dtype": "BF16",
+        "payload_bytes": 368640,
+        "shape": [
+          32,
+          5760
+        ]
+      },
+      "gate_up_proj_blocks": {
+        "dtype": "U8",
+        "payload_bytes": 265420800,
+        "shape": [
+          32,
+          5760,
+          90,
+          16
+        ]
+      },
+      "gate_up_proj_scales": {
+        "dtype": "U8",
+        "payload_bytes": 16588800,
+        "shape": [
+          32,
+          5760,
+          90
+        ]
+      }
+    },
+    "geometry": {
+      "experts_per_layer": 32,
+      "hidden_size": 2880,
+      "intermediate_size": 2880,
+      "routed_layers": 24,
+      "shared_experts": 0,
+      "top_k": 4
+    },
+    "index_sha256": "0e085b977c4c9942f85938828e8c989ed7d5cdabf852e4da6a67c116cd502cd1",
+    "quantization_config": {
+      "modules_to_not_convert": [
+        "model.layers.*.self_attn",
+        "model.layers.*.mlp.router",
+        "model.embed_tokens",
+        "lm_head"
+      ],
+      "quant_method": "mxfp4"
+    },
+    "safetensors_file_bytes": 13761316904,
+    "shards": [
+      "model-00000-of-00002.safetensors",
+      "model-00001-of-00002.safetensors",
+      "model-00002-of-00002.safetensors"
+    ],
+    "tensor_payload_bytes": 13761264768,
+    "tokenizer_json_sha256": "0614fe83cadab421296e664e1f48f4261fa8fef6e03e63bb75c20f38e37d07d3"
+  },
+  "claim_boundary": "router/dispatch instrumentation qualification only; no routing-distribution or performance claim",
+  "decision": "QUALIFIED",
+  "eager_control": {
+    "expert_hook_calls": 1,
+    "id_mismatches": 0,
+    "max_abs_weight_error": 0.0,
+    "qualified": true,
+    "router_hook_calls": 1,
+    "selected_weight_sum_max": 1.0,
+    "selected_weight_sum_min": 1.0,
+    "tokens": 2,
+    "weight_mismatches": 0
+  },
+  "environment": {
+    "accelerate": "1.3.0",
+    "python": "3.12.13",
+    "safetensors": "0.8.0",
+    "tokenizers": "0.22.2",
+    "torch": "2.11.0+rocm7.2",
+    "torch_hip": "7.2.26015",
+    "transformers": "5.14.1"
+  },
+  "gate_checks": {
+    "complete_dispatch_hook_coverage": true,
+    "complete_expected_call_coverage": true,
+    "custom_mlp_forward_observed": true,
+    "eager_parity": true,
+    "kernel_provenance_recorded": true,
+    "loaded_bytes_recorded": true,
+    "native_all_ids_match": true,
+    "native_all_weights_match": true,
+    "native_mxfp4_experts": true,
+    "native_weight_tolerance": true,
+    "ordinary_router_bypass_observed": true,
+    "weights_normalized": true
+  },
+  "milestone": "C",
+  "native_mxfp4": {
+    "compute_input_dtype": "torch.bfloat16",
+    "device": "cuda:0",
+    "device_capability": [
+      9,
+      5
+    ],
+    "device_name": "AMD Instinct MI355X",
+    "dispatch_hook_calls_total": 24,
+    "dispatch_ordering": "selected IDs sorted ascending per token, then stable expert-major gather",
+    "expert_class": "Mxfp4GptOssExperts",
+    "input_token_ids": [
+      41625,
+      27694,
+      363,
+      12272,
+      113181,
+      13
+    ],
+    "input_tokens": 6,
+    "kernel_provenance": {
+      "hub_module_path": "/home/souchakr/.cache/huggingface/hub/kernels--kernels-community--gpt-oss-triton-kernels/snapshots/9655fcf7d0f638bec4a82f6f1a70014f0aa8cfb0/build/torch-rocm/__init__.py",
+      "hub_object_type": "module",
+      "hub_repr": "<module '_gpt_oss_triton_kernels_rocm_8a730d9' from '/home/souchakr/.cache/huggingface/hub/kernels--kernels-community--gpt-oss-triton-kernels/snapshots/9655fcf7d0f638bec4a82f6f1a70014f0aa8cfb0/build/torch-rocm/__init__.py'>",
+      "kernels_data_package": "0.16.0",
+      "kernels_package": "0.15.2",
+      "snapshot_revisions": [
+        "9655fcf7d0f638bec4a82f6f1a70014f0aa8cfb0"
+      ],
+      "source_files": [
+        {
+          "path": "/home/souchakr/.cache/huggingface/hub/kernels--kernels-community--gpt-oss-triton-kernels/snapshots/9655fcf7d0f638bec4a82f6f1a70014f0aa8cfb0/build/torch-rocm/matmul_ogs.py",
+          "sha256": "698c0c515cba84b07516886357d53d6afcbd457e9179d9687626f79bf673aede"
+        },
+        {
+          "path": "/home/souchakr/.cache/huggingface/hub/kernels--kernels-community--gpt-oss-triton-kernels/snapshots/9655fcf7d0f638bec4a82f6f1a70014f0aa8cfb0/build/torch-rocm/routing.py",
+          "sha256": "2b479f6cb6bdad96e62d93670c801e830e19b8d91dc1daf573eac10fe1537f85"
+        },
+        {
+          "path": "/home/souchakr/.cache/huggingface/hub/kernels--kernels-community--gpt-oss-triton-kernels/snapshots/9655fcf7d0f638bec4a82f6f1a70014f0aa8cfb0/build/torch-rocm/swiglu.py",
+          "sha256": "edd7e1eb0dc85b346e5f1d783a5f20a20cc936d2d10591cd8c295221bb995f6c"
+        },
+        {
+          "path": "/home/souchakr/.cache/huggingface/hub/kernels--kernels-community--gpt-oss-triton-kernels/snapshots/9655fcf7d0f638bec4a82f6f1a70014f0aa8cfb0/build/torch-rocm/tensor.py",
+          "sha256": "656593135404161e915043669265fe15a717a9d5aa6eee8945ba60b4a0815442"
+        }
+      ]
+    },
+    "loaded_expert_bytes_per_expert": 13253760,
+    "loaded_expert_bytes_per_layer": 424120320,
+    "loaded_expert_components_layer0_bytes": {
+      "down_proj": 132710400,
+      "down_proj_bias": 368640,
+      "down_proj_scales": 8294400,
+      "gate_up_proj": 265420800,
+      "gate_up_proj_bias": 737280,
+      "gate_up_proj_scales": 16588800
+    },
+    "mlp_forward_module": "transformers.integrations.mxfp4",
+    "ordinary_router_hook_calls_total": 0,
+    "prompt": "Milestone C dispatch parity.",
+    "router_ordering": "descending router logit (torch.topk; tie order unspecified)",
+    "selected_weight_normalization": "softmax over selected top-k only; sums to one",
+    "selected_weight_sum_max": 1.0029296875,
+    "selected_weight_sum_min": 0.998046875
+  },
+  "schema_version": 1,
+  "transformers_source_sha256": {
+    "/home/souchakr/dev/ep-predict/.venv/lib/python3.12/site-packages/transformers/integrations/mxfp4.py": "c0889ac0b0a28b6b40ce7a6ecad6c491473626147c603348595181f0adc4ab4c",
+    "/home/souchakr/dev/ep-predict/.venv/lib/python3.12/site-packages/transformers/models/gpt_oss/modeling_gpt_oss.py": "6748d3ee97cf428cc370d7a4f02e0dc87d2847a3ae063b556c385999e96808ce"
+  }
+}

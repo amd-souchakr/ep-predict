@@ -2,7 +2,7 @@
 
 ## Founding Research PRD
 
-**Status:** H1–H6, C0, and MI355X Milestones A–B complete; Milestone C qualification is next and not started
+**Status:** H1–H6, C0, and MI355X Milestones A–B complete; Milestone C is qualified pending review, and Milestone D remains blocked
 **Initial environment:** Python 3.12, `uv`, PyTorch, Hugging Face Transformers, CUDA 12.4<br>
 **Initial hardware:** 1× NVIDIA GPU with 24 GB VRAM  
 **Scale-up environment:** ROCm 7.2, PyTorch 2.11, 8× AMD MI355X-class GPUs with 288 GB HBM per GPU; experiments expose one GPU<br>

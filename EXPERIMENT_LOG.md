@@ -577,3 +577,32 @@ The immutable run manifest and metrics remain the source of truth.
 - One next action: freeze and execute the smallest GPT-OSS Transformers
   router/dispatch qualification, then stop for review before the 20B tracer
   bullet.
+
+### `gpt-oss-20b-milestone-c` — 2026-08-01
+
+- Milestone: C — GPT-OSS Transformers router/dispatch qualification, not a
+  routing-distribution experiment.
+- Provenance: `openai/gpt-oss-20b` and bundled tokenizer at revision
+  `6cee5e81ee83917806bbde320786a8fb61efebee`; Transformers 5.14.1,
+  PyTorch 2.11.0+rocm7.2, kernels 0.15.2, and GPT-OSS Triton-kernel snapshot
+  `9655fcf7d0f638bec4a82f6f1a70014f0aa8cfb0` on one MI355X.
+- Path result: native MXFP4 replaces the MLP forward, computes router logits
+  inline, and bypasses `GptOssTopKRouter.forward`. Ordinary router hooks fire
+  zero times. Expert-dispatch pre-hooks observe the exact `RoutingData` and
+  gather/scatter tensors passed to the two fused grouped GEMMs.
+- Integrity: 24/24 routed layers covered; 6 tokens × 24 layers × top-4 = 576
+  consumed ID/weight pairs; zero ID mismatches, zero weight mismatches at
+  `1e-6`, and maximum absolute weight error 0.0.
+- Semantics: 32 experts/layer, top-4, no shared expert, selected-top-k softmax,
+  descending-logit router order, ascending-ID then expert-major dispatch order,
+  and BF16 compute inputs.
+- Storage: 13,236,480 serialized bytes/expert and 13,253,760 loaded
+  bytes/expert. The 17,280-byte difference is exactly two BF16 bias vectors
+  materialized in FP32.
+- Decision: `QUALIFIED`. The covered MXFP4 bypass is admissible for later
+  tracing. This establishes no routing distribution, model output, timing, or
+  120B claim.
+- Figure: one two-panel coverage/parity figure retained as PDF and 450-DPI PNG
+  with hashed inputs/outputs under `analysis`-independent run `figures/`.
+- One next action: researcher reviews the report and figure. Do not begin
+  Milestone D without explicit approval.

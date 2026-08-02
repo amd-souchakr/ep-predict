@@ -1,7 +1,7 @@
 # MI355X OLMoE parity and AMD-baseline protocol
 
 **Frozen:** 2026-08-01  
-**State:** Milestones A--B reviewed; Milestone C is next and not started
+**State:** Milestones A--B reviewed; Milestone C qualified pending review
 **Model:** `allenai/OLMoE-1B-7B-0125-Instruct`, revision
 `caada7d7b70f4b852b14108479e0812223a8794f`  
 **New platform:** one visible AMD MI355X (`gfx950`), ROCm 7.2, PyTorch 2.11  
@@ -173,7 +173,7 @@ measured forward is treated as a likely software/testbed artifact, not an
 inherent MI355X characteristic. Final figures use plain operational language
 and retain every swept trend.
 
-### Milestone C -- GPT-OSS Transformers qualification (next; not started)
+### Milestone C -- GPT-OSS Transformers qualification (qualified; review pending)
 
 Add a model-specific qualification path; do not build a universal MoE
 adapter. Before downloading the 120B weights:
@@ -193,6 +193,14 @@ Use `gpt-oss-20b` to exercise the implementation cheaply. A tiny synthetic or
 configuration-only inspection may precede weight download, but no claim about
 120B hook semantics follows until its implementation path is shown to be the
 same or is independently validated.
+
+**Execution result:** `QUALIFIED`. On the pinned 20B native MXFP4 path, the
+dispatch-boundary hooks covered 24/24 routed layers and all 576 consumed
+ID/weight pairs with zero mismatches. Ordinary router hooks fired zero times,
+confirming the anticipated inline-router bypass. Stored/loaded expert bytes,
+BF16 compute, top-k/dispatch ordering, selected-softmax semantics, absence of
+shared experts, and complete source/kernel provenance are recorded in
+`docs/GPT_OSS_MILESTONE_C_RESULTS.md`. Stop for review before Milestone D.
 
 ### Milestone D -- GPT-OSS 20B tracer bullet (blocked on C review)
 

@@ -23,6 +23,13 @@ end-to-end speedup.
 See [STATUS.md](STATUS.md), [docs/H4_PROTOCOL.md](docs/H4_PROTOCOL.md), and
 [docs/MI355X_H4_RESULTS.md](docs/MI355X_H4_RESULTS.md).
 
+GPT-OSS 20B Milestone C now qualifies the model-specific Transformers tracing
+boundary on one MI355X. The native MXFP4 path bypasses ordinary router-module
+hooks, but dispatch-boundary hooks cover all 24 layers and match all 576
+consumed expert-ID/weight pairs exactly. This is instrumentation qualification,
+not a routing-distribution or performance result; the project stops for review
+before Milestone D. See [docs/GPT_OSS_MILESTONE_C_RESULTS.md](docs/GPT_OSS_MILESTONE_C_RESULTS.md).
+
 The current evidence supports source-target-aware planning for the pinned
 OLMoE checkpoint: linear hidden-state candidates for early planning and
 transition candidates for late refinement. The two H4 calibrations show that
