@@ -2,7 +2,10 @@
 
 ## Founding Research PRD
 
-**Status:** H1–H6, C0, and MI355X Milestones A–E complete; Milestone E conditionally supports GPT-OSS 20B route prediction pending review; the 120B comparison is cancelled under the disk constraint
+**Status:** H1–H6, C0, and MI355X Milestones A–E complete; Milestone E
+conditionally supports GPT-OSS 20B route prediction; Milestone F learned
+lookahead protocol ready; Milestone G analytical regime study planned; the
+120B comparison is cancelled under the disk constraint
 **Initial environment:** Python 3.12, `uv`, PyTorch, Hugging Face Transformers, CUDA 12.4<br>
 **Initial hardware:** 1× NVIDIA GPU with 24 GB VRAM  
 **Scale-up environment:** ROCm 7.2, PyTorch 2.11, 8× AMD MI355X-class GPUs with 288 GB HBM per GPU; experiments expose one GPU<br>
@@ -38,6 +41,16 @@ Milestone E's K is strictly prediction candidate count: K/32 normalizes the
 candidate set, not fast-tier residency. Any resource replay must introduce an
 independent resident capacity R and sweep K and R separately.
 
+The target narrative is now explicit. First demonstrate that compact
+lookahead expert-demand predictors can be built for existing, unmodified MoE
+models. Then place their empirical coverage/precision/amplification frontiers
+inside analytical workload and memory-system sweeps. A software cache manager
+is a conceptual consumer of scored total-demand forecasts, not an
+implementation deliverable. Training future routers with multi-horizon
+predictability objectives or auxiliary losses is motivated future work; this
+paper will not claim that such training preserves quality, specialization, or
+load balance.
+
 ---
 
 # 1. Executive Summary
@@ -51,9 +64,13 @@ The initial experiment will:
 3. Quantify expert popularity, skew, reuse, temporal locality, and cross-layer predictability.
 4. Train lightweight skip-layer routers that predict experts needed one, two, or three MoE layers in the future.
 5. Evaluate prediction using latency-relevant set-coverage metrics rather than only ordinary classification accuracy.
-6. Replay routing traces through an analytical cache and prefetch simulator.
-7. Build an artificial CPU-to-GPU expert-loading prototype using pinned host memory and asynchronous PCIe transfers.
-8. Use measured workload statistics and calibrated transfer timing to identify the hardware regimes in which predictive expert prefetching is viable.
+6. Fit compact lookahead predictors that emit scored total-demand forecasts at
+   tunable candidate budgets.
+7. Place measured predictor frontiers in an analytical hierarchy model; use a
+   cache manager only as a conceptual consumer of forecasts.
+8. Identify workload and memory-system regimes in which predictive expert
+   movement is profitable, without requiring a production cache or live
+   asynchronous-transfer implementation.
 
 The project must not assume that high prediction accuracy automatically improves low-latency inference. In synchronous small-batch decode, one unpredicted cold expert can stall the execution wave. Therefore, the central question is not:
 
@@ -96,7 +113,11 @@ This project addresses one narrow but important primitive within that vision:
 
 > **Predictive future-expert demand estimation for hierarchical expert residency and prefetch planning.**
 
-The immediate goal is not to design the complete distributed inference architecture. The goal is to establish the workload evidence, predictive limits, analytical model, and experimentally calibrated feasibility boundaries needed to justify or reject such an architecture.
+The immediate goal is not to design the complete distributed inference
+architecture. The goal is to establish workload evidence, learned
+lookahead-prediction limits, and analytical feasibility boundaries needed to
+justify or reject predictive expert movement. The runtime/cache manager is an
+architectural abstraction in the current paper.
 
 ---
 
@@ -260,10 +281,8 @@ Ordinary top-1 accuracy is not a sufficient research metric.
 - Per-token and per-layer routing trace collection.
 - Expert popularity and temporal locality analysis.
 - Lightweight future-expert predictors.
-- Trace-driven cache and prefetch simulation.
+- Trace-driven analytical resident/in-flight and movement accounting.
 - Analytical performance modeling.
-- Artificial CPU-to-GPU expert loading over PCIe.
-- Measured validation of transfer overlap and stall.
 - Extrapolation to large-HBM and multi-GPU systems.
 - Evaluation of whole-expert and synthetic tile-level transfer sizes.
 - Explicit comparison of prediction, static hot-expert caching, and oracle prefetch.
@@ -273,6 +292,8 @@ Ordinary top-1 accuracy is not a sufficient research metric.
 
 - Training or fine-tuning the underlying MoE model.
 - Changing the model router to be locality-aware.
+- Implementing a production cache manager or eviction service.
+- Requiring an artificial PCIe/asynchronous-copy prototype for the paper.
 - Designing a production distributed inference runtime.
 - Implementing expert parallelism across eight GPUs in phase one.
 - Claiming production speedup from the single-GPU PCIe prototype.
@@ -443,9 +464,9 @@ See [docs/H5_RESULTS.md](docs/H5_RESULTS.md).
 
 ---
 
-## H6: Prediction is more useful for residency planning than strict just-in-time loading
+## H6: Depth lookahead does not automatically solve temporal residency
 
-Prediction may be most valuable for:
+Prediction could still inform:
 
 - selecting experts to replicate;
 - reserving staging capacity;
@@ -454,7 +475,7 @@ Prediction may be most valuable for:
 - informing remote execution placement;
 - prioritizing transfer queues.
 
-This may remain true even if strict low-latency just-in-time prefetch fails.
+These are architectural possibilities, not conclusions from H6.
 
 ### Current pilot result
 
@@ -481,16 +502,48 @@ See [docs/H6_RESULTS.md](docs/H6_RESULTS.md).
 
 ---
 
-## H7: Predictable routing can be encouraged without sacrificing model quality
+## H7: Future co-designed training may improve lookahead predictability
 
-A later controlled intervention will test whether adding one
-trajectory-predictability objective can improve complete future-route coverage
-and modeled hardware benefit while preserving validation loss and marginal
-load balance.
+The empirical trend motivates a future model-design hypothesis: a
+multi-horizon routing objective or auxiliary loss may improve complete
+future-route coverage and the coverage/amplification frontier. This paper does
+not test that hypothesis.
 
-Current H1–H6 evidence is observational and cannot support this claim. The H6
-placement failure also removes the immediate justification for this training
-intervention.
+Any later training study must jointly report validation quality, expert
+specialization, load balance, and predictability. Current observational and
+analytical evidence cannot establish that the frontier can be moved without
+regression on those other objectives. H7 is therefore future work rather than
+an active milestone.
+
+---
+
+## AMD-F: A compact learned model preserves the GPT-OSS lookahead frontier
+
+Milestone E's transition table is a fitted route predictor, but it is still a
+conditional-frequency lookup. AMD-F tests the stronger publication claim that
+a small parameterized model can map the current token's weighted route and
+layer/horizon context to scored demand for all 32 future experts.
+
+The primary object is the empirical frontier over complete-route coverage,
+candidate precision, and candidate amplification. Candidate count K is
+tunable; the predictor is never trained against resident/cold labels. The
+development experiment reuses the request-held-out Milestone E split with
+explicit adaptive-analysis caveats. A fresh frozen-pipeline confirmation is
+conditional on passing the development gate. See
+[docs/GPT_OSS_MILESTONE_F_PROTOCOL.md](docs/GPT_OSS_MILESTONE_F_PROTOCOL.md).
+
+## AMD-G: Measured prediction enters defined analytical regimes
+
+AMD-G uses the empirical AMD-F frontier rather than an assumed future-router
+quality point. It sweeps workload concurrency and demand unions together with
+independent candidate count K, resident capacity R, bandwidth, startup
+latency, transfer concurrency, staging capacity, and available lookahead
+slack.
+
+The analytical result must compare predictive and reactive hierarchy at equal
+R, charge useful/false/late/missed movements, and expose inverse requirements.
+It does not implement a cache manager or establish a measured GPT-OSS speedup.
+See [docs/GPT_OSS_MILESTONE_G_PLAN.md](docs/GPT_OSS_MILESTONE_G_PLAN.md).
 
 ---
 
@@ -695,107 +748,30 @@ This is supported only after comparing:
 
 # 9. Experimental Architecture
 
-The implementation should be modular and divided into six subsystems:
+The current paper requires five modular subsystems:
 
-1. **Model adapter**
-2. **Trace collector**
-3. **Dataset and feature pipeline**
-4. **Predictor training and evaluation**
-5. **Trace-driven simulator**
-6. **PCIe prototype and timing calibrator**
+1. **Model-specific dispatch observer:** establish that traces represent
+   executed expert demand.
+2. **Trace and split pipeline:** preserve request boundaries, phases, layers,
+   expert IDs/weights, and provenance.
+3. **Predictor training:** convert current routes into scored future-expert
+   demand at tunable candidate budgets.
+4. **Prediction evaluation:** report request-held-out complete-set,
+   amplification, calibration, and robustness metrics.
+5. **Analytical regime model:** combine empirical predictor points with swept
+   workload, capacity, bandwidth, latency, staging, and lead-time assumptions.
 
-Recommended repository structure:
+A cache manager appears only as a conceptual consumer that removes resident
+and in-flight experts and schedules movements. A production cache, eviction
+implementation, asynchronous copy path, or serving-runtime integration is not
+required.
 
-```text
-predictive-expert-prefetch/
-├── pyproject.toml
-├── uv.lock
-├── README.md
-├── configs/
-│   ├── model/
-│   ├── dataset/
-│   ├── trace/
-│   ├── predictor/
-│   └── simulator/
-├── src/
-│   └── pep/
-│       ├── cli.py
-│       ├── config.py
-│       ├── models/
-│       │   ├── base.py
-│       │   ├── hf_adapter.py
-│       │   └── router_discovery.py
-│       ├── tracing/
-│       │   ├── hooks.py
-│       │   ├── schema.py
-│       │   ├── writer.py
-│       │   └── validation.py
-│       ├── data/
-│       │   ├── datasets.py
-│       │   ├── token_stream.py
-│       │   ├── splits.py
-│       │   └── projection.py
-│       ├── analysis/
-│       │   ├── popularity.py
-│       │   ├── locality.py
-│       │   ├── transitions.py
-│       │   ├── coverage.py
-│       │   └── plots.py
-│       ├── predictors/
-│       │   ├── base.py
-│       │   ├── popularity.py
-│       │   ├── transition.py
-│       │   ├── linear.py
-│       │   ├── mlp.py
-│       │   └── metrics.py
-│       ├── simulation/
-│       │   ├── events.py
-│       │   ├── cache.py
-│       │   ├── transfer.py
-│       │   ├── policies.py
-│       │   ├── replay.py
-│       │   └── reports.py
-│       ├── prototype/
-│       │   ├── pinned_memory.py
-│       │   ├── async_copy.py
-│       │   ├── staging_pool.py
-│       │   └── timeline.py
-│       └── utils/
-│           ├── logging.py
-│           ├── reproducibility.py
-│           └── hardware.py
-├── scripts/
-│   ├── inspect_model.py
-│   ├── collect_trace.py
-│   ├── analyze_trace.py
-│   ├── train_predictor.py
-│   ├── simulate_prefetch.py
-│   └── run_pcie_demo.py
-├── tests/
-│   ├── unit/
-│   ├── integration/
-│   └── golden/
-├── notebooks/
-│   ├── 01_trace_characterization.ipynb
-│   ├── 02_skip_router_results.ipynb
-│   ├── 03_oracle_feasibility.ipynb
-│   └── 04_hardware_phase_diagrams.ipynb
-└── artifacts/
-    ├── traces/
-    ├── checkpoints/
-    ├── reports/
-    └── figures/
-```
-
-The implemented prototype uses `artifacts/runs/<run-id>/analysis/` rather than
-separate report and figure trees. These native paths are the canonical
-publication record: compact run metadata, CSV/JSON/MD results, fitted analysis
-outputs, and PDF/PNG figures are checked into ordinary Git. Large request-level
-`trace/`, projected `features/`, `hidden_states/`, and `activations/`
-directories are ignored and currently treated as disposable. A closeout audit
-validates hashes and document references before staging all durable artifacts;
-see `docs/EXPERIMENT_SOP.md`. This avoids duplicated result bundles and keeps
-paper figures directly connected to their machine-readable source tables.
+Canonical outputs live under `artifacts/runs/<run-id>/analysis/`: compact run
+metadata, CSV/JSON/Markdown results, fitted predictor state, and scripted
+PDF/PNG figures are checked into Git. Large request-level `trace/`, projected
+`features/`, `hidden_states/`, and `activations/` directories remain ignored
+and disposable after their hashes are recorded. The closeout audit validates
+hashes and document references; see `docs/EXPERIMENT_SOP.md`.
 
 ---
 
@@ -1471,24 +1447,28 @@ Report:
 
 # 21. Oracle-First Gating
 
-The implementation must evaluate oracle feasibility before optimizing learned predictors.
+The analytical profitability claim must evaluate physical/oracle feasibility;
+predictor accuracy can be studied independently before that systems gate.
 
 Required sequence:
 
-1. Measure expert sizes and layer times.
-2. Configure realistic transfer parameters.
-3. Run perfect-future oracle prefetch.
-4. Sweep cache capacity, bandwidth, latency, and expert granularity.
-5. Identify whether any meaningful stall reduction is physically possible.
-6. Only then evaluate learned prediction.
+1. Measure exact expert sizes and record any available timing anchors.
+2. Build and evaluate the empirical lookahead predictor frontier.
+3. Configure explicit swept transfer and workload parameters.
+4. Run perfect-future oracle movement as a physical ceiling.
+5. Sweep resident capacity, bandwidth, latency, staging, and granularity.
+6. Place empirical predictor points only inside oracle-feasible regions.
 
-This prevents spending time improving a predictor for a physically infeasible mechanism.
+This prevents prediction accuracy from being misreported as systems
+profitability while allowing prediction itself to remain a first-class result.
 
 ---
 
-# 22. Artificial PCIe Prototype
+# 22. Optional future PCIe calibration
 
-The prototype is a mechanism demonstration, not a production benchmark.
+This prototype is future calibration work, not a current deliverable. If a
+later analytical point merits validation, the prototype is a mechanism
+demonstration rather than a production cache or benchmark.
 
 ## 22.1 Memory Tiers
 
@@ -1543,9 +1523,9 @@ No synthetic result may be presented as a real end-to-end model speedup.
 
 ---
 
-# 23. Timing Calibration
+# 23. Optional timing calibration
 
-Before running the simulator, measure:
+If a later selected design point requires physical calibration, measure:
 
 1. CPU pinned to GPU transfer time across sizes.
 2. GPU to CPU transfer time across sizes.
@@ -1995,6 +1975,54 @@ language-quality claim follows from the pass.
 
 ---
 
+## AMD-F: GPT-OSS compact learned lookahead predictor
+
+Deliverables:
+
+- fixed weighted-route input and complete future top-4 labels;
+- compact shared route MLP with frozen training configuration;
+- K=4/8/12/16 coverage, precision, amplification, and calibration frontier;
+- request-bootstrap comparison with popularity, route copy, and transition;
+- model parameter, byte, and forecast-operation accounting;
+- conditional fresh-request confirmation plan.
+
+Exit gate:
+
+- the learned model meets absolute decode quality at K=8 for at least two of
+  delta 1--3;
+- it is noninferior to the transition frontier within the frozen margins;
+- it retains broad gains over cheap baselines across domains;
+- no cache state or cold label enters predictor training.
+
+This is the active milestone. See
+`docs/GPT_OSS_MILESTONE_F_PROTOCOL.md`.
+
+---
+
+## AMD-G: GPT-OSS analytical regime placement
+
+Deliverables:
+
+- empirical predictor frontier embedded in the H4/H5/AX analytical model;
+- independent K and R sweeps;
+- workload concurrency, demand-union, bandwidth, latency, staging, and
+  lookahead sensitivity;
+- profitability phase map and inverse bandwidth/lookahead requirement;
+- explicit measured/trace-derived/assumed/hypothetical evidence labels.
+
+Exit gate:
+
+- identify a coherent profitable region or show that none exists under the
+  swept contract;
+- compare predictive and reactive hierarchy at equal resident capacity;
+- charge useful, false, late, and missed traffic;
+- make no production-cache or measured-speedup claim.
+
+Freeze this milestone only after AMD-F fixes the empirical predictor frontier.
+See `docs/GPT_OSS_MILESTONE_G_PLAN.md`.
+
+---
+
 ## Milestone 6: PCIe prototype
 
 Deliverables:
@@ -2009,9 +2037,8 @@ Exit gate:
 
 - measured transfer and stall behavior agrees sufficiently with the analytical model to support extrapolation.
 
-This milestone is deferred until H5 identifies a policy region worth
-validating. It is not a prerequisite for the first-order viability and
-profitability-window study.
+This milestone is future work. It is not required for AMD-F/G or for the
+paper's prediction-plus-analytical-regime claim.
 
 ---
 
@@ -2250,7 +2277,8 @@ These are future directions. The initial experiment should only claim support wh
 - future production systems should offload experts to host memory;
 - learned prefetch will improve end-to-end TPOT;
 - three-tier expert caching is a complete architecture;
-- skip-layer prediction generalizes across models;
+- skip-layer prediction generalizes broadly beyond the tested OLMoE and
+  GPT-OSS checkpoints;
 - routing can be modified for locality without quality loss;
 - peer-HBM migration will beat token dispatch at scale;
 - a single-GPU PCIe result directly predicts rack-scale behavior.
@@ -2293,15 +2321,20 @@ Use this lean order:
 8. Place the existing transition and linear streams on that surface without
    retraining.
 9. Compare residency roles only with the existing policies first. H6 did so
-   and failed; stop this mechanism rather than escalating predictor complexity.
-10. Sweep an explicitly assumed MTP-router envelope over complete cold-set
-    coverage and amplification; retain correlated wave misses.
-11. Derive host/pooled-memory capacity–P99 frontiers and inverse interconnect
-    requirements before adding timing fidelity.
-12. Add transfer granularity and rolling HBM-to-SRAM staging using the same
-    event model.
-13. Defer broad predictor training and asynchronous-copy prototypes until an
-    analytical configuration is worth calibrating.
+   and failed; stop treating same-token depth scores as temporal-reuse
+   controllers.
+10. Qualify GPT-OSS dispatch and demonstrate held-out transition prediction.
+    Milestones C--E completed this sequence.
+11. Fit the fixed compact AMD-F total-demand predictor on retained GPT-OSS
+    traces and report its K-dependent coverage/amplification frontier.
+12. Confirm the frozen predictor on fresh requests if the development gate
+    passes; require confirmation for the paper's learned-model claim.
+13. Place the empirical frontier in the AMD-G analytical workload and
+    memory-system sweep, keeping K independent from R.
+14. Derive capacity/profitability regions and inverse interconnect
+    requirements without implementing a production cache manager.
+15. Retain predictability-aware routing objectives and live asynchronous-copy
+    prototypes as future work unless a later paper explicitly authorizes them.
 
 ---
 
@@ -2315,15 +2348,17 @@ The project is minimally successful if it produces:
 - correct complete-set coverage metrics;
 - a calibrated transfer model;
 - an oracle prefetch simulation;
-- one learned prefetch result;
+- one compact learned lookahead-demand result;
+- one empirical coverage/precision/amplification frontier;
 - one trace-calibrated future-predictor architecture envelope;
 - one fast-tier capacity versus tail-latency Pareto result;
 - one defensible positive or negative architecture conclusion.
 
-The project does not require end-to-end model speedup or a live asynchronous
-PCIe implementation to be successful. A later overlap demonstration is a
-calibration step for a selected design point, not a prerequisite for deriving
-the architecture.
+The project does not require an implemented cache manager, end-to-end model
+speedup, or a live asynchronous PCIe path to be successful. A conceptual
+manager is sufficient to define resident/in-flight suppression and movement
+accounting. A later overlap demonstration is a calibration step for a selected
+design point, not a prerequisite for deriving the analytical regimes.
 
 ---
 

@@ -675,5 +675,11 @@ The immutable run manifest and metrics remain the source of truth.
   tables, split and scope/request/horizon/bootstrap tables, three PDF/450-DPI
   figures, reports, and hashed manifest under
   `artifacts/runs/gpt-oss-20b-milestone-e/`.
-- One next action: researcher reviews the result and chooses a bounded 20B
-  resource-contract replay or closes the GPT-OSS track.
+- Researcher review: accepted the conditional prediction evidence and selected
+  a publication spine centered on learned total-demand lookahead prediction,
+  followed by analytical workload/memory-system regime placement. A software
+  cache manager remains conceptual; co-designed predictability training is
+  future work.
+- One next action: implement the protocol-ready compact Milestone F predictor
+  on the retained traces and apply its development gate before any fresh
+  collection or Milestone G sweep.

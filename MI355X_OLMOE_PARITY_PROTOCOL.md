@@ -1,7 +1,8 @@
 # MI355X OLMoE parity and AMD-baseline protocol
 
 **Frozen:** 2026-08-01  
-**State:** Milestones A--D reviewed; Milestone E conditionally supports GPT-OSS 20B route prediction pending review
+**State:** Milestones A--D reviewed; Milestone E conditionally supports GPT-OSS
+20B route prediction; Milestone F learned-predictor protocol ready
 **Model:** `allenai/OLMoE-1B-7B-0125-Instruct`, revision
 `caada7d7b70f4b852b14108479e0812223a8794f`  
 **New platform:** one visible AMD MI355X (`gfx950`), ROCm 7.2, PyTorch 2.11  
@@ -33,15 +34,15 @@ Follow an **AMD baseline + model generalization** sequence. Execute and review
 one milestone at a time. Do not begin the next milestone until its predecessor
 has a recorded result and the researcher explicitly approves the transition.
 
-The next milestone is deliberately small:
+The first GPT-OSS milestone was deliberately small:
 
 > Can the pinned Transformers implementation expose GPT-OSS router decisions
 > that are proven identical to the expert IDs actually dispatched, including
 > any MXFP4 or custom-kernel path?
 
-This is a model-specific instrumentation gate, not a routing-distribution
-experiment or performance benchmark. It must succeed before a GPT-OSS trace
-can be treated as workload evidence.
+This was a model-specific instrumentation gate, not a routing-distribution
+experiment or performance benchmark. It had to succeed before a GPT-OSS trace
+could be treated as workload evidence.
 
 ## Project position entering the AMD phase
 
@@ -244,28 +245,40 @@ fraction, not residency. A later resource replay must introduce resident
 capacity R independently.
 See `docs/GPT_OSS_MILESTONE_E_RESULTS.md`.
 
-### Milestone F -- 20B synthesis or close (blocked on E review)
+### Milestone F -- compact learned GPT-OSS lookahead predictor (protocol ready)
 
-The cancelled 120B run removes the planned controlled routing-geometry
-comparison. Any synthesis must therefore label GPT-OSS evidence as a
-single-checkpoint replication of structured cross-layer predictability, not a
-cross-model effect-size estimate. After Milestone E review, either close the
-track with that bounded conclusion or authorize a 20B resource-contract
-replay paired with the calibrated MI355X physical bound.
+Use the existing Milestone E traces to fit one compact route-only model that
+maps the current token's weighted top-4 route plus layer/horizon/phase context
+to 32 future-expert scores. Evaluate total target-layer demand at tunable
+candidate counts K=4/8/12/16; do not train against resident/cold labels and do
+not build a cache manager. The frozen-data design, noninferiority gate, and
+fresh-confirmation boundary are in
+`docs/GPT_OSS_MILESTONE_F_PROTOCOL.md`.
 
-Advance the hardware proposal only where the combined evidence supports it.
-Candidate long-term mechanisms remain:
+The cancelled 120B run means this remains evidence from one GPT-OSS checkpoint
+alongside the separate OLMoE architecture. It supports a two-architecture
+feasibility claim, not universal MoE behavior or a controlled cross-model
+effect-size estimate.
 
-- long-horizon placement in HBM and short-horizon rolling staging;
-- deadline-aware, priority-isolated expert DMA;
-- explicit commit/degradation telemetry and an always-resident fallback path;
-- smaller or factorized transferable expert state;
-- activation movement or replication where expert movement loses.
+### Milestone G -- GPT-OSS analytical regime placement (planned after F)
 
-The proposal must separate measured MI355X facts, trace-derived demand,
-assumed future-router behavior, and hypothetical hardware. It must compare
-hierarchical execution with both reactive offload and all-resident execution;
-it may not claim a production speedup from analytical replay alone.
+Insert the measured Milestone F coverage/precision/amplification frontier into
+the existing H4/H5/AX analytical framework. Sweep workload characteristics and
+memory-system capacity, bandwidth, latency, concurrency, staging, and
+lookahead assumptions while keeping prediction candidate count K independent
+from resident capacity R. Compare predictive and reactive hierarchy at equal
+R. The dependent plan is `docs/GPT_OSS_MILESTONE_G_PLAN.md`.
+
+No production cache manager or live asynchronous path is required. The
+conceptual manager only defines resident/in-flight suppression and movement
+accounting. The analysis must separate measured MI355X facts, trace-derived
+demand, empirical predictor quality, and hypothetical hardware; it may not
+claim a current GPT-OSS speedup from analytical replay.
+
+Training routing with a multi-horizon predictability objective or auxiliary
+loss is a future co-design hypothesis. This paper will motivate it from the
+observed trends but will not claim quality, specialization, or load-balance
+preservation without a training experiment.
 
 ## Milestone A frozen design
 

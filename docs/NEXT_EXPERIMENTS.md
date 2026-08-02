@@ -1,27 +1,37 @@
-# Next experiments: GPT-OSS 20B prediction review after the MI355X baseline
+# Next experiments: learned lookahead prediction and analytical regime placement
 
 **Updated:** 2026-08-01  
-**Current next action:** review the conditional Milestone E GPT-OSS 20B
-prediction result; the 120B comparison is cancelled under the disk constraint
-**Operating rule:** prove model-specific dispatch visibility before collecting
-routing evidence; do not treat model metadata or reconstructed top-k IDs as
-executed routing. Keep prediction candidate count K independent from resident
-capacity R; K/E is candidate-set fraction, whereas R/E is resident fraction.
+**Current next action:** materialize the exact Milestone F training TOML, then
+implement the frozen-data predictor from
+[GPT_OSS_MILESTONE_F_PROTOCOL.md](GPT_OSS_MILESTONE_F_PROTOCOL.md); do not
+collect fresh traces until its development gate is applied
+**Publication spine:** demonstrate compact lookahead expert-demand prediction
+on existing unmodified MoE models, then place the measured predictor frontier
+in an analytical workload/memory-system regime map
+**Operating rule:** the predictor estimates total future expert demand. A
+conceptual software manager may consume its scored forecasts, but building a
+cache manager is not a research deliverable. Keep prediction candidate count
+K independent from resident capacity R; K/E is candidate-set fraction,
+whereas R/E is resident fraction.
 
-This plan separates three questions that should not be conflated:
+This plan separates four questions that should not be conflated:
 
-1. Under what hardware and prediction assumptions is hierarchical expert
-   management analytically worthwhile?
-2. Where do the existing transition and linear candidate streams land within
-   that design space?
-3. Can routing later be trained to move the prediction–quality Pareto frontier
-   without harming language-model quality or load balance?
+1. Is cross-layer route structure present on more than one public MoE
+   architecture?
+2. Can a compact learned model convert current routes into scored future
+   expert demand with a tunable coverage/amplification frontier?
+3. Where does that empirical frontier fall under swept workload, capacity,
+   bandwidth, latency, and lead-time assumptions?
+4. Could future co-designed training improve predictability without harming
+   quality or load balance? This final question is future work, not a claim of
+   the current paper.
 
-The completed AX track answers the first question under an explicit optimistic
-assumption: a future MTP-style router can expose multi-horizon expert-demand
-predictions without degrading model quality. It does not claim that current
-OLMoE or the fixed H3 predictor achieves those points. The frozen design is in
-[ARCHITECTURE_EXPLORATION_PROTOCOL.md](ARCHITECTURE_EXPLORATION_PROTOCOL.md).
+OLMoE H2 and GPT-OSS Milestone E answer the first question conditionally: both
+show held-out cross-layer structure, but they do not establish universal MoE
+behavior or a controlled cross-model effect size. Milestone F addresses the
+second question. Milestone G adapts the completed AX/H5 analytical machinery
+to the measured GPT-OSS frontier. Training a predictability objective is
+retained only as a future co-design hypothesis.
 
 ## Experiment list
 
@@ -32,6 +42,8 @@ OLMoE or the fixed H3 predictor achieves those points. The frozen design is in
 | AMD-C | Can Transformers expose GPT-OSS router outputs proven identical to actual dispatch? | Configuration/tiny path first; 20B only as needed | Qualified; reviewed and advanced |
 | AMD-D | Does the qualified GPT-OSS 20B path produce a complete tracer-bullet artifact chain? | Yes | Qualified and reviewed |
 | AMD-E | On held-out GPT-OSS 20B requests, do transition tables beat strong cheap route baselines? | Yes | Conditional support: 3/3 prediction gates pass; frozen trace-weight gate fails on 6/2,323,200 pairs; K is candidate count and residency is unmodeled |
+| AMD-F | Can a compact learned route model preserve the GPT-OSS lookahead coverage/amplification frontier? | No for development; fresh confirmation only after pass | Protocol ready; exact training TOML and implementation are next |
+| AMD-G | Under what workload and memory-system regimes is the measured GPT-OSS predictor analytically profitable? | No | Planned after F fixes the empirical frontier; no cache-manager implementation |
 | AMD-120B | How does 120B routing change normalized contracts? | Would require a new checkpoint | Cancelled: insufficient disk; no result claimed |
 | AX1 | What model-capacity and TPOT envelope can future predictive host/pooled-memory prefetch provide? | No | Complete; projected region exists, review pending |
 | AX2 | How do bandwidth, latency, coverage, amplification, and transfer granularity divide the design space? | No | Complete; inverse bounds and phase map generated |
@@ -42,14 +54,15 @@ OLMoE or the fixed H3 predictor achieves those points. The frozen design is in
 | H5-C | How much analytical oracle benefit do the existing transition and linear streams recover? | No retraining; reconstruct existing predictions | Complete; raw streams fail traffic gate |
 | H5-D | Do existing scores separate useful from useless cold candidates? | No | Complete; signal present, shared threshold insufficient |
 | H6 | Does prediction-guided on-demand residency beat static/domain/LRU at equal capacity and movement budget? | No | Complete; frozen gate failed |
-| H7 | Can a routing-predictability objective improve modeled benefit without harming loss or load balance? | Yes; small controlled intervention | Deferred after H6 failure |
+| H7 | Can a routing-predictability objective improve the quality/resource frontier without harming loss or load balance? | Yes; model training | Future work outside the current paper; motivated, not tested |
 | C0 | Does Base→Instruct post-training materially change matched-token trajectory predictability? | Yes; two endpoint traces | Complete; frozen stage-effect gate failed |
 | C1 | Does the trajectory/co-design result transfer to one newer top-1/top-2 checkpoint? | Yes; one trace collection | Deferred; explicit permission required |
 
-Detailed timing validation, concurrent-copy microbenchmarks, MLPs, predictor
-training, new inference, and model downloads remain deferred. AX is an
-analytical architectural exploration, not an attempt to rescue the current H3
-or H6 policies.
+Detailed timing validation, concurrent-copy microbenchmarks, live cache work,
+new model downloads, and predictability-aware base-model training remain
+deferred. The fixed Milestone F route MLP is now active because it tests total
+lookahead demand on an already qualified model; it is not an attempt to rescue
+the H3 replacement gate or H6 residency policy.
 
 ## Completed GPT-OSS sequence -- Milestones C through E
 
@@ -117,6 +130,83 @@ checkpoint downloads on SFT/DPO stage localization. The next generalization
 experiment, if explicitly approved later, should change routing architecture
 rather than add another OLMoE post-training stage.
 
+## AMD-F — Compact learned GPT-OSS lookahead predictor
+
+The protocol-ready design is
+[GPT_OSS_MILESTONE_F_PROTOCOL.md](GPT_OSS_MILESTONE_F_PROTOCOL.md).
+
+### Claim being tested
+
+A small learned model, using only the current token's weighted top-4 route plus
+layer/horizon/phase context, can emit scored demand forecasts for all 32
+experts and preserve most of the strong transition-table frontier.
+
+The predictor estimates total target-layer demand for every token. It is not
+trained against cold labels and does not observe a cache. At runtime, a
+conceptual manager could suppress resident and in-flight experts, aggregate
+forecasts across tokens, and choose movements. That manager is outside the
+experimental deliverable.
+
+### Minimum implementation
+
+1. Materialize the weighted 32-dimensional source-route vector and top-4
+   target labels from existing Milestone E traces.
+2. Implement one shared 64-hidden-unit route MLP with source-layer,
+   target-layer, and phase embeddings.
+3. Freeze the optimizer, seed, training budget, and checkpoint rule in TOML
+   before fitting.
+4. Preserve the 96/32 request split and compare global/domain popularity,
+   route copy, transition, and learned scores at K=4/8/12/16.
+5. Apply the decode K=8, delta 1--3 absolute-quality and transition
+   noninferiority gate without tuning on the development requests.
+6. Report request-bootstrap uncertainty, domain/layer breadth, score
+   calibration, parameter bytes, and forecast operations.
+
+The existing 32 test requests are development data after Milestone E review.
+If the gate passes, freeze the complete pipeline before a 64-request fresh
+confirmation required for the paper's confirmatory learned-predictor claim. If
+it fails while the transition table remains strong,
+retain the transition predictor and narrow the learned-model claim rather than
+escalating network size.
+
+## AMD-G — GPT-OSS analytical workload/memory-system regimes
+
+The dependent plan is
+[GPT_OSS_MILESTONE_G_PLAN.md](GPT_OSS_MILESTONE_G_PLAN.md). Freeze it only
+after Milestone F fixes the empirical coverage, precision, calibration, and
+candidate-amplification frontier.
+
+Adapt the existing H4/H5/AX machinery to GPT-OSS's measured 24-layer,
+32-expert, top-4 geometry and 12.640 MiB loaded expert size. Sweep candidate
+count K independently from resident capacity R, then vary bandwidth, startup
+latency, transfer concurrency, staging capacity, available lookahead slack,
+batch/concurrent streams, prefill/decode mix, domain persistence, and demand
+union size.
+
+The decisive comparison is predictive versus reactive hierarchy at equal R.
+Report useful/false/late/missed bytes, complete cold-demand coverage, required
+staging, inverse bandwidth, and modeled mean/P95/P99 service. An all-resident
+point is a capacity/performance reference, not an equal-capacity baseline.
+
+No production cache manager, live asynchronous transfer path, or end-to-end
+speedup is required. Resident/in-flight suppression and eviction controls are
+analytical bookkeeping. Every output must distinguish measured,
+trace-derived, assumed, and hypothetical inputs.
+
+## Publication claim ladder
+
+The planned evidence supports three deliberately different claim levels:
+
+1. **Empirical:** existing OLMoE and GPT-OSS checkpoints contain structured
+   cross-layer demand, and lightweight predictors achieve a measured held-out
+   coverage/amplification frontier.
+2. **Analytical:** under explicit workload and memory-system assumptions, the
+   measured GPT-OSS points enter or fail to enter defined profitable regions.
+3. **Future work:** routing could be co-designed with a multi-horizon
+   predictability objective or auxiliary loss to move this frontier. The
+   current paper does not test training, language quality, specialization, or
+   load-balance tradeoffs.
+
 ## AX architecture-exploration sequence
 
 ### Assumption boundary
@@ -182,8 +272,8 @@ decision is not another sweep:
    light of the more pessimistic selected FCFS queue points;
 3. select at most one calibration point only if measuring live asynchronous
    behavior would change the architectural conclusion;
-4. otherwise preserve C1 top-1/top-2 confirmation and H7 predictable-routing
-   training as future work requiring explicit permission.
+4. otherwise preserve C1 top-1/top-2 confirmation and H7 co-designed training
+   as future work; neither is on the current Milestone F/G critical path.
 
 ## AX4 — Deadline-bounded graceful degradation
 
@@ -367,36 +457,23 @@ the strongest matched simple baseline. The oracle remains strong, but existing
 depth-trajectory scores do not predict temporal reuse well enough to select
 residency.
 
-Decision: stop this placement mechanism after human figure review. Do not fit
-the previously proposed cost-sensitive head, tune an MLP, collect fresh
-confirmation, begin H7, or download a second model. Any later work must first
-pose a genuinely different mechanism or a direct temporal-reuse hypothesis and
-receive explicit permission.
+Decision: stop this placement mechanism after human figure review. H6 rejects
+using same-token depth scores as a temporal-reuse residency controller; it does
+not reject learning the original cross-layer demand task on GPT-OSS. AMD-F is
+therefore a different prediction experiment, not an attempt to rescue H6.
 
-## H7 — Controlled routing-predictability intervention
+## H7 — Future co-designed predictability objective
 
-H1–H6 observe a normally trained model; they do not show that predictability
-can be increased without quality loss. H6 also removes the immediate placement
-justification for this intervention.
+H1–H6 and AMD-C--F observe normally trained models. They can motivate, but
+cannot demonstrate, that future routing should include a multi-horizon
+predictability objective or auxiliary loss.
 
-If H5-B produces a plausible predictor target, run one small matched pilot:
-
-1. standard load-balancing continuation objective;
-2. the same objective plus one trajectory-predictability term.
-
-Start with one seed and a short token budget. Measure the Pareto tuple:
-
-\[
-(\text{validation loss},\ \text{load balance},\
-\text{complete trajectory coverage},\ \text{modeled HW benefit}).
-\]
-
-Proceed only if the intervention moves the modeled-benefit frontier without a
-material validation-loss or load-balance regression. Replication, regularizer
-ablations, and broader training wait for that result.
-
-This intervention is a distinct project phase because it modifies training.
-It must not be retroactively inferred from the current hook-only evidence.
+The paper may state the hypothesis that jointly optimizing validation quality,
+load balance, specialization, and future-route predictability could move the
+measured coverage/amplification frontier. Testing that Pareto tuple requires
+model training and is explicitly future work. H7 is no longer an active
+experiment in the current agenda and must not be inferred from analytical
+Milestone G results.
 
 ## C1 — Sparse-model transfer check
 
@@ -445,4 +522,6 @@ Use a compact actual-versus-required table for H5-C. Every plot must name:
 - profitability assumptions;
 - whether the result is measured, trace-driven, or analytical.
 
-Complete the human review checkpoint before beginning H7 or C1.
+Complete the Milestone F development review before collecting fresh
+confirmation or freezing Milestone G. H7 remains future work; C1 remains a
+separate optional external-validity experiment.

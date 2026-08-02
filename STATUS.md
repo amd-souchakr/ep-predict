@@ -1,13 +1,13 @@
 # Project status
 
-**Current focus:** Milestone E review — GPT-OSS 20B held-out route prediction
-**Current stage:** The Milestone E prediction gate passes 3/3 short horizons,
-but the overall result is `CONDITIONAL_PILOT_SUPPORT_WITH_TRACE_WEIGHT_EXCEPTION`.
-All 2,323,200 executed expert IDs match and token/layer coverage is complete;
-six independently reconstructed weights differ by at most 0.001953125, so the
-frozen `1e-6` trace gate formally fails. The 120B comparison is cancelled
-under the disk constraint. Milestone E's K is candidate count, not resident
-capacity; no residency state was collected or replayed.
+**Current focus:** Milestone F — compact learned GPT-OSS 20B lookahead predictor
+**Current stage:** Protocol ready; implementation is the next action. Milestone
+E established strong request-held-out transition prediction but remains
+`CONDITIONAL_PILOT_SUPPORT_WITH_TRACE_WEIGHT_EXCEPTION`. Milestone F now tests
+whether a small parameterized route model can preserve that total-demand
+coverage/amplification frontier. Milestone G will then place the empirical
+frontier in analytical workload/memory-system regimes. No cache-manager
+implementation or predictability-aware model training is in scope.
 **Last updated:** 2026-08-01
 
 | Gate | Question | State | Exit evidence |
@@ -17,7 +17,9 @@ capacity; no residency state was collected or replayed.
 | AMD-B | Does MI355X calibration make the unchanged H4 whole-expert oracle gate feasible on measured AMD demand? | Pilot supports; reviewed with narrowed testbed interpretation | K=16 passes at delta 1/2/3; delta 3 reaches 83.9% timely cold bytes and 86.5% stall reduction |
 | AMD-C | Can Transformers expose GPT-OSS routing with IDs and weights proven identical to actual dispatch? | Qualified; reviewed and advanced | 24/24 dispatch hooks, 576/576 ID-weight pairs match, zero ordinary router hooks confirms the covered MXFP4 bypass; provenance and storage semantics recorded |
 | AMD-D | Does the qualified GPT-OSS 20B path produce a complete deterministic tracer-bullet artifact chain? | Qualified; reviewed and advanced | 4,248/4,248 token-layer records, 16,992/16,992 ID-weight pairs match, exact same-process repeat, retained outputs/tables/figures/manifests |
-| AMD-E | On held-out GPT-OSS 20B requests, do transition tables beat strong cheap route baselines? | Conditional pilot support; review pending | At decode K=8 candidates, Δ=1/2/3 selection gains are +18.2/+16.7/+15.5 pp and complete-route gains are +32.3/+30.0/+26.9 pp; 3/3 gates pass, but 6/2,323,200 independent weights fail the frozen trace tolerance; residency is unmodeled |
+| AMD-E | On held-out GPT-OSS 20B requests, do transition tables beat strong cheap route baselines? | Conditional pilot support; reviewed and advanced | At decode K=8 candidates, Δ=1/2/3 selection gains are +18.2/+16.7/+15.5 pp and complete-route gains are +32.3/+30.0/+26.9 pp; 3/3 gates pass, but 6/2,323,200 independent weights fail the frozen trace tolerance; residency is unmodeled |
+| AMD-F | Can a compact learned model preserve the GPT-OSS total-demand lookahead frontier? | Protocol ready; implementation next | Existing 96/32 request split and complete traces support a fixed shared route MLP, K=4/8/12/16 evaluation, and a decode K=8 noninferiority gate |
+| AMD-G | Where is the measured GPT-OSS predictor profitable under workload and memory-system sweeps? | Planned after AMD-F | Adapt H4/H5/AX with empirical predictor points; sweep K independently from R; no cache implementation or measured-speedup claim |
 | H1 | Is hotness strong and stable enough for a fast tier? | Mixed; global gate failed | 2/16 mixed decode layers passed; code and math are locally strong |
 | H2 | Does conditional locality beat marginal popularity? | Pilot supported | All Δ=1/2/3 transition baselines passed the held-out decode gate |
 | H3 | Can a small predictor beat transition tables at equal candidate budget? | Formal pilot not supported; reviewed | Global replacement failed; post-hoc scan found strong early-layer/long-range value |
@@ -27,7 +29,7 @@ capacity; no residency state was collected or replayed.
 | H5-C | Where do existing transition/linear policies land? | Raw streams not supported | 3.4–6.7× transfer amplification; no representative row passes |
 | H5-D | Do existing scores separate useful from useless cold candidates? | Mixed; strong ranking, insufficient threshold | Linear AUROC 0.883/0.861 at Δ=3/9; C≥50% needs A≈3.0–3.3× |
 | H6 | Does prediction-guided residency beat static/domain/LRU placement? | Pilot not supported; reviewed | At decode K=16, Δ=3, transition/linear lose 3.9/2.5 pp expert-stall reduction and 0.7/0.6 pp complete hits versus the strongest matched baseline |
-| H7 | Can routing be made more predictable without harming loss or balance? | Deferred after H6 failure | Requires a new mechanism and explicit permission |
+| H7 | Can co-designed training improve predictability without harming quality, specialization, or load balance? | Future work outside current paper | Motivated by empirical trends; no training result will be claimed |
 | C0 | Does post-training materially change matched-token trajectory predictability? | Pilot not supported; review pending | Base/Instruct retain 89.7% of selections; layer-0→15 conditional-gain change is +1.6 pp versus a 5 pp gate |
 | C1 | Does the result transfer to a top-1/top-2 checkpoint? | Deferred; explicit permission required | No model download or testbed change authorized |
 | AX1 | Under assumed future MTP-style routing quality, what capacity/TPOT envelope does predictive offload enable? | Projected region exists; review pending | At measured PCIe and assumed C=99%, A=1.5×, wave-local P99 improves 34–39% versus reactive offload; FCFS queue tails are materially worse |
@@ -110,8 +112,22 @@ capacity; no residency state was collected or replayed.
 - [x] Correct K/E terminology: it is candidate-set fraction in Milestone E,
       not resident fraction; retain residency R/E as an independent future
       replay variable.
-- [ ] Researcher reviews Milestone E and decides whether to replay a bounded
-      20B resource contract or close the GPT-OSS track.
+- [x] Researcher reviewed Milestone E and selected learned total-demand
+      prediction followed by analytical regime placement as the publication
+      spine.
+- [x] Define the Milestone F input, model, comparators, K sweep, request-level
+      evaluation, noninferiority gate, and fresh-confirmation boundary.
+- [ ] Materialize the Milestone F TOML with exact optimizer/seed/training
+      settings before the first fit.
+- [ ] Implement the fixed shared route MLP and reproduce all Milestone E
+      transition baselines from the retained traces.
+- [ ] Apply the Milestone F development gate before collecting fresh requests
+      or freezing Milestone G.
+- [ ] If the F development gate passes, freeze the pipeline and confirm it on
+      64 fresh requests without refitting.
+- [ ] If confirmation passes, freeze the empirical predictor frontier and
+      execute the analytical GPT-OSS workload/memory-system sweep in
+      Milestone G.
 
 - [x] Confirm the actual machine exposes the intended 24 GB NVIDIA GPU.
 - [x] Install the `data` and `inference` dependency groups.
@@ -182,9 +198,10 @@ capacity; no residency state was collected or replayed.
 - [x] Apply the H6 gate unchanged: neither guided policy passes.
 - [x] Complete human review of the H6 heatmap and record the final
       interpretation.
-- [x] Defer overlap microbenchmarks, MLPs, fresh routing collection, H7, C1,
-      and timing
-      fidelity until a selective policy identifies a worthwhile mechanism.
+- [x] At the H6 decision point, defer overlap microbenchmarks, MLPs, fresh
+      routing collection, H7, C1, and timing fidelity rather than rescuing the
+      failed residency mechanism. The later AMD-F route MLP addresses a
+      different total-demand prediction claim.
 - [x] Preregister C0 before Base collection with exact matched-token
       serialization and a fixed layer-0→15 conditional-gain gate.
 - [x] Download and qualify OLMoE Base only after explicit researcher approval;
@@ -237,7 +254,9 @@ Prior result: [docs/H4_RESULTS.md](docs/H4_RESULTS.md).
 Architecture protocol:
 [docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md](docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md).
 Latest empirical result:
-[docs/MI355X_H4_RESULTS.md](docs/MI355X_H4_RESULTS.md).
+[docs/GPT_OSS_MILESTONE_E_RESULTS.md](docs/GPT_OSS_MILESTONE_E_RESULTS.md).
+Active protocol:
+[docs/GPT_OSS_MILESTONE_F_PROTOCOL.md](docs/GPT_OSS_MILESTONE_F_PROTOCOL.md).
 
 ## Evidence policy
 

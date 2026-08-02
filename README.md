@@ -1,8 +1,9 @@
 # ep-predict
 
-Hook-only experiments for testing whether MoE expert demand is skewed,
-predictable, and useful for hierarchical memory placement. The model and
-Transformers source remain unmodified.
+Trace-driven experiments for testing whether MoE expert demand is predictable
+ahead of execution and where that predictability could make hierarchical
+memory profitable. Existing model weights and Transformers source remain
+unmodified.
 
 Follow a "tracer bullet" development approach that develops a narrow vertical slice to a result instead of breadth and ceremony. This is a scientist's tool for rapid prototyping and experimentation, not a production software. Keep the human in the loop. Explain your findings, analysis, and interpretation from each experiment before moving to the next one.
 
@@ -35,6 +36,19 @@ profitability. The 120B comparison is cancelled under the disk constraint.
 Here K is prediction candidate count and K/32 is candidate-set fraction;
 residency is an independent variable that Milestone E does not model.
 See [docs/GPT_OSS_MILESTONE_E_RESULTS.md](docs/GPT_OSS_MILESTONE_E_RESULTS.md).
+
+The active publication sequence is prediction first, analytical placement
+second. Milestone F will fit a compact shared route MLP that predicts all 32
+future expert scores from the current token's weighted top-4 route and
+layer/horizon/phase context. It evaluates K=4/8/12/16 as tunable candidate
+budgets; it does not predict only cold experts or implement a cache manager.
+Milestone G will insert the measured coverage/precision/amplification frontier
+into workload and memory-system sweeps with K independent from resident
+capacity R. The paper may motivate predictability-aware routing objectives as
+future co-design work, but will not claim that an auxiliary loss preserves
+language quality, specialization, or load balance. See the
+[Milestone F protocol](docs/GPT_OSS_MILESTONE_F_PROTOCOL.md) and
+[Milestone G plan](docs/GPT_OSS_MILESTONE_G_PLAN.md).
 
 The current evidence supports source-target-aware planning for the pinned
 OLMoE checkpoint: linear hidden-state candidates for early planning and
@@ -86,8 +100,8 @@ target, not evidence that current OLMoE preserves quality under erasure. See
 the [protocol](docs/DEADLINE_DEGRADATION_PROTOCOL.md) and
 [AX4 report](artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/REPORT.md).
 
-The active experiment queue, insight-mining questions, and visualization
-deliverables are in
+The active Milestone F implementation checklist, later Milestone G sweep, and
+claim boundaries are in
 [docs/NEXT_EXPERIMENTS.md](docs/NEXT_EXPERIMENTS.md).
 
 The durable publication thesis, foundational principles, perspective shifts,
@@ -97,7 +111,7 @@ experiment log, that document changes only at major evidence transitions.
 
 ## Testbed
 
-The primary model is `allenai/OLMoE-1B-7B-0125-Instruct`:
+The original model is `allenai/OLMoE-1B-7B-0125-Instruct`:
 
 - 7B total and about 1.3B active parameters;
 - 16 MoE layers;
@@ -109,6 +123,12 @@ The primary model is `allenai/OLMoE-1B-7B-0125-Instruct`:
 The BF16 checkpoint is about 13.8 GB and fits the target 24 GB GPU. The
 implementation discovers routers by module behavior and attributes rather than
 hard-coding OLMoE into the trace format.
+
+The current prediction target is the independently qualified
+`openai/gpt-oss-20b` checkpoint: 24 routed layers, 32 experts per layer,
+top-4 routing, native MXFP4 experts, and no shared expert. Its model-specific
+observer captures the tensors consumed by dispatch rather than assuming the
+OLMoE hook path transfers unchanged.
 
 Future checkpoints may use one-time model-specific loading and hook wiring.
 Before adding one, follow

@@ -146,6 +146,13 @@ Do not infer prefetch profitability. No GPT-OSS expert-copy timing, overlap,
 residency replay, or end-to-end latency was measured. Do not infer language
 quality: this experiment predicts internal expert demand and does not score
 answers. The 120B comparison is cancelled under the disk constraint, not
-completed negatively. Stop for researcher review before deciding whether the
-next useful step is a 20B resource-contract replay or closing the GPT-OSS
-track.
+completed negatively.
+
+The researcher selected the following publication sequence after review:
+Milestone F fits a compact learned total-demand predictor on the existing 20B
+traces, and Milestone G places the resulting empirical
+coverage/amplification frontier in an analytical workload/memory-system
+sweep. A cache manager remains conceptual, and predictability-aware model
+training is future work. See
+[GPT_OSS_MILESTONE_F_PROTOCOL.md](GPT_OSS_MILESTONE_F_PROTOCOL.md) and
+[GPT_OSS_MILESTONE_G_PLAN.md](GPT_OSS_MILESTONE_G_PLAN.md).
