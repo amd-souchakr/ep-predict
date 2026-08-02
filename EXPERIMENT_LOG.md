@@ -683,3 +683,146 @@ The immutable run manifest and metrics remain the source of truth.
 - One next action: implement the protocol-ready compact Milestone F predictor
   on the retained traces and apply its development gate before any fresh
   collection or Milestone G sweep.
+
+### `gpt-oss-20b-milestone-f-development` — 2026-08-01
+
+- Hypothesis: the frozen compact shared route MLP preserves most of the
+  Milestone E transition-table frontier at decode K=8 for at least two of
+  delta 1--3.
+- Frozen setup: configuration SHA-256
+  `026fe84b769459ca84ebf3a21be25be5ee4a004362234eabc58aa99ec0896bfc`;
+  32 weighted route inputs, 8/8/4-d source/target/phase embeddings, one
+  64-unit exact-GELU hidden layer, 32 logits, unweighted BCE, AdamW, 20 full
+  epochs, final-epoch checkpoint, deterministic seed 20260801, no validation
+  or early stopping.
+- Split: the exact retained Milestone E 96/32 request split. Fitting uses
+  18,126 tokens and 5,002,776 source-target examples per epoch; development
+  uses 6,074 tokens and 1,676,424 forecasts. No development request affects
+  weights, normalization, stopping, or thresholds.
+- Integrity: exact dispatch IDs and complete token/layer coverage; the six
+  legacy weight deviations satisfy the frozen BF16-aware upper bounds and
+  dispatch-consumed weights feed the model and mass metrics. All 17,664
+  comparable Milestone E K=8 baseline metric values reproduce with maximum
+  absolute difference zero.
+- Model accounting: 5,864 FP32 parameters, 23,456 parameter bytes,
+  26,359-byte checkpoint, and 5,376 multiply-accumulates per forecast.
+- Primary result: learned decode K=8 selection is 62.6%, 63.1%, and 64.8% at
+  delta 1/2/3 versus 86.3%, 85.5%, and 84.4% for transition. Complete-route
+  coverage is 22.9%, 21.4%, and 25.4% versus the 50% absolute floor. Learned
+  selection trails the stronger cheap comparator by 5.5, 5.7, and 4.0 points,
+  with negative gains in all four domains.
+- Decision: `DEVELOPMENT_FAIL`, 0/3 primary lookaheads pass. Do not collect
+  the conditional 64 fresh requests and do not use this learned frontier as
+  confirmatory Milestone G input.
+- Post-hoc diagnostic: frozen-checkpoint training-request selection is only
+  61.1--63.3% at the primary lookaheads, ruling out ordinary held-out
+  generalization collapse but not distinguishing capacity from loss, phase
+  weighting, optimizer, or epoch-budget mismatch. No rescue fit was run.
+- Artifacts: full report, checkpoint, training history, exact request lists,
+  per-request/scope/frontier/calibration/churn tables, bootstrap intervals,
+  PDF/450-DPI figures, and manifest under
+  `artifacts/runs/gpt-oss-20b-milestone-f-development/`; manifest SHA-256
+  `8c037bef5befbfe05b6e116cff346b70cb5c92c0d6a197b81aec0c2b1ccb3e38`.
+- Human visual inspection: completed; both figures are legible and agree with
+  the tabulated fixed-K and threshold frontiers. Researcher review is pending.
+- One next action: review the negative result. Retain transition as the
+  demonstrated lightweight predictor; any new learned study needs a new
+  preregistration and fresh development data before confirmation.
+
+### `gpt-oss-20b-mtp-head-exploratory` — 2026-08-01
+
+- Question: did the shared MLP fail because 96 requests were intrinsically
+  insufficient, or because additive layer embeddings and one 64-unit
+  bottleneck imposed the wrong parameter sharing?
+- Frozen exploratory setup: configuration SHA-256
+  `cae63d813a2007ea86a97003b9d240fd8d2827b033e4db8e8505cbfd190e79f5`;
+  four request-held-out folds formed only inside the original 96 fitting
+  requests; 8/16/32/48/72-request learning curves; weighted, binary, and
+  weighted+binary route inputs; one linear head per source-target layer pair.
+- Model selection: at 72 requests, weighted+binary heads average 90.5%
+  selection and 71.7% complete-route coverage across folds and delta 1--3,
+  versus 84.6%/57.9% for transition. The feature form was selected without the
+  existing 32-request development set.
+- Development result after fitting all 96 requests: K=8 selection is 91.9%,
+  91.6%, and 90.5%; complete-route coverage is 74.8%, 74.4%, and 71.8% at
+  delta 1/2/3. All 3/3 counterfactual Milestone F gate rows pass.
+- Resource cost: 276 decode heads, 574,080 FP32 parameters (2.19 MiB), 2,048
+  MACs per forecast. A delta 1--3 deployment needs only 66 heads and 137,280
+  parameters.
+- Interpretation: the original failure was architectural, not evidence that
+  route prediction needed more data. Weighted+binary heads already average
+  85.2% selection and 61.2% complete coverage with 128 decode tokens, though
+  the fixed-epoch minibatch boundaries prevent treating the curve as a pure
+  sample-complexity law.
+- Checkpoint SHA-256:
+  `2417c9756f8a201c06914593e5aef6e60d19f092775fd50d3d11a0cffa41aec5`.
+  Artifact manifest SHA-256:
+  `69c15bcbaf1551d0d9d0157461cc12c44712c6b89e5eacd277dafc5c1b7a2312`.
+- Evidence boundary: adaptive development only. Freeze the selected weights
+  and collect a new 64-request confirmation before changing the paper claim.
+
+### `gpt-oss-20b-mtp-head-confirmation` — 2026-08-01
+
+- Hypothesis: the frozen weighted+binary layer-pair heads pass the unchanged
+  decode K=8 gate on 64 previously unused requests without refitting.
+- Frozen setup: confirmation TOML SHA-256
+  `d09a8d6e72335947e60d8f94aeaa7c259a731aa09f8214c1965ab796e3531e1b`;
+  checkpoint and architecture hashes embedded before inference; exactly 16
+  requests per domain; zero sample-ID and prompt-hash overlap with all 128
+  prior requests.
+- Trace integrity: `TRACE_COMPLETE`; 64 requests, 11,868 prompt tokens, 1,024
+  generated tokens, 309,408 token-layer records, 1,237,632 dispatch pairs,
+  zero ID mismatches, zero weight mismatches, and maximum independent-weight
+  error 0.0009765625.
+- Confirmatory result: learned K=8 selection is 91.7%, 91.1%, and 90.0% at
+  delta 1/2/3, beating transition by 5.7, 5.8, and 5.9 points. Complete-route
+  coverage is 74.1%, 73.3%, and 70.8%, beating transition by about 14 points.
+  Paired-request 95% intervals for learned-minus-transition selection are
+  +5.5--+6.0, +5.5--+6.1, and +5.7--+6.2 points.
+- Decision: `CONFIRMATION_PASS`, 3/3 lookaheads; every absolute,
+  noninferiority, cheap-baseline, and four-domain breadth check passes. No
+  predictor refit occurred.
+- Claim boundary: confirms route-only future-expert prediction on one GPT-OSS
+  checkpoint and four matched domains. It does not establish language quality,
+  latency reduction, or jointly trained hidden-state-head accuracy.
+- Artifact manifest SHA-256:
+  `c9d2751c9f0d6cbce6ba16f30304377bc70f7e3b81611486912152b08bc3472c`.
+- One next action: freeze Milestone G around the confirmed K-dependent
+  multihead frontier, keeping candidate count K independent from resident
+  capacity R.
+
+### `gpt-oss-20b-long-horizon-exploratory` — 2026-08-02
+
+- Question: how does frozen-head accuracy trade against forecasting farther
+  down the 24-layer network, and can candidate amplification recover the lost
+  coverage?
+- Scope: post-hoc evaluation of all 276 trained source-target heads at
+  delta 1--23 on the unchanged 64-request confirmation trace; no refit. Only
+  delta 1--3 retain confirmatory status.
+- Method: K=4/8/12/16 learned frontiers plus the K=8 transition comparator;
+  domain-stratified request bootstrap with 5,000 resamples. Each request has
+  16 decode tokens; valid layer pairs fall from 23 at delta 1 to one at delta
+  23.
+- K=8 result: selection/complete-route coverage is 91.7%/74.1% at delta 1,
+  87.2%/65.5% at delta 12, and 84.7%/62.8% at delta 23. The decline is real
+  but nonmonotone and substantially shallower than rapid decorrelation.
+- Amplification trade-off at delta 23: K=4/8/12/16 selection is
+  67.0%/84.7%/91.5%/94.7%; complete-route coverage is
+  35.9%/62.8%/77.6%/84.6%. K=12 at delta 23 nearly recovers K=8 selection at
+  delta 1, at 50% more candidate cost.
+- Comparator: transition K=8 at delta 23 reaches 78.1% selection and 46.8%
+  complete coverage, versus 84.7% and 62.8% for the frozen heads.
+- Interpretation boundary: averages use every valid pair for each delta, so
+  horizon and source-target composition change together. This is operational
+  long-horizon performance, not a causal estimate of distance alone and not a
+  retroactive extension of the confirmation gate.
+- Artifacts: request metrics, bootstrap summary, result, PDF/PNG figure, and
+  hashed manifest under
+  `artifacts/analysis/gpt-oss-20b-long-horizon-exploratory/`; manifest SHA-256
+  `596a852551db2b10a8a515d0add3d0368ecfeb793a5da8b4e99f5ccf0b05581f`.
+- Research decision: treat the information gate as complete for the pinned
+  checkpoint. The next highest-ROI experiment is exact Milestone G action
+  replay: residual-cold-set accounting, first-order service pruning, then
+  deadline queue simulation of learned/reactive/oracle policies at equal
+  resident capacity and transfer budget. Defer more predictor fitting and live
+  cache implementation until this gate establishes a robust useful region.

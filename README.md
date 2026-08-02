@@ -37,17 +37,32 @@ Here K is prediction candidate count and K/32 is candidate-set fraction;
 residency is an independent variable that Milestone E does not model.
 See [docs/GPT_OSS_MILESTONE_E_RESULTS.md](docs/GPT_OSS_MILESTONE_E_RESULTS.md).
 
-The active publication sequence is prediction first, analytical placement
-second. Milestone F will fit a compact shared route MLP that predicts all 32
-future expert scores from the current token's weighted top-4 route and
-layer/horizon/phase context. It evaluates K=4/8/12/16 as tunable candidate
-budgets; it does not predict only cold experts or implement a cache manager.
-Milestone G will insert the measured coverage/precision/amplification frontier
-into workload and memory-system sweeps with K independent from resident
-capacity R. The paper may motivate predictability-aware routing objectives as
-future co-design work, but will not claim that an auxiliary loss preserves
-language quality, specialization, or load balance. See the
-[Milestone F protocol](docs/GPT_OSS_MILESTONE_F_PROTOCOL.md) and
+Milestone F's original 5,864-parameter shared route MLP failed because its
+narrow additive-context bottleneck did not represent layer-pair-specific
+transition maps. An MTP-style revision with one lightweight head per
+source-target pair passed development and fresh confirmation. On 64 new
+requests, frozen decode K=8 selection is 91.7%, 91.1%, and 90.0% for Δ=1–3,
+with 74.1%, 73.3%, and 70.8% complete-route coverage. It beats transition
+selection by 5.7–5.9 points, passes all four domains, and was not refit on the
+fresh traces. This confirms that existing GPT-OSS routing is predictable from
+the current weighted+binary route; it does not establish latency or language
+quality. See the [multihead result](docs/GPT_OSS_MULTIHEAD_RESULTS.md),
+[original negative result](docs/GPT_OSS_MILESTONE_F_RESULTS.md), and
+[Milestone G plan](docs/GPT_OSS_MILESTONE_G_PLAN.md). The
+[single-token visual aids](docs/GPT_OSS_LOOKAHEAD_VISUALS.md) show how a
+lookahead nomination resolves into covered demand, missed demand, and unused
+candidate amplification layer by layer. A
+[post-hoc long-horizon analysis](docs/GPT_OSS_LONG_HORIZON_RESULTS.md) shows
+that the trained heads span Δ=1–23; K=8 selection declines from 91.7% at Δ=1
+to 84.7% at Δ=23, with layer-pair composition explicitly treated as a
+confound.
+
+Milestone G is now the highest-priority experiment. It replays the exact
+frozen scores and realized demand to quantify action value after resident and
+in-flight suppression, false transfers, bandwidth, startup, queueing,
+deadlines, and staging. The intended outputs are an action-value phase map, a
+capacity/traffic/stall Pareto, and inverse bandwidth-versus-lookahead bounds.
+No additional predictor training or model inference is needed. See the
 [Milestone G plan](docs/GPT_OSS_MILESTONE_G_PLAN.md).
 
 The current evidence supports source-target-aware planning for the pinned
@@ -100,8 +115,8 @@ target, not evidence that current OLMoE preserves quality under erasure. See
 the [protocol](docs/DEADLINE_DEGRADATION_PROTOCOL.md) and
 [AX4 report](artifacts/runs/h1-standard-small/analysis/ax4_deadline_degradation/REPORT.md).
 
-The active Milestone F implementation checklist, later Milestone G sweep, and
-claim boundaries are in
+The confirmed Milestone F predictor, Milestone G dependency, and claim
+boundaries are in
 [docs/NEXT_EXPERIMENTS.md](docs/NEXT_EXPERIMENTS.md).
 
 The durable publication thesis, foundational principles, perspective shifts,

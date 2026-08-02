@@ -1,0 +1,9 @@
+{
+  "config_path": "configs/experiment/gpt-oss-20b-mtp-head-exploratory.toml",
+  "config_sha256": "cae63d813a2007ea86a97003b9d240fd8d2827b033e4db8e8505cbfd190e79f5",
+  "created_before_first_fit": true,
+  "evidence_role": "exploratory architecture and learning-curve study; cannot replace the frozen Milestone F decision",
+  "source_manifest_sha256": "ff32e7837b162fa78a3993bca9c02f54780337e9dfa8a2fbe715de5e4b34140b",
+  "source_run": "artifacts/runs/gpt-oss-20b-milestone-e",
+  "split_sha256": "47e96c86f724ef6d1350b3c2d34932ed660b2b291474d973f16f351442546322"
+}

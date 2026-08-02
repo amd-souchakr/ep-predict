@@ -1,0 +1,48 @@
+run_id = "gpt-oss-20b-mtp-head-confirmation"
+milestone = "F-multihead-confirmation"
+output_dir = "artifacts/runs/gpt-oss-20b-mtp-head-confirmation"
+model_id = "openai/gpt-oss-20b"
+revision = "6cee5e81ee83917806bbde320786a8fb61efebee"
+snapshot = "/home/souchakr/.cache/huggingface/hub/models--openai--gpt-oss-20b/snapshots/6cee5e81ee83917806bbde320786a8fb61efebee"
+device = "cuda:0"
+seed = 20260803
+chat_template_current_date = "2026-08-01"
+prompt_file = "artifacts/datasets/gpt-oss-milestone-f-confirmation/prompts.jsonl"
+prompt_file_sha256 = "f9e8b6f2b584438155602165668c6c90b278178bda6f9f212bcee758ec4f38f3"
+prompt_manifest = "artifacts/datasets/gpt-oss-milestone-f-confirmation/manifest.json"
+prompt_manifest_sha256 = "448c79c1a23e9c909e0bd2c667e46d3045bec296e4c1bafe2e602d96b4b68925"
+expected_requests = 64
+expected_domains = 4
+expected_requests_per_domain = 16
+max_prompt_tokens = 512
+max_new_tokens = 16
+predictor_checkpoint = "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/model.pt"
+predictor_checkpoint_sha256 = "2417c9756f8a201c06914593e5aef6e60d19f092775fd50d3d11a0cffa41aec5"
+predictor_config = "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/frozen_config.toml"
+predictor_config_sha256 = "cae63d813a2007ea86a97003b9d240fd8d2827b033e4db8e8505cbfd190e79f5"
+predictor_feature_mode = "weighted_binary"
+predictor_heads = 276
+confirmation_without_refit = true
+
+[trace]
+expected_layers = 24
+expected_experts = 32
+expected_top_k = 4
+dispatch_weight_atol = 0.00390625
+
+[analysis]
+primary_phase = "decode"
+primary_candidate_count = 8
+primary_lookaheads = [1, 2, 3]
+bootstrap_resamples = 5000
+bootstrap_seed = 20260803
+confidence_level = 0.95
+
+[decision_gate]
+min_selection_coverage = 0.82
+min_complete_route_coverage = 0.50
+max_selection_deficit_vs_transition = 0.03
+max_complete_route_deficit_vs_transition = 0.05
+min_selection_gain_vs_cheap_comparator = 0.10
+require_positive_selection_gain_all_domains = true
+min_passing_lookaheads = 2

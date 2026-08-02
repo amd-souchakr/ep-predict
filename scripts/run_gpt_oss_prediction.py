@@ -76,6 +76,13 @@ def main() -> None:
     output_dir = Path(config["output_dir"])
     snapshot = Path(config["snapshot"])
     workload = _load_workload(config)
+    for path_key, hash_key in (
+        ("prompt_manifest", "prompt_manifest_sha256"),
+        ("predictor_checkpoint", "predictor_checkpoint_sha256"),
+        ("predictor_config", "predictor_config_sha256"),
+    ):
+        if path_key in config and sha256_file(Path(config[path_key])) != config[hash_key]:
+            raise ValueError(f"{path_key} SHA-256 does not match the frozen config")
     if not torch.cuda.is_available() or torch.cuda.device_count() != 1:
         raise RuntimeError("Milestone E requires exactly one visible accelerator")
     if not snapshot.is_dir():
@@ -223,7 +230,7 @@ def main() -> None:
     }
     integrity = {
         "schema_version": 1,
-        "milestone": "E",
+        "milestone": str(config.get("milestone", "E")),
         "coverage": coverage,
         "totals": totals,
         "gate_checks": checks,
@@ -267,9 +274,12 @@ def main() -> None:
                 Path("artifacts/runs/gpt-oss-20b-milestone-d/result.json")
             ),
         },
-        "claim_boundary": (
-            "GPT-OSS 20B routing and held-out route-prediction quality only; "
-            "no timing, language-quality, 120B, or cross-model claim"
+        "claim_boundary": str(
+            config.get(
+                "claim_boundary",
+                "GPT-OSS 20B routing and held-out route-prediction quality only; "
+                "no timing, language-quality, 120B, or cross-model claim",
+            )
         ),
     }
     write_json(output_dir / "run_definition.json", run_definition)

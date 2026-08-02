@@ -1,14 +1,16 @@
 # Project status
 
-**Current focus:** Milestone F — compact learned GPT-OSS 20B lookahead predictor
-**Current stage:** Protocol ready; implementation is the next action. Milestone
-E established strong request-held-out transition prediction but remains
-`CONDITIONAL_PILOT_SUPPORT_WITH_TRACE_WEIGHT_EXCEPTION`. Milestone F now tests
-whether a small parameterized route model can preserve that total-demand
-coverage/amplification frontier. Milestone G will then place the empirical
-frontier in analytical workload/memory-system regimes. No cache-manager
-implementation or predictability-aware model training is in scope.
-**Last updated:** 2026-08-01
+**Current focus:** Milestone G — quantify the action value of early expert-demand forecasts
+**Current stage:** the empirical information gate is complete for the pinned
+GPT-OSS checkpoint and four tested domains. Frozen weighted+binary layer-pair
+heads pass 3/3 fresh-confirmation lookaheads and cover every forward pair
+through Δ=23. At K=8, selection coverage is
+90.0–91.7% for confirmed Δ=1–3 and remains 84.7% at Δ=23. The dominant open
+question is no longer whether routing is predictable; it is whether this
+foreknowledge reduces residual cold-service stalls after candidate traffic,
+resident capacity, deadlines, queueing, and staging are charged. Milestone G
+is the next execution step and requires no new model inference.
+**Last updated:** 2026-08-02
 
 | Gate | Question | State | Exit evidence |
 |---|---|---|---|
@@ -18,8 +20,8 @@ implementation or predictability-aware model training is in scope.
 | AMD-C | Can Transformers expose GPT-OSS routing with IDs and weights proven identical to actual dispatch? | Qualified; reviewed and advanced | 24/24 dispatch hooks, 576/576 ID-weight pairs match, zero ordinary router hooks confirms the covered MXFP4 bypass; provenance and storage semantics recorded |
 | AMD-D | Does the qualified GPT-OSS 20B path produce a complete deterministic tracer-bullet artifact chain? | Qualified; reviewed and advanced | 4,248/4,248 token-layer records, 16,992/16,992 ID-weight pairs match, exact same-process repeat, retained outputs/tables/figures/manifests |
 | AMD-E | On held-out GPT-OSS 20B requests, do transition tables beat strong cheap route baselines? | Conditional pilot support; reviewed and advanced | At decode K=8 candidates, Δ=1/2/3 selection gains are +18.2/+16.7/+15.5 pp and complete-route gains are +32.3/+30.0/+26.9 pp; 3/3 gates pass, but 6/2,323,200 independent weights fail the frozen trace tolerance; residency is unmodeled |
-| AMD-F | Can a compact learned model preserve the GPT-OSS total-demand lookahead frontier? | Protocol ready; implementation next | Existing 96/32 request split and complete traces support a fixed shared route MLP, K=4/8/12/16 evaluation, and a decode K=8 noninferiority gate |
-| AMD-G | Where is the measured GPT-OSS predictor profitable under workload and memory-system sweeps? | Planned after AMD-F | Adapt H4/H5/AX with empirical predictor points; sweep K independently from R; no cache implementation or measured-speedup claim |
+| AMD-F | Can a compact learned model preserve the GPT-OSS total-demand lookahead frontier? | Confirmed after architecture revision | Shared 64-unit MLP fails 0/3; layer-pair weighted+binary heads pass 3/3 on development and 3/3 on 64 fresh requests, reaching 90.0–91.7% K=8 selection and beating transition by 5.7–5.9 pp |
+| AMD-G | Where is the measured GPT-OSS predictor profitable under workload and memory-system sweeps? | Highest-priority next experiment; ready to freeze | Replay exact frozen scores and demand at equal R; prune with normalized service pressure, then queue-simulate only boundary cells; report action-value and inverse-HW requirements |
 | H1 | Is hotness strong and stable enough for a fast tier? | Mixed; global gate failed | 2/16 mixed decode layers passed; code and math are locally strong |
 | H2 | Does conditional locality beat marginal popularity? | Pilot supported | All Δ=1/2/3 transition baselines passed the held-out decode gate |
 | H3 | Can a small predictor beat transition tables at equal candidate budget? | Formal pilot not supported; reviewed | Global replacement failed; post-hoc scan found strong early-layer/long-range value |
@@ -117,17 +119,36 @@ implementation or predictability-aware model training is in scope.
       spine.
 - [x] Define the Milestone F input, model, comparators, K sweep, request-level
       evaluation, noninferiority gate, and fresh-confirmation boundary.
-- [ ] Materialize the Milestone F TOML with exact optimizer/seed/training
+- [x] Materialize the Milestone F TOML with exact optimizer/seed/training
       settings before the first fit.
-- [ ] Implement the fixed shared route MLP and reproduce all Milestone E
+- [x] Implement the fixed shared route MLP and reproduce all Milestone E
       transition baselines from the retained traces.
-- [ ] Apply the Milestone F development gate before collecting fresh requests
+- [x] Apply the Milestone F development gate before collecting fresh requests
       or freezing Milestone G.
-- [ ] If the F development gate passes, freeze the pipeline and confirm it on
-      64 fresh requests without refitting.
-- [ ] If confirmation passes, freeze the empirical predictor frontier and
-      execute the analytical GPT-OSS workload/memory-system sweep in
-      Milestone G.
+- [x] Preserve the shared-MLP 0/3 failure as the frozen architecture result;
+      do not rescue that model by tuning it on development.
+- [x] Select MTP-style layer-pair heads using four folds inside the original 96
+      fitting requests, then apply the unchanged gate on the 32-request
+      development set.
+- [x] Freeze the selected 574,080-parameter weighted+binary model and confirm
+      it without refitting on 64 new requests, 16 per domain, with zero prior
+      prompt/sample overlap.
+- [x] Apply the confirmation gate: all 3/3 lookaheads and all domains pass.
+- [x] Evaluate the already-trained Δ=1--23 heads post hoc on the unchanged
+      fresh traces: K=8 selection declines from 91.7% at Δ=1 to 84.7% at
+      Δ=23; retain the layer-pair-composition caveat and Δ=1--3 confirmation
+      boundary.
+- [ ] Freeze the exact Milestone G TOML around the predictor, confirmation
+      trace, decision thresholds, and normalized hardware axes; keep K
+      independent from resident capacity R.
+- [ ] Build the exact residual-cold-set bookkeeping replay and first-order
+      service-pressure screen before any detailed queue simulation.
+- [ ] Run trace-ordered queue replay only for feasible and boundary cells;
+      compare learned, reactive, and oracle service at equal R.
+- [ ] Produce the action-value phase map, capacity/traffic/stall Pareto, and
+      inverse bandwidth-versus-lookahead requirement, then stop for review.
+- [ ] Measure GPT-specific unhooked timing or live overlap only if the
+      analytical decision changes within the current timing uncertainty.
 
 - [x] Confirm the actual machine exposes the intended 24 GB NVIDIA GPU.
 - [x] Install the `data` and `inference` dependency groups.

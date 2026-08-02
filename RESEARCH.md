@@ -2,10 +2,11 @@
 
 ## Founding Research PRD
 
-**Status:** H1–H6, C0, and MI355X Milestones A–E complete; Milestone E
-conditionally supports GPT-OSS 20B route prediction; Milestone F learned
-lookahead protocol ready; Milestone G analytical regime study planned; the
-120B comparison is cancelled under the disk constraint
+**Status:** H1–H6, C0, and MI355X Milestones A–F complete; frozen MTP-style
+GPT-OSS 20B layer-pair heads passed 3/3 on 64 fresh requests without refitting
+and retain useful K=8 coverage through Δ=23; the empirical information gate is
+closed for this checkpoint. Milestone G action-value modeling is the active
+next experiment; the 120B comparison is cancelled under the disk constraint
 **Initial environment:** Python 3.12, `uv`, PyTorch, Hugging Face Transformers, CUDA 12.4<br>
 **Initial hardware:** 1× NVIDIA GPU with 24 GB VRAM  
 **Scale-up environment:** ROCm 7.2, PyTorch 2.11, 8× AMD MI355X-class GPUs with 288 GB HBM per GPU; experiments expose one GPU<br>
@@ -41,15 +42,17 @@ Milestone E's K is strictly prediction candidate count: K/32 normalizes the
 candidate set, not fast-tier residency. Any resource replay must introduce an
 independent resident capacity R and sweep K and R separately.
 
-The target narrative is now explicit. First demonstrate that compact
-lookahead expert-demand predictors can be built for existing, unmodified MoE
-models. Then place their empirical coverage/precision/amplification frontiers
-inside analytical workload and memory-system sweeps. A software cache manager
-is a conceptual consumer of scored total-demand forecasts, not an
-implementation deliverable. Training future routers with multi-horizon
-predictability objectives or auxiliary losses is motivated future work; this
-paper will not claim that such training preserves quality, specialization, or
-load balance.
+The first half of the target narrative is now empirically supported: a compact
+lookahead expert-demand predictor can be built for an existing, unmodified MoE
+checkpoint, frozen, and confirmed on fresh requests. More predictor fitting is
+not the current bottleneck. The active question is action value: place the
+measured score/coverage/amplification frontier inside trace-driven workload and
+memory-system models that charge residual cold demand, false traffic,
+deadlines, queueing, staging, and capacity. A software cache manager remains a
+conceptual consumer of forecasts rather than an implementation deliverable.
+Training future routers with multi-horizon objectives is motivated future work;
+this paper will not claim that such training preserves quality,
+specialization, or load balance.
 
 ---
 
@@ -517,32 +520,56 @@ an active milestone.
 
 ---
 
-## AMD-F: A compact learned model preserves the GPT-OSS lookahead frontier
+## AMD-F: Layer-pair route heads preserve the GPT-OSS frontier
 
 Milestone E's transition table is a fitted route predictor, but it is still a
-conditional-frequency lookup. AMD-F tests the stronger publication claim that
-a small parameterized model can map the current token's weighted route and
-layer/horizon context to scored demand for all 32 future experts.
+conditional-frequency lookup. AMD-F tested the stronger publication claim
+that a small parameterized model can map the current token's weighted route
+and layer/horizon context to scored demand for all 32 future experts. The
+frozen 5,864-parameter model failed: at decode K=8 and delta 1--3 it reaches
+62.6--64.8% selection and 21.4--25.4% complete-route coverage, trails
+transition selection by 19.6--23.7 points, and passes 0/3 gate rows.
 
 The primary object is the empirical frontier over complete-route coverage,
 candidate precision, and candidate amplification. Candidate count K is
 tunable; the predictor is never trained against resident/cold labels. The
-development experiment reuses the request-held-out Milestone E split with
-explicit adaptive-analysis caveats. A fresh frozen-pipeline confirmation is
-conditional on passing the development gate. See
-[docs/GPT_OSS_MILESTONE_F_PROTOCOL.md](docs/GPT_OSS_MILESTONE_F_PROTOCOL.md).
+development experiment reused the request-held-out Milestone E split with
+explicit adaptive-analysis caveats. Because the gate failed, the conditional
+fresh confirmation was not collected. See the
+[protocol](docs/GPT_OSS_MILESTONE_F_PROTOCOL.md) and
+[result](docs/GPT_OSS_MILESTONE_F_RESULTS.md).
+
+That negative result isolated the architecture rather than ending the broader
+predictability question. A subsequent MTP-style design assigns a linear future
+expert head to each source-target layer pair and consumes both weighted and
+binary current-route vectors. Four-fold architecture selection used only the
+original 96 fitting requests. The frozen 574,080-parameter decode model then
+passed the existing 32-request development gate and a 64-request fresh
+confirmation: K=8 selection is 90.0--91.7% and complete-route coverage is
+70.8--74.1% at delta 1--3, with positive gains in every domain and no refit.
+All 276 forward layer-pair heads were trained. On the unchanged confirmation
+trace, exploratory K=8 selection remains 87.2% at delta 12 and 84.7% at delta
+23; K=12 at delta 23 recovers 91.5% selection at 50% more candidates. Thus the
+remaining problem is not to prove that useful route information exists. It is
+to price the extra candidates against the additional service time they buy.
+See [docs/GPT_OSS_MULTIHEAD_RESULTS.md](docs/GPT_OSS_MULTIHEAD_RESULTS.md).
 
 ## AMD-G: Measured prediction enters defined analytical regimes
 
-AMD-G uses the empirical AMD-F frontier rather than an assumed future-router
-quality point. It sweeps workload concurrency and demand unions together with
-independent candidate count K, resident capacity R, bandwidth, startup
-latency, transfer concurrency, staging capacity, and available lookahead
-slack.
+AMD-G uses the exact frozen multihead scores and confirmation demand rather
+than an assumed predictor-quality point. It first computes residual cold
+demand after resident and in-flight suppression and screens each configuration
+using experts transferable per layer interval, queue utilization, staging
+capacity, and the deadline-indexed amplification ratio. Only feasible and
+boundary configurations proceed to trace-ordered queue replay.
 
 The analytical result must compare predictive and reactive hierarchy at equal
-R, charge useful/false/late/missed movements, and expose inverse requirements.
-It does not implement a cache manager or establish a measured GPT-OSS speedup.
+R, hold transfer admission budgets equal, charge useful/false/late/missed
+movements, preserve correlated complete-set misses, and expose inverse
+requirements. The decisive outputs are an action-value phase map, a compact
+capacity/traffic/stall Pareto, and minimum bandwidth or maximum expert size as
+a function of usable lookahead. It does not implement a cache manager or
+establish a measured GPT-OSS speedup.
 See [docs/GPT_OSS_MILESTONE_G_PLAN.md](docs/GPT_OSS_MILESTONE_G_PLAN.md).
 
 ---
@@ -1994,8 +2021,12 @@ Exit gate:
 - it retains broad gains over cheap baselines across domains;
 - no cache state or cold label enters predictor training.
 
-This is the active milestone. See
-`docs/GPT_OSS_MILESTONE_F_PROTOCOL.md`.
+The original shared-MLP development is complete with `DEVELOPMENT_FAIL`, 0/3.
+The subsequent layer-pair head revision passes 3/3 development and 3/3 fresh
+confirmation lookaheads. All forward heads through delta 23 were trained;
+exploratory K=8 selection remains 84.7% at the longest horizon. See
+`docs/GPT_OSS_MILESTONE_F_RESULTS.md`, `docs/GPT_OSS_MULTIHEAD_RESULTS.md`,
+and `docs/GPT_OSS_LONG_HORIZON_RESULTS.md`.
 
 ---
 
@@ -2003,11 +2034,14 @@ This is the active milestone. See
 
 Deliverables:
 
-- empirical predictor frontier embedded in the H4/H5/AX analytical model;
-- independent K and R sweeps;
-- workload concurrency, demand-union, bandwidth, latency, staging, and
-  lookahead sensitivity;
-- profitability phase map and inverse bandwidth/lookahead requirement;
+- exact replay of the frozen predictor scores and confirmation demand;
+- residual-cold-set accounting after resident and in-flight suppression;
+- a first-order service-pressure screen before detailed queue simulation;
+- independent K, admission-budget, and resident-capacity R sweeps;
+- trace-ordered learned/reactive/oracle comparison at equal R and transfer
+  budget, preserving correlated misses and deadlines;
+- action-value phase map, capacity/traffic/stall Pareto, and inverse
+  bandwidth/lookahead requirement;
 - explicit measured/trace-derived/assumed/hypothetical evidence labels.
 
 Exit gate:
@@ -2018,7 +2052,13 @@ Exit gate:
 - charge useful, false, late, and missed traffic;
 - make no production-cache or measured-speedup claim.
 
-Freeze this milestone only after AMD-F fixes the empirical predictor frontier.
+This is the highest-ROI next experiment. Freeze it around the confirmed
+multihead checkpoint and exact fresh-request scores, not aggregate accuracy or
+the failed shared-MLP frontier. Keep K, admission budget, and R independent.
+Do not collect more predictor data, tune another model, download another
+checkpoint, or build a live cache before this analytical action-value gate.
+Measure GPT-specific layer timing or copy/compute overlap only if the
+normalized result is decision-sensitive to the current timing uncertainty.
 See `docs/GPT_OSS_MILESTONE_G_PLAN.md`.
 
 ---
@@ -2325,15 +2365,17 @@ Use this lean order:
    controllers.
 10. Qualify GPT-OSS dispatch and demonstrate held-out transition prediction.
     Milestones C--E completed this sequence.
-11. Fit the fixed compact AMD-F total-demand predictor on retained GPT-OSS
-    traces and report its K-dependent coverage/amplification frontier.
-12. Confirm the frozen predictor on fresh requests if the development gate
-    passes; require confirmation for the paper's learned-model claim.
-13. Place the empirical frontier in the AMD-G analytical workload and
-    memory-system sweep, keeping K independent from R.
-14. Derive capacity/profitability regions and inverse interconnect
+11. Fit the fixed compact AMD-F shared predictor. Done; the architecture fails
+    0/3 and is retained as a negative result.
+12. Replace additive context sharing with MTP-style layer-pair heads selected
+    only inside the 96 fitting requests. Done; 3/3 development rows pass.
+13. Confirm the frozen revised predictor on 64 fresh requests without
+    refitting. Done; 3/3 rows and all domains pass.
+14. Place the confirmed multihead frontier in AMD-G, keeping K independent
+    from R and preserving the route-only evidence boundary.
+15. Derive capacity/profitability regions and inverse interconnect
     requirements without implementing a production cache manager.
-15. Retain predictability-aware routing objectives and live asynchronous-copy
+16. Retain predictability-aware routing objectives and live asynchronous-copy
     prototypes as future work unless a later paper explicitly authorizes them.
 
 ---

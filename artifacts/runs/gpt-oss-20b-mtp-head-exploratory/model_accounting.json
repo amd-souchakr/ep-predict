@@ -1,0 +1,9 @@
+{
+  "checkpoint_bytes": 2298197,
+  "heads": 276,
+  "macs_per_forecast": 2048,
+  "parameter_bytes_fp32": 2296320,
+  "parameters": 574080,
+  "phase": "decode",
+  "selected_feature_mode": "weighted_binary"
+}

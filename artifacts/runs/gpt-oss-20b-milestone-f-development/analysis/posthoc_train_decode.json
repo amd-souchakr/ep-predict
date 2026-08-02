@@ -1,0 +1,22 @@
+{
+  "evidence_role": "post-hoc diagnostic after the frozen development gate; not a gate input",
+  "method": "evaluate the frozen final-epoch checkpoint at K=8 on the 96 fitting requests, decode only, with the same complete-top-4 labels",
+  "lookaheads": [
+    {
+      "complete_route_coverage": 0.22206182065217392,
+      "delta": 1,
+      "selection_coverage": 0.6105850883152174
+    },
+    {
+      "complete_route_coverage": 0.21232836174242425,
+      "delta": 2,
+      "selection_coverage": 0.6158410274621212
+    },
+    {
+      "complete_route_coverage": 0.24866691468253968,
+      "delta": 3,
+      "selection_coverage": 0.6331922743055556
+    }
+  ],
+  "interpretation": "Training-request ranking quality is no better than development quality, so ordinary request-held-out generalization collapse does not explain the failure. This does not distinguish insufficient capacity from the frozen loss, phase weighting, optimizer, or epoch budget, and it does not authorize tuning on the inspected development split."
+}

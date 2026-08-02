@@ -1,0 +1,8 @@
+{
+  "exact_within_1e_12": true,
+  "max_abs_metric_difference": 0.0,
+  "metric_values_compared": 17664,
+  "missing_rows": 0,
+  "reference": "artifacts/runs/gpt-oss-20b-milestone-e/analysis/prediction/request_metrics.csv",
+  "reference_sha256": "34bb334a1871cba5d3aa308e8b831c461268767fc8d36fa1273088187e639c40"
+}

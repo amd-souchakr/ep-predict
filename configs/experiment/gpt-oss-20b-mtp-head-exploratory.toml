@@ -1,0 +1,55 @@
+run_id = "gpt-oss-20b-mtp-head-exploratory"
+output_dir = "artifacts/runs/gpt-oss-20b-mtp-head-exploratory"
+source_run_dir = "artifacts/runs/gpt-oss-20b-milestone-e"
+source_artifact_manifest_sha256 = "ff32e7837b162fa78a3993bca9c02f54780337e9dfa8a2fbe715de5e4b34140b"
+milestone_f_split = "artifacts/runs/gpt-oss-20b-milestone-e/analysis/prediction/split.json"
+milestone_f_split_sha256 = "47e96c86f724ef6d1350b3c2d34932ed660b2b291474d973f16f351442546322"
+evidence_role = "exploratory architecture and learning-curve study; cannot replace the frozen Milestone F decision"
+seed = 20260802
+device = "cuda:0"
+
+[geometry]
+layers = 24
+experts = 32
+top_k = 4
+
+[cross_validation]
+folds = 4
+validation_requests_per_domain = 6
+train_requests_per_domain = [2, 4, 8, 12, 18]
+ordering_seed = 20260802
+phase = "decode"
+
+[models]
+feature_modes = ["weighted", "binary", "weighted_binary"]
+head_granularity = "one_linear_head_per_source_target_pair"
+activation = "none"
+output_width = 32
+parameter_dtype = "float32"
+
+[training]
+objective = "binary_cross_entropy_with_logits"
+positive_weight = 1.0
+optimizer = "adamw"
+learning_rate = 0.01
+weight_decay = 0.0001
+betas = [0.9, 0.999]
+epsilon = 1e-8
+epochs = 100
+batch_size_tokens = 512
+shuffle = true
+checkpoint_rule = "final_epoch"
+scheduler = "none"
+deterministic_algorithms = true
+
+[evaluation]
+candidate_count = 8
+primary_lookaheads = [1, 2, 3]
+compare_transition_at_equal_training_size = true
+selection_target = 0.82
+complete_route_target = 0.50
+
+[final_exploratory_fit]
+fit_all_96_requests = true
+evaluate_on_existing_32_development_requests = true
+confirmation_claim_allowed = false

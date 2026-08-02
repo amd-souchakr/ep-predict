@@ -1,0 +1,62 @@
+{
+  "name": "h1-standard-small",
+  "output_file": "artifacts/datasets/gpt-oss-milestone-f-confirmation-pool/prompts-48-per-domain.jsonl",
+  "output_sha256": "bb573ec31b2661cb7214bfdc6a0cd51c137f0f36940f28d090daff1803e1ec0f",
+  "record_count": 192,
+  "samples_per_domain": 48,
+  "seed": 7,
+  "sources": [
+    {
+      "accepted": 48,
+      "dataset_name": "Salesforce/wikitext",
+      "domain": "general",
+      "inspected": 104,
+      "key": "wikitext2",
+      "prompt_chars_max": 1725,
+      "prompt_chars_mean": 839.1,
+      "prompt_chars_min": 270,
+      "revision": "b08601e04326c79dfdd32d625aee71d232d685c3",
+      "split": "validation",
+      "subset": "wikitext-2-raw-v1"
+    },
+    {
+      "accepted": 48,
+      "dataset_name": "openai/gsm8k",
+      "domain": "math",
+      "inspected": 48,
+      "key": "gsm8k",
+      "prompt_chars_max": 645,
+      "prompt_chars_mean": 273.4,
+      "prompt_chars_min": 145,
+      "revision": "ecdace25ad778589e9d5524ca35f2cca6d7d6fd1",
+      "split": "test",
+      "subset": "main"
+    },
+    {
+      "accepted": 48,
+      "dataset_name": "openai/openai_humaneval",
+      "domain": "code",
+      "inspected": 48,
+      "key": "humaneval",
+      "prompt_chars_max": 1090,
+      "prompt_chars_mean": 457.9,
+      "prompt_chars_min": 154,
+      "revision": "e9b53e1677523f1e61e4d0960fd7502694a24bd4",
+      "split": "test",
+      "subset": "openai_humaneval"
+    },
+    {
+      "accepted": 48,
+      "dataset_name": "HuggingFaceH4/mt_bench_prompts",
+      "domain": "conversation",
+      "inspected": 48,
+      "key": "mt_bench",
+      "prompt_chars_max": 1642,
+      "prompt_chars_mean": 293.2,
+      "prompt_chars_min": 57,
+      "revision": "e3a795c",
+      "split": "train",
+      "subset": null
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "checkpoint_file_bytes": 26359,
+  "checkpoint_sha256": "d1116acf2dcd8ccfab58458c8748585cd6cbc0123c690f8817f59797c3acd6f0",
+  "embedding_lookups_per_forecast": 3,
+  "gelu_evaluations_per_forecast": 64,
+  "hidden_width": 64,
+  "input_width": 52,
+  "linear_bias_additions_per_forecast": 96,
+  "multiply_accumulates_per_forecast": 5376,
+  "output_width": 32,
+  "parameter_dtype": "float32",
+  "parameters": 5864,
+  "serialized_parameter_bytes": 23456
+}

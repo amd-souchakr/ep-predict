@@ -1,10 +1,10 @@
-# Next experiments: learned lookahead prediction and analytical regime placement
+# Next experiments: action value of learned lookahead prediction
 
-**Updated:** 2026-08-01  
-**Current next action:** materialize the exact Milestone F training TOML, then
-implement the frozen-data predictor from
-[GPT_OSS_MILESTONE_F_PROTOCOL.md](GPT_OSS_MILESTONE_F_PROTOCOL.md); do not
-collect fresh traces until its development gate is applied
+**Updated:** 2026-08-02
+
+**Current next action:** freeze and execute Milestone G on the exact frozen
+multihead scores and 64-request confirmation trace; preserve prediction count
+K, transfer-admission budget, and resident capacity R as independent controls
 **Publication spine:** demonstrate compact lookahead expert-demand prediction
 on existing unmodified MoE models, then place the measured predictor frontier
 in an analytical workload/memory-system regime map
@@ -26,12 +26,14 @@ This plan separates four questions that should not be conflated:
    quality or load balance? This final question is future work, not a claim of
    the current paper.
 
-OLMoE H2 and GPT-OSS Milestone E answer the first question conditionally: both
-show held-out cross-layer structure, but they do not establish universal MoE
-behavior or a controlled cross-model effect size. Milestone F addresses the
-second question. Milestone G adapts the completed AX/H5 analytical machinery
-to the measured GPT-OSS frontier. Training a predictability objective is
-retained only as a future co-design hypothesis.
+OLMoE H2 and GPT-OSS Milestones E/F answer the first two questions
+conditionally. The frozen GPT-OSS heads pass fresh confirmation at delta 1--3
+and retain substantial exploratory accuracy through delta 23. This is strong
+evidence for the pinned checkpoint and four tested domains, not a universal
+MoE law. Milestone G is now the active question: it adapts the completed
+AX/H5 analytical machinery to exact predictor scores and trace-ordered demand.
+Training a predictability objective is retained only as a future co-design
+hypothesis.
 
 ## Experiment list
 
@@ -42,8 +44,8 @@ retained only as a future co-design hypothesis.
 | AMD-C | Can Transformers expose GPT-OSS router outputs proven identical to actual dispatch? | Configuration/tiny path first; 20B only as needed | Qualified; reviewed and advanced |
 | AMD-D | Does the qualified GPT-OSS 20B path produce a complete tracer-bullet artifact chain? | Yes | Qualified and reviewed |
 | AMD-E | On held-out GPT-OSS 20B requests, do transition tables beat strong cheap route baselines? | Yes | Conditional support: 3/3 prediction gates pass; frozen trace-weight gate fails on 6/2,323,200 pairs; K is candidate count and residency is unmodeled |
-| AMD-F | Can a compact learned route model preserve the GPT-OSS lookahead coverage/amplification frontier? | No for development; fresh confirmation only after pass | Protocol ready; exact training TOML and implementation are next |
-| AMD-G | Under what workload and memory-system regimes is the measured GPT-OSS predictor analytically profitable? | No | Planned after F fixes the empirical frontier; no cache-manager implementation |
+| AMD-F | Can a compact learned route model preserve the GPT-OSS lookahead coverage/amplification frontier? | Existing traces for development plus 64 fresh confirmation requests | Original shared MLP fails 0/3; revised layer-pair heads pass 3/3 development and 3/3 fresh confirmation without refitting |
+| AMD-G | Under what workload and memory-system regimes is the measured GPT-OSS predictor analytically profitable? | No | Highest priority: freeze exact replay, prune analytically, then queue-simulate feasible and boundary cells |
 | AMD-120B | How does 120B routing change normalized contracts? | Would require a new checkpoint | Cancelled: insufficient disk; no result claimed |
 | AX1 | What model-capacity and TPOT envelope can future predictive host/pooled-memory prefetch provide? | No | Complete; projected region exists, review pending |
 | AX2 | How do bandwidth, latency, coverage, amplification, and transfer granularity divide the design space? | No | Complete; inverse bounds and phase map generated |
@@ -60,9 +62,9 @@ retained only as a future co-design hypothesis.
 
 Detailed timing validation, concurrent-copy microbenchmarks, live cache work,
 new model downloads, and predictability-aware base-model training remain
-deferred. The fixed Milestone F route MLP is now active because it tests total
-lookahead demand on an already qualified model; it is not an attempt to rescue
-the H3 replacement gate or H6 residency policy.
+deferred. The fixed shared Milestone F route MLP failed, but its MTP-style
+layer-pair replacement is now confirmed on fresh requests. Neither experiment
+attempts to rescue the H3 replacement gate or H6 residency policy.
 
 ## Completed GPT-OSS sequence -- Milestones C through E
 
@@ -132,8 +134,23 @@ rather than add another OLMoE post-training stage.
 
 ## AMD-F — Compact learned GPT-OSS lookahead predictor
 
-The protocol-ready design is
-[GPT_OSS_MILESTONE_F_PROTOCOL.md](GPT_OSS_MILESTONE_F_PROTOCOL.md).
+The frozen protocol is
+[GPT_OSS_MILESTONE_F_PROTOCOL.md](GPT_OSS_MILESTONE_F_PROTOCOL.md); the
+executed development result is
+[GPT_OSS_MILESTONE_F_RESULTS.md](GPT_OSS_MILESTONE_F_RESULTS.md).
+
+**Original outcome:** `DEVELOPMENT_FAIL`, 0/3 primary lookaheads. The shared model
+reaches only 62.6–64.8% decode K=8 selection and 21.4–25.4% complete-route
+coverage at Δ=1–3. It trails transition by 19.6–23.7 selection points and the
+stronger cheap comparator by 4.0–5.7 points, with negative gains in every
+domain.
+
+**Architecture-revision outcome:** one weighted+binary linear head per
+source-target layer pair passes 3/3 on the existing development set and 3/3 on
+64 fresh requests without refitting. Fresh K=8 selection is 90.0–91.7%,
+complete-route coverage is 70.8–74.1%, and transition selection is exceeded by
+5.7–5.9 points. See
+[GPT_OSS_MULTIHEAD_RESULTS.md](GPT_OSS_MULTIHEAD_RESULTS.md).
 
 ### Claim being tested
 
@@ -162,36 +179,64 @@ experimental deliverable.
 6. Report request-bootstrap uncertainty, domain/layer breadth, score
    calibration, parameter bytes, and forecast operations.
 
-The existing 32 test requests are development data after Milestone E review.
-If the gate passes, freeze the complete pipeline before a 64-request fresh
-confirmation required for the paper's confirmatory learned-predictor claim. If
-it fails while the transition table remains strong,
-retain the transition predictor and narrow the learned-model claim rather than
-escalating network size.
+The existing 32 test requests remain development data after Milestone E
+review. Architecture selection for the revised heads occurred inside the
+original 96 fitting requests; the revised development pass was then frozen and
+confirmed on 64 requests with zero prior prompt/sample overlap. Retain the
+shared-MLP failure as evidence against excessive parameter sharing, not as
+evidence against route predictability.
 
 ## AMD-G — GPT-OSS analytical workload/memory-system regimes
 
 The dependent plan is
-[GPT_OSS_MILESTONE_G_PLAN.md](GPT_OSS_MILESTONE_G_PLAN.md). Freeze it only
-after Milestone F fixes the empirical coverage, precision, calibration, and
-candidate-amplification frontier.
+[GPT_OSS_MILESTONE_G_PLAN.md](GPT_OSS_MILESTONE_G_PLAN.md). Milestone F has
+now fixed the empirical input. Do not reduce it to aggregate coverage: replay
+the exact per-expert scores, target routes, request order, and deadlines from
+the frozen 64-request confirmation artifact.
 
-Adapt the existing H4/H5/AX machinery to GPT-OSS's measured 24-layer,
-32-expert, top-4 geometry and 12.640 MiB loaded expert size. Sweep candidate
-count K independently from resident capacity R, then vary bandwidth, startup
-latency, transfer concurrency, staging capacity, available lookahead slack,
-batch/concurrent streams, prefill/decode mix, domain persistence, and demand
-union size.
+Execute G in four stages:
 
-The decisive comparison is predictive versus reactive hierarchy at equal R.
-Report useful/false/late/missed bytes, complete cold-demand coverage, required
-staging, inverse bandwidth, and modeled mean/P95/P99 service. An all-resident
-point is a capacity/performance reference, not an equal-capacity baseline.
+1. Construct the residual cold set after resident and already-in-flight
+   suppression. Record complete coverage, useful/false/missed candidates,
+   traffic amplification, and staging occupancy before modeling latency.
+2. Apply a first-order screen using experts transferable per layer interval,
+   queue utilization, available lead time, and staging capacity. Eliminate
+   clearly overloaded or trivially feasible cells without expensive replay.
+3. Run deadline-aware, trace-ordered queue replay only for feasible and
+   boundary cells. Compare learned, reactive, and oracle service at equal R
+   and equal transfer-admission budget. Preserve correlated miss waves rather
+   than substituting independent-label accuracy.
+4. Convert the result into inverse architecture requirements: minimum
+   bandwidth, maximum movable expert bytes, transfer concurrency, and staging
+   capacity versus lookahead and workload pressure.
+
+The primary outputs are one action-value phase map, one
+capacity/traffic/stall Pareto, and one inverse bandwidth-versus-lookahead
+curve. A workload-concurrency view is warranted only if it changes the
+qualitative regime. An all-resident point is a capacity/performance reference,
+not an equal-capacity baseline.
 
 No production cache manager, live asynchronous transfer path, or end-to-end
-speedup is required. Resident/in-flight suppression and eviction controls are
-analytical bookkeeping. Every output must distinguish measured,
+speedup is required. Measure GPT-specific unhooked layer timing and concurrent
+copy/compute only if the normalized analysis crosses its decision boundary
+within the current timing uncertainty. Every output must distinguish measured,
 trace-derived, assumed, and hypothetical inputs.
+
+## Highest-ROI order
+
+1. **Freeze and run Milestone G.** This directly tests whether confirmed
+   information changes a resource decision. It needs no new inference and
+   closes the largest remaining logical gap in the paper.
+2. **Calibrate only decision-sensitive physical inputs.** If a profitability
+   boundary is robust over normalized service rates, stop. If it straddles the
+   plausible GPT-OSS timing or overlap range, measure only those quantities.
+3. **Choose one mechanism from the phase map.** A narrow live prototype is
+   justified only after the analysis identifies a robust operating region and
+   the admission rule it requires.
+4. **Defer model expansion.** More predictor fitting, another checkpoint,
+   120B, and predictability-aware co-training have lower ROI until action value
+   is known. Better accuracy cannot rescue an overloaded queue, and a broad
+   candidate set is not automatically a transfer list.
 
 ## Publication claim ladder
 
@@ -522,6 +567,6 @@ Use a compact actual-versus-required table for H5-C. Every plot must name:
 - profitability assumptions;
 - whether the result is measured, trace-driven, or analytical.
 
-Complete the Milestone F development review before collecting fresh
-confirmation or freezing Milestone G. H7 remains future work; C1 remains a
-separate optional external-validity experiment.
+Freeze Milestone G around the confirmed multihead frontier, not the failed
+shared-MLP frontier. H7 remains future work; C1 remains a separate optional
+external-validity experiment.

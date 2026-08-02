@@ -1,0 +1,15 @@
+{
+  "durable_files": {
+    "artifacts/analysis/gpt-oss-20b-long-horizon-exploratory/fig1_long_horizon_tradeoff.pdf": "f023b557ce2a17bc6e9d77ea5fc405d288b46215711dba17e110ac5df6ccafc8",
+    "artifacts/analysis/gpt-oss-20b-long-horizon-exploratory/fig1_long_horizon_tradeoff.png": "0bf16a3b891d8c407e1cace91ca5f3663118cc1e0e4295bd7c9a6d836d9cdb9b",
+    "artifacts/analysis/gpt-oss-20b-long-horizon-exploratory/horizon_summary.csv": "0a7c16d9994d7627ab7e1d477e0d2006358745802a64728a5245962d6692c768",
+    "artifacts/analysis/gpt-oss-20b-long-horizon-exploratory/request_metrics.csv": "365890963a5e124c4454bb457573cd16f5a9793c2ad2340dab0c2a603b4b33f8",
+    "artifacts/analysis/gpt-oss-20b-long-horizon-exploratory/result.json": "2803f25358a6c8ac46421e99a4aace4334af4e424756986b96021019388c702f"
+  },
+  "schema_version": 1,
+  "source": {
+    "confirmation_manifest_sha256": "c9d2751c9f0d6cbce6ba16f30304377bc70f7e3b81611486912152b08bc3472c",
+    "predictor_checkpoint_sha256": "2417c9756f8a201c06914593e5aef6e60d19f092775fd50d3d11a0cffa41aec5",
+    "predictor_config_sha256": "cae63d813a2007ea86a97003b9d240fd8d2827b033e4db8e8505cbfd190e79f5"
+  }
+}

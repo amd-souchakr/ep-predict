@@ -1,0 +1,29 @@
+{
+  "candidates": [
+    {
+      "feature_mode": "binary",
+      "fold_delta_cells": 12,
+      "mean_primary_complete_route_coverage": 0.7011293136462973,
+      "mean_primary_selection_coverage": 0.898849675259322
+    },
+    {
+      "feature_mode": "weighted",
+      "fold_delta_cells": 12,
+      "mean_primary_complete_route_coverage": 0.6311548128803564,
+      "mean_primary_selection_coverage": 0.8721951526702716
+    },
+    {
+      "feature_mode": "weighted_binary",
+      "fold_delta_cells": 12,
+      "mean_primary_complete_route_coverage": 0.7170352308344836,
+      "mean_primary_selection_coverage": 0.9051719560381247
+    }
+  ],
+  "selection_rule": "highest mean selection at 72 requests",
+  "winner": {
+    "feature_mode": "weighted_binary",
+    "fold_delta_cells": 12,
+    "mean_primary_complete_route_coverage": 0.7170352308344836,
+    "mean_primary_selection_coverage": 0.9051719560381247
+  }
+}

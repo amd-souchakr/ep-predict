@@ -1,0 +1,29 @@
+{
+  "durable_files": {
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/REPORT.md": "f4d6fa7a6f71abd199f59b8e99f90464fca9b426ee96d03a0d6c64e195eb700d",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/analysis/baseline_reproduction.json": "b5023572dd4ffc94ef4021d2203f1610900c5853a92013c8cde213065f314e0b",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/analysis/bootstrap_gate.csv": "55a883e23ba741f8b0ccce6518056de9aa8131faacf4536fe04c1d0fb2d8d789",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/analysis/calibration_reliability.csv": "3e1e89a4f9b4fa798f1d8957c665e76b964f09ea6ba2c87ad101eab56a19818e",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/analysis/calibration_summary.csv": "01904377f0d918a6801be035e8b458e061f6ae09c56abf2b3f74d8f37e6b6a83",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/analysis/candidate_churn.csv": "b12653b7a93198cf09a1772bae4b2c501fa845bcb78405467531c5b4800b2093",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/analysis/decision.json": "14cd6080e0ab8f83daba114f84f69b7f20df396b5b1a8f062212060a09096ee1",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/analysis/horizon_summary.csv": "dbbcb7204e3a2633a4a78e3c389315e804e8fa265a54b82b041111ba8078459b",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/analysis/posthoc_train_decode.json": "2075c3dbd470f79b2b91da9b8fbd8c03ddc2b57f2af78ffcff06b00ccd9848dd",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/analysis/request_metrics.csv": "acd6bd7458d9bc87b619f06cf5a38b0fd40d441047903103e31bf934fff3a57d",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/analysis/scope_metrics.csv": "cf97f2fb6c63c0e9fc8e02ea7594457f4da2f3162893e245f747a1814adcf714",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/analysis/score_threshold_frontier.csv": "e2a15caa9f734bf38def7729a2afbcdcf12832b87222434f65e2d590a45c062e",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/figures/fig1_fixed_k_frontier.pdf": "e98d5fd41a95b8a8e8a43497218e2b0238b762c58a5e501fe2dfe16b492eb5a4",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/figures/fig1_fixed_k_frontier.png": "3e47213086e9635dc613b7249309b1c674c13c151faaf93f1bb25108241bfa6e",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/figures/fig2_score_threshold_frontier.pdf": "12ef4e1af66caa2e47494d2a67b588002ab46df0065654ff12016f916430773d",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/figures/fig2_score_threshold_frontier.png": "09692129cbac5fb82573f18e6adf9543c66553cccc00ec8cfe53fd29ad6c15af",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/frozen_config.toml": "026fe84b769459ca84ebf3a21be25be5ee4a004362234eabc58aa99ec0896bfc",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/model.pt": "d1116acf2dcd8ccfab58458c8748585cd6cbc0123c690f8817f59797c3acd6f0",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/model_accounting.json": "4f041ac730cd472149012126528f2390aa6947d5444b20212c57732c4c628649",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/request_split.csv": "edb7b178af9f641c3d4ccd99327a7ef36e51c00fcf1136da66b742218cb50001",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/request_split.json": "5d7d6e1730c8084f6fceda6804d36bf4356fc848b94ea1f92c41d86769611864",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/result.json": "6139390454d79fd7be94f1dd4ebae1b9e610122088ebe4589ed86c376097b560",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/run_definition.json": "27c2c7e9d71a8ac4979e169e8280f71f99fb179dfd3815b88e70b03ee17fefb1",
+    "artifacts/runs/gpt-oss-20b-milestone-f-development/training_history.csv": "9b7ffcb2d66b00372ac4cbd2facffb5bc2fdef719a6fb9f3fa04c688409eb40f"
+  },
+  "schema_version": 1
+}

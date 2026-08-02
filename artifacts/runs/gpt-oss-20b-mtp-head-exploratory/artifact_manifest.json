@@ -1,0 +1,19 @@
+{
+  "durable_files": {
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/REPORT.md": "b9b239c860aff56ffc68fad89096e90167f94d5186a4e69e168c60c6f3971135",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/cross_validation_splits.json": "3afe37996b1e48a4270be1989d46035e75a32d65cd1803bbc69ef572a8a63589",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/decision.json": "1b03a8f9fcc3adbf27207d53895e02ec967fa14822672541d87d7f9da3babf35",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/figures/fig1_learning_curve.pdf": "2ab9ec4e5fc4e8319460d150b54f54f49bbfed926256d503e5bf21ea0b5467c7",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/figures/fig1_learning_curve.png": "8e88b84a8304b06d6c6f571ff8e7926dba800abc1b6ebf92b148d4625fa17dcc",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/final_development_metrics.csv": "a40774b00d88f8214b3af04dd3591436a8ebf2ce896b8aa39e46626b0bb2f4ca",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/frozen_config.toml": "cae63d813a2007ea86a97003b9d240fd8d2827b033e4db8e8505cbfd190e79f5",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/learning_curve.csv": "50b1bd4169ef8a3a5e68d88b022bf9be0d2e3a61dac64709b57c6ee30a08959b",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/model.pt": "2417c9756f8a201c06914593e5aef6e60d19f092775fd50d3d11a0cffa41aec5",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/model_accounting.json": "693c24b2f439a9cd58edda8f8fdb496881e7650ebfb1abc035bbeb2c33998357",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/model_selection.json": "a1aa4ad9bd4e8d1b33dba1e68998d6e66e5dc9fb01e53b03132964f2229adf7c",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/result.json": "c19c5493d85ab33588f798e225ce0156f1f9ad63590b8a567ea979c6379d2053",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/run_definition.json": "b5454024c3bd1ed1585bc7466badb5488aba52ee8e3d99bc112d0140fd95d6dd",
+    "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/training_summary.csv": "b2d3896067ac6c1fec09a700b8eb6d7fcd27da9442df66b12af2e058f91d4488"
+  },
+  "schema_version": 1
+}

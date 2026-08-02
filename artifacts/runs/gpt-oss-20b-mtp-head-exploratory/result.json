@@ -1,0 +1,127 @@
+{
+  "cross_validation_model_selection": {
+    "candidates": [
+      {
+        "feature_mode": "binary",
+        "fold_delta_cells": 12,
+        "mean_primary_complete_route_coverage": 0.7011293136462973,
+        "mean_primary_selection_coverage": 0.898849675259322
+      },
+      {
+        "feature_mode": "weighted",
+        "fold_delta_cells": 12,
+        "mean_primary_complete_route_coverage": 0.6311548128803564,
+        "mean_primary_selection_coverage": 0.8721951526702716
+      },
+      {
+        "feature_mode": "weighted_binary",
+        "fold_delta_cells": 12,
+        "mean_primary_complete_route_coverage": 0.7170352308344836,
+        "mean_primary_selection_coverage": 0.9051719560381247
+      }
+    ],
+    "selection_rule": "highest mean selection at 72 requests",
+    "winner": {
+      "feature_mode": "weighted_binary",
+      "fold_delta_cells": 12,
+      "mean_primary_complete_route_coverage": 0.7170352308344836,
+      "mean_primary_selection_coverage": 0.9051719560381247
+    }
+  },
+  "decision": {
+    "confirmation_claim_allowed": false,
+    "decision": "EXPLORATORY_GATE_EQUIVALENT_PASS",
+    "evidence_role": "exploratory counterfactual application of the Milestone F gate",
+    "lookaheads": [
+      {
+        "checks": {
+          "absolute_complete": true,
+          "absolute_selection": true,
+          "all_domain_selection_gains_positive": true,
+          "cheap_selection_gain": true,
+          "transition_complete_noninferiority": true,
+          "transition_selection_noninferiority": true
+        },
+        "complete_deficit_vs_transition": 0.1403702445652174,
+        "complete_route_coverage": 0.7476222826086957,
+        "delta": 1,
+        "domain_gains": {
+          "code": 0.2575577445652174,
+          "conversation": 0.2179857336956521,
+          "general": 0.20940896739130432,
+          "math": 0.26766304347826086
+        },
+        "mean_gain_vs_strongest_cheap": 0.23815387228260868,
+        "pass": true,
+        "selection_coverage": 0.9192212975543478,
+        "selection_deficit_vs_transition": 0.0566193953804347,
+        "transition_complete_route_coverage": 0.6072520380434783,
+        "transition_selection_coverage": 0.8626019021739131
+      },
+      {
+        "checks": {
+          "absolute_complete": true,
+          "absolute_selection": true,
+          "all_domain_selection_gains_positive": true,
+          "cheap_selection_gain": true,
+          "transition_complete_noninferiority": true,
+          "transition_selection_noninferiority": true
+        },
+        "complete_deficit_vs_transition": 0.15003551136363635,
+        "complete_route_coverage": 0.7442294034090909,
+        "delta": 2,
+        "domain_gains": {
+          "code": 0.25008877840909083,
+          "conversation": 0.20232599431818177,
+          "general": 0.20276988636363635,
+          "math": 0.25843394886363624
+        },
+        "mean_gain_vs_strongest_cheap": 0.2284046519886363,
+        "pass": true,
+        "selection_coverage": 0.9163041548295454,
+        "selection_deficit_vs_transition": 0.06101296164772718,
+        "transition_complete_route_coverage": 0.5941938920454546,
+        "transition_selection_coverage": 0.8552911931818182
+      },
+      {
+        "checks": {
+          "absolute_complete": true,
+          "absolute_selection": true,
+          "all_domain_selection_gains_positive": true,
+          "cheap_selection_gain": true,
+          "transition_complete_noninferiority": true,
+          "transition_selection_noninferiority": true
+        },
+        "complete_deficit_vs_transition": 0.15048363095238093,
+        "complete_route_coverage": 0.7182849702380952,
+        "delta": 3,
+        "domain_gains": {
+          "code": 0.23763020833333326,
+          "conversation": 0.18675595238095244,
+          "general": 0.19661458333333326,
+          "math": 0.24534970238095233
+        },
+        "mean_gain_vs_strongest_cheap": 0.21658761160714282,
+        "pass": true,
+        "selection_coverage": 0.9050874255952381,
+        "selection_deficit_vs_transition": 0.06117466517857151,
+        "transition_complete_route_coverage": 0.5678013392857143,
+        "transition_selection_coverage": 0.8439127604166666
+      }
+    ],
+    "passing_lookaheads": 3,
+    "required": 2
+  },
+  "evidence_role": "exploratory architecture and learning-curve study; cannot replace the frozen Milestone F decision",
+  "final_training_loss": 0.16291149954001108,
+  "model_accounting": {
+    "checkpoint_bytes": 2298197,
+    "heads": 276,
+    "macs_per_forecast": 2048,
+    "parameter_bytes_fp32": 2296320,
+    "parameters": 574080,
+    "phase": "decode",
+    "selected_feature_mode": "weighted_binary"
+  },
+  "recovery_note": "all fits completed before a NumPy-boolean JSON serialization error; existing outputs finalized without refitting"
+}

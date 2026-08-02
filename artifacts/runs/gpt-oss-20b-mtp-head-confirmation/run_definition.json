@@ -1,0 +1,88 @@
+{
+  "checkpoint": {
+    "config_sha256": "3a2a26ded679375b7928ddeca59764df7cea83220c1961035f6d6e232659e9ce",
+    "model_id": "openai/gpt-oss-20b",
+    "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+    "safetensors_index_sha256": "0e085b977c4c9942f85938828e8c989ed7d5cdabf852e4da6a67c116cd502cd1",
+    "snapshot": "/home/souchakr/.cache/huggingface/hub/models--openai--gpt-oss-20b/snapshots/6cee5e81ee83917806bbde320786a8fb61efebee",
+    "tokenizer_json_sha256": "0614fe83cadab421296e664e1f48f4261fa8fef6e03e63bb75c20f38e37d07d3"
+  },
+  "claim_boundary": "GPT-OSS 20B routing and held-out route-prediction quality only; no timing, language-quality, 120B, or cross-model claim",
+  "config": {
+    "analysis": {
+      "bootstrap_resamples": 5000,
+      "bootstrap_seed": 20260803,
+      "confidence_level": 0.95,
+      "primary_candidate_count": 8,
+      "primary_lookaheads": [
+        1,
+        2,
+        3
+      ],
+      "primary_phase": "decode"
+    },
+    "chat_template_current_date": "2026-08-01",
+    "confirmation_without_refit": true,
+    "decision_gate": {
+      "max_complete_route_deficit_vs_transition": 0.05,
+      "max_selection_deficit_vs_transition": 0.03,
+      "min_complete_route_coverage": 0.5,
+      "min_passing_lookaheads": 2,
+      "min_selection_coverage": 0.82,
+      "min_selection_gain_vs_cheap_comparator": 0.1,
+      "require_positive_selection_gain_all_domains": true
+    },
+    "device": "cuda:0",
+    "expected_domains": 4,
+    "expected_requests": 64,
+    "expected_requests_per_domain": 16,
+    "max_new_tokens": 16,
+    "max_prompt_tokens": 512,
+    "milestone": "F-multihead-confirmation",
+    "model_id": "openai/gpt-oss-20b",
+    "output_dir": "artifacts/runs/gpt-oss-20b-mtp-head-confirmation",
+    "predictor_checkpoint": "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/model.pt",
+    "predictor_checkpoint_sha256": "2417c9756f8a201c06914593e5aef6e60d19f092775fd50d3d11a0cffa41aec5",
+    "predictor_config": "artifacts/runs/gpt-oss-20b-mtp-head-exploratory/frozen_config.toml",
+    "predictor_config_sha256": "cae63d813a2007ea86a97003b9d240fd8d2827b033e4db8e8505cbfd190e79f5",
+    "predictor_feature_mode": "weighted_binary",
+    "predictor_heads": 276,
+    "prompt_file": "artifacts/datasets/gpt-oss-milestone-f-confirmation/prompts.jsonl",
+    "prompt_file_sha256": "f9e8b6f2b584438155602165668c6c90b278178bda6f9f212bcee758ec4f38f3",
+    "prompt_manifest": "artifacts/datasets/gpt-oss-milestone-f-confirmation/manifest.json",
+    "prompt_manifest_sha256": "448c79c1a23e9c909e0bd2c667e46d3045bec296e4c1bafe2e602d96b4b68925",
+    "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+    "run_id": "gpt-oss-20b-mtp-head-confirmation",
+    "seed": 20260803,
+    "snapshot": "/home/souchakr/.cache/huggingface/hub/models--openai--gpt-oss-20b/snapshots/6cee5e81ee83917806bbde320786a8fb61efebee",
+    "trace": {
+      "dispatch_weight_atol": 0.00390625,
+      "expected_experts": 32,
+      "expected_layers": 24,
+      "expected_top_k": 4
+    }
+  },
+  "config_path": "configs/experiment/gpt-oss-20b-mtp-head-confirmation.toml",
+  "config_sha256": "d09a8d6e72335947e60d8f94aeaa7c259a731aa09f8214c1965ab796e3531e1b",
+  "environment": {
+    "device_name": "AMD Instinct MI355X",
+    "hip_visible_devices": "0",
+    "kernels": "0.15.2",
+    "python": "3.12.13",
+    "tokenizers": "0.22.2",
+    "torch": "2.11.0+rocm7.2",
+    "torch_hip": "7.2.26015",
+    "transformers": "5.14.1",
+    "visible_device_count": 1
+  },
+  "git_commit": "086b08d6eade4c2926b4c5be3a593d86cb9b955f",
+  "milestone_d_result": {
+    "path": "artifacts/runs/gpt-oss-20b-milestone-d/result.json",
+    "sha256": "f405fb40f64d8e9501326fd8e2f7010a1e3772f4bdad6698bf09b2de0e83d8ec"
+  },
+  "prompt_file": {
+    "path": "artifacts/datasets/gpt-oss-milestone-f-confirmation/prompts.jsonl",
+    "sha256": "f9e8b6f2b584438155602165668c6c90b278178bda6f9f212bcee758ec4f38f3"
+  },
+  "schema_version": 1
+}

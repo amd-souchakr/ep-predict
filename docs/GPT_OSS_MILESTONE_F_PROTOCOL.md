@@ -1,6 +1,14 @@
 # GPT-OSS 20B Milestone F learned-lookahead protocol
 
-**State:** protocol ready; freeze the implementation config before fitting
+**State:** frozen protocol executed; development failed 0/3 primary lookaheads
+and conditional fresh confirmation was not collected (see
+[GPT_OSS_MILESTONE_F_RESULTS.md](GPT_OSS_MILESTONE_F_RESULTS.md))
+
+**Subsequent architecture revision:** MTP-style layer-pair heads were selected
+inside the original fitting requests, passed the development gate, and passed
+a separately frozen 64-request confirmation. See
+[GPT_OSS_MULTIHEAD_RESULTS.md](GPT_OSS_MULTIHEAD_RESULTS.md). This does not
+retroactively change the shared-MLP protocol outcome.
 **Checkpoint:** `openai/gpt-oss-20b`, revision
 `6cee5e81ee83917806bbde320786a8fb61efebee`
 **Primary evidence:** existing Milestone E dispatch traces

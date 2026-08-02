@@ -1,0 +1,31 @@
+{
+  "config_path": "configs/experiment/gpt-oss-20b-milestone-f.toml",
+  "config_sha256": "026fe84b769459ca84ebf3a21be25be5ee4a004362234eabc58aa99ec0896bfc",
+  "created_before_first_fit": true,
+  "development_split": "artifacts/runs/gpt-oss-20b-milestone-e/analysis/prediction/split.json",
+  "development_split_sha256": "47e96c86f724ef6d1350b3c2d34932ed660b2b291474d973f16f351442546322",
+  "environment": {
+    "device_count": 1,
+    "device_name": "AMD Instinct MI355X",
+    "hip_visible_devices": "0",
+    "numpy": "2.5.1",
+    "python": "3.12.13",
+    "torch": "2.11.0+rocm7.2",
+    "torch_hip": "7.2.26015"
+  },
+  "evidence_stage": "development",
+  "frozen_config_path": "artifacts/runs/gpt-oss-20b-milestone-f-development/frozen_config.toml",
+  "git_commit_before_implementation_run": "086b08d6eade4c2926b4c5be3a593d86cb9b955f",
+  "integrity_checks": {
+    "complete_token_layer_coverage": true,
+    "dispatch_consumed_weights_retained": true,
+    "exact_dispatch_ids": true,
+    "legacy_weight_error_within_bf16_bound": true,
+    "legacy_weight_mismatch_fraction_within_bound": true
+  },
+  "legacy_weight_mismatch_fraction": 2.5826446280991737e-06,
+  "milestone": "F",
+  "schema_version": 1,
+  "source_artifact_manifest_sha256": "ff32e7837b162fa78a3993bca9c02f54780337e9dfa8a2fbe715de5e4b34140b",
+  "source_run": "artifacts/runs/gpt-oss-20b-milestone-e"
+}

@@ -17,8 +17,8 @@ Update it only when at least one of the following occurs:
 Routine metrics, commands, implementation changes, and transient next steps
 belong in `EXPERIMENT_LOG.md`, `STATUS.md`, and the per-hypothesis reports.
 
-**Evidence snapshot:** 2026-08-01, after H1–H6, the all-layer H2/H3 scan, and
-the C0 Base–Instruct matched-token comparison.
+**Evidence snapshot:** 2026-08-02, after H1–H6, the all-layer H2/H3 scan, C0,
+and fresh-request confirmation of the GPT-OSS layer-pair route predictor.
 
 ---
 
@@ -38,10 +38,12 @@ The emerging architectural view is:
 > progressively refine placement, replication, or scheduling as execution
 > reveals more information.
 
-This is presently an OLMoE pilot result, not a universal MoE law. H4 found
-that physical actionability is conditional: the preregistered compact tier and
-short horizon failed, while more residency, lead time, or bandwidth exposed an
-oracle-feasible region.
+Cross-layer route structure now appears in two materially different public
+MoE architectures, and a learned route-only predictor has passed fresh
+confirmation on one GPT-OSS checkpoint. This is stronger than a single-model
+pilot but still not a universal MoE law. Physical actionability remains a
+separate claim: residency, admission, lead time, bandwidth, queueing, and
+staging determine whether predictive information has positive action value.
 
 ---
 
@@ -68,6 +70,31 @@ At decode \(K=16\), the H2 transition table achieved:
 | \(n+3\) | 76.8% | 22.2% |
 
 All 168 original layer-domain comparisons improved over static popularity.
+
+### A learned route-only predictor survives fresh GPT-OSS confirmation
+
+The original shared 64-unit MLP failed, but the failure was architectural
+rather than a demonstrated data shortage. A weighted+binary linear head for
+each source-target layer pair reaches the following on 64 fresh GPT-OSS 20B
+requests, with no refit:
+
+| Decode, K=8 | Selection coverage | Complete top-4 coverage |
+|---:|---:|---:|
+| delta 1 | 91.7% | 74.1% |
+| delta 2 | 91.1% | 73.3% |
+| delta 3 | 90.0% | 70.8% |
+
+All three frozen gates and all four domain-breadth checks pass. The model
+beats the transition table by 5.7--5.9 selection points. This matters because
+it converts descriptive conditional structure into a compact, scored forecast
+that can be consumed by a resource controller.
+
+All forward heads through delta 23 were trained. On the same fresh trace, the
+exploratory K=8 selection/complete frontier remains 84.7%/62.8% at delta 23;
+K=12 raises it to 91.5%/77.6%. Long lead time therefore survives, but it is
+not free: candidate amplification grows with K. The correct architectural
+object is the full coverage--amplification--deadline frontier, not accuracy at
+one horizon.
 
 ### A linear sidecar is not a universal replacement
 
@@ -385,9 +412,12 @@ The experiments separate three necessary properties:
 3. **Selectivity:** acting on predictions does not waste excessive bytes or
    capacity.
 
-H2/H3 support the information gate. H4 exposes conditional service regions.
-H5 finds an analytical intersection but shows that the unchanged candidate
-streams miss its selectivity boundary.
+H2/H3 support the information gate on OLMoE. GPT-OSS Milestone F strengthens
+it with a learned route-only model that passes fresh confirmation. H4 exposes
+conditional service regions. H5 finds an analytical intersection but shows
+that the unchanged OLMoE candidate streams miss its selectivity boundary.
+Milestone G must now test the confirmed GPT-OSS scores against all three gates
+in one exact replay.
 
 No single accuracy, bandwidth, or cache-hit metric establishes architectural
 value. A system is profitable only in the intersection of all three regions.
@@ -435,6 +465,7 @@ features, but one cannot be substituted for another without evidence.
 | Complete route coverage is the placement target | Complete residual-cold-set coverage is the operational target |
 | Quote bandwidth in GB/s | Compare experts transferable per layer interval with cold experts per wave |
 | One good metric establishes architectural value | Information, physical service, and selectivity must pass together |
+| Better forecast accuracy establishes action value | Exact scores must survive residual-cold-set suppression, admission cost, and deadline queueing |
 | Future-expert prediction is a generic cache signal | The predictor's axis must match the mechanism: depth for within-token action, time for reuse |
 | A failed primary gate ends the idea | A failed global policy can expose a valuable conditional regime |
 | Preregister every important interaction | Freeze one decision, then use cheap post-hoc scans for discovery |
@@ -448,6 +479,12 @@ features, but one cannot be substituted for another without evidence.
 H1 rejected universal static placement but revealed domain structure. H3
 rejected universal linear replacement but revealed early-layer long-range
 value. Neither failure justified an MLP or a tuning sweep.
+
+Milestone F adds a complementary warning: a weak learned result does not by
+itself prove inadequate data. The shared MLP underfit both training and held-out
+requests; source-target-specific linear heads then passed with the same 96
+fitting requests. Check whether parameter sharing matches the structure of the
+conditional map before buying more samples or model capacity.
 
 ### Preregistration protects decisions, not discovery
 
@@ -491,10 +528,10 @@ model or proof that routing should be reshaped. Turning score separation into
 a base-model training objective would introduce a different hypothesis about
 loss, load balance, and routing controllability.
 
-The next aligned question is whether existing trajectory information improves
-residency or replication over simple policies. Co-training predictable routing
-remains later work and should not be used to rescue an unproven placement
-mechanism.
+The next aligned question is whether the freshly confirmed GPT-OSS scores have
+action value for within-token service after residency, transfer admission, and
+deadlines are charged. Co-training predictable routing remains later work and
+should not be used to rescue an unproven movement mechanism.
 
 ### A strong oracle gap can coexist with the wrong predictor
 
@@ -608,25 +645,26 @@ increase, even if its raw trajectory predictor is less accurate.
 
 ## Unanswered foundational questions
 
-1. Does the descriptive \(K=32,\Delta=3\) oracle region survive measured
+1. Do the exact frozen GPT-OSS scores reduce modeled residual service stall at
+   equal resident capacity and transfer-admission budget?
+2. Which K, lookahead, and admission rule lies on the best
+   coverage--traffic--deadline Pareto after resident and in-flight suppression?
+3. Does the useful regime favor whole experts, finer-grained tiles, bandwidth
+   reservation, or no speculative movement?
+4. Are the Milestone G decisions robust to GPT-specific layer timing and real
    concurrent copy/compute contention?
-2. Can prediction be aggregated across requests or token waves so that reuse
-   offsets candidate churn?
-3. Can a direct temporal-reuse predictor, request-level aggregation, or
-   replication objective exploit the H6 oracle gap without becoming a new
-   high-complexity project?
-4. Is future-routing information genuinely low-dimensional, or did one random
-   projection happen to work well?
-5. Does the early-linear/late-transition regime reproduce on fresh requests?
-6. Does it generalize to a newer top-1/top-2 MoE checkpoint?
-7. Are middle layers easier to predict because of lower router entropy,
-   semantic specialization, residual-stream geometry, or another mechanism?
-8. Is whole-expert movement ever preferable to moving activations toward
+5. Does workload concurrency or prefill demand union destroy a batch-one
+   decode region through queueing and staging pressure?
+6. Can a direct temporal-reuse predictor or request-level aggregation exploit
+   the H6 oracle gap without conflating depth prediction with cache retention?
+7. Does learned trajectory prediction generalize to a newer top-1/top-2 MoE
+   checkpoint and different workloads?
+8. Why are some distant layer pairs easier to predict: router entropy,
+   specialization, residual-stream geometry, or another mechanism?
+9. Is whole-expert movement ever preferable to moving activations toward
    resident experts?
-9. Should the hierarchy optimize strict latency, throughput, bandwidth,
-   replication quality, or different objectives in different regimes?
 10. Can routing or control behavior eventually be co-trained without harming
-    model quality?
+    model quality, specialization, or load balance?
 
 ---
 
@@ -722,6 +760,22 @@ contract, but it is not a literal description of current OLMoE execution.
 - The same AX4 replay rejects measured PCIe for this mechanism: P99 normalized
   missing mass is 100%/100%/81% at K=8/16/32.
 
+### Directly supported for the pinned GPT-OSS workload
+
+- Held-out route transitions predict future top-4 demand through the
+  24-layer network, independently confirming cross-layer structure in a
+  second public MoE architecture.
+- A frozen weighted+binary layer-pair predictor passes all delta 1--3 gates on
+  64 fresh requests and all four tested domains without refitting.
+- At decode K=8, selection coverage is 90.0--91.7% and complete-route coverage
+  is 70.8--74.1% at delta 1--3; transition selection is exceeded by
+  5.7--5.9 points.
+- Useful predictive information remains at long lead times: exploratory K=8
+  selection is 87.2% at delta 12 and 84.7% at delta 23.
+- The original shared MLP failure was not evidence that 96 requests were
+  intrinsically insufficient; layer-pair-specific heads fit and generalized
+  under the same data budget.
+
 ### Plausible architectural inference
 
 - A hybrid early-planning/late-correction controller is more appropriate than
@@ -744,7 +798,10 @@ contract, but it is not a literal description of current OLMoE execution.
 - Prediction reduces end-to-end latency or TPOT.
 - The current prediction-guided transfer policy is profitable.
 - The current depth predictors improve on-demand expert residency.
-- The result generalizes beyond one top-8 OLMoE checkpoint.
+- Learned route-prediction accuracy generalizes beyond the pinned GPT-OSS
+  checkpoint, four tested domains, or current request distribution.
+- Cross-layer predictability is universal across MoE architectures, routing
+  widths, training recipes, or workloads.
 - The within-family Base–Instruct stability result generalizes across model
   families or routing sparsities.
 - The base model learned to manage hardware resources.
@@ -789,6 +846,9 @@ Routes Provide Short-Range Correction**
 8. Recast late experts as deadline erasures under an always-resident competence
    path, and quantify the bandwidth–residency–distortion region in which a hard
    TPOT bound becomes a plausible training target.
+9. Confirm on fresh GPT-OSS requests that a compact source-target-aware route
+   predictor preserves high coverage through long horizons, then quantify the
+   action value of its exact scores under explicit hardware contracts.
 
 The defensible contribution is a workload and co-design boundary, not a
 profitable end-to-end prefetch implementation. Strong long-range routing
@@ -827,3 +887,7 @@ central trajectory result.
   mass-priority 128–256 GB/s FCFS regime, and established that a hard latency
   bound, service capacity, and erasure robustness are three separate
   requirements.
+- **2026-08-02:** GPT-OSS Milestone F passed fresh confirmation with
+  source-target-specific weighted+binary route heads. K=8 selection remains
+  84.7% at delta 23, closing the information gate for the pinned checkpoint
+  and making exact action-value replay the highest-priority next experiment.
