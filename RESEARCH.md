@@ -3,9 +3,9 @@
 ## Founding Research PRD
 
 **Status:** H1–H6 and C0 empirical pilot complete; AX1–AX4 analytical architecture track complete, AX4 human review pending
-**Primary environment:** Python 3.12, `uv`, PyTorch, Hugging Face Transformers, CUDA 12.4  
+**Initial environment:** Python 3.12, `uv`, PyTorch, Hugging Face Transformers, CUDA 12.4<br>
 **Initial hardware:** 1× NVIDIA GPU with 24 GB VRAM  
-**Planned scale-up environment:** 8× AMD MI355X-class GPUs with 288 GB HBM per GPU  
+**Scale-up environment:** ROCm 7.2, PyTorch 2.11, 8× AMD MI355X-class GPUs with 288 GB HBM per GPU; experiments expose one GPU<br>
 **Primary audience:** AI coding assistant, ML systems researcher, GPU performance modeling engineer, HW/SW/workload co-design architect
 
 **Curated publication insights:** [docs/FOUNDATIONAL_INSIGHTS.md](docs/FOUNDATIONAL_INSIGHTS.md)

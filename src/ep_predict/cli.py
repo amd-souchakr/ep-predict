@@ -28,6 +28,18 @@ def _inspect(args: argparse.Namespace) -> int:
     return 0
 
 
+def _verify_rocm(args: argparse.Namespace) -> int:
+    from ep_predict.runtime import verify_rocm_runtime
+
+    report = verify_rocm_runtime(
+        device_index=args.device_index,
+        expected_architecture=args.expected_architecture,
+        expected_visible_devices=args.expected_visible_devices,
+    )
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0 if report["state"] == "ready" else 1
+
+
 def _prepare_dataset(args: argparse.Namespace) -> int:
     from ep_predict.data.standard import materialize_standard_workload
 
@@ -318,6 +330,15 @@ def build_parser() -> argparse.ArgumentParser:
     inspect_parser.add_argument("--config", required=True, type=Path)
     inspect_parser.add_argument("--output", type=Path)
     inspect_parser.set_defaults(function=_inspect)
+
+    rocm_parser = subparsers.add_parser(
+        "verify-rocm",
+        help="verify the ROCm wheel, one gfx950 GPU, BF16, and router hooks",
+    )
+    rocm_parser.add_argument("--device-index", type=int, default=0)
+    rocm_parser.add_argument("--expected-architecture", default="gfx950")
+    rocm_parser.add_argument("--expected-visible-devices", type=int, default=1)
+    rocm_parser.set_defaults(function=_verify_rocm)
 
     dataset_parser = subparsers.add_parser(
         "prepare-dataset",

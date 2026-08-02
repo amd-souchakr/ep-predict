@@ -24,6 +24,12 @@ documents the active/total parameter counts and Transformers support. The
 [Transformers implementation](https://github.com/huggingface/transformers/blob/main/src/transformers/models/olmoe/modeling_olmoe.py)
 is the source of truth for hook semantics.
 
+The scale-up testbed runs this same BF16 checkpoint through unmodified
+Transformers on one visible AMD MI355X (`gfx950`) using ROCm 7.2. The model is
+small relative to 288 GB HBM, so neither CPU offload nor multi-GPU sharding is
+part of the qualification. `HIP_VISIBLE_DEVICES=0` enforces the single-GPU
+scope; PyTorch ROCm still names the logical device `cuda:0`.
+
 ## Paired checkpoint control
 
 C0 additionally qualified the direct pretrained ancestor

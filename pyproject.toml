@@ -18,8 +18,10 @@ data = [
 ]
 inference = [
     "accelerate==1.3.0",
-    "torch==2.6.0",
+    "pytorch-triton-rocm>=3.5.1; sys_platform == 'linux'",
+    "torch==2.11.0",
     "transformers==5.14.1",
+    "triton-rocm>=3.6.0; sys_platform == 'linux'",
 ]
 viz = [
     "matplotlib==3.11.1",
@@ -29,3 +31,22 @@ viz = [
 [build-system]
 requires = ["uv_build>=0.12.0,<0.13.0"]
 build-backend = "uv_build"
+
+# ROCm PyTorch wheels are published outside PyPI. Keep this index explicit so
+# unrelated dependencies continue to resolve from PyPI and CUDA wheels cannot
+# enter Linux environments through torch's default index.
+[tool.uv.sources]
+pytorch-triton-rocm = [
+    { index = "pytorch-rocm", marker = "sys_platform == 'linux'" },
+]
+torch = [
+    { index = "pytorch-rocm", marker = "sys_platform == 'linux'" },
+]
+triton-rocm = [
+    { index = "pytorch-rocm", marker = "sys_platform == 'linux'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-rocm"
+url = "https://download.pytorch.org/whl/rocm7.2"
+explicit = true

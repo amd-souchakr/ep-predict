@@ -83,7 +83,10 @@ def measure_h4(
     import torch
 
     if not torch.cuda.is_available():
-        raise RuntimeError("H4 timing calibration requires CUDA")
+        raise RuntimeError(
+            "H4 timing calibration requires a GPU through PyTorch's "
+            "torch.cuda API (CUDA or ROCm)"
+        )
     output_dir = Path(experiment_config["output_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
     fingerprint = config_fingerprint(model_config, experiment_config)
@@ -249,4 +252,3 @@ def measure_h4(
     }
     write_json(output_dir / "measurement.json", result)
     return result
-

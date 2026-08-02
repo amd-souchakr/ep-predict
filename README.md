@@ -100,6 +100,30 @@ Before adding one, follow
 [docs/ADDING_MODEL_TESTBED.md](docs/ADDING_MODEL_TESTBED.md) to keep run
 artifacts, status, conclusions, and publication insights scoped by model.
 
+## AMD MI355X environment
+
+The Linux inference extra is pinned to PyTorch 2.11.0 from the ROCm 7.2 wheel
+index. It contains no CUDA packages. The target is one visible MI355X
+(`gfx950`) even when the host contains eight GPUs:
+
+```bash
+uv sync --extra inference
+
+HIP_VISIBLE_DEVICES=0 uv run ep-predict verify-rocm
+```
+
+PyTorch exposes ROCm devices through its `torch.cuda` API, so model and
+predictor configs intentionally continue to use `device = "cuda:0"`. With
+`HIP_VISIBLE_DEVICES=0`, that is logical device zero and cannot initiate a
+multi-GPU run. The verifier performs BF16 compute, a pinned host-to-device
+copy, and a tiny Transformers OLMoE forward with project router hooks; it does
+not download a checkpoint.
+
+The Python environment assumes the host already exposes `/dev/kfd` and
+`/dev/dri` and has a compatible ROCm driver. It does not install or alter OS
+packages. See [docs/ROCM_SETUP.md](docs/ROCM_SETUP.md) for the validation and
+full-checkpoint smoke sequence.
+
 ## Quick start
 
 Install the inference dependencies:

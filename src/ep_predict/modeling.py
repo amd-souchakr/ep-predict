@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.metadata
 import json
+import os
 import platform
 import subprocess
 from pathlib import Path
@@ -30,7 +31,19 @@ def load_model_and_tokenizer(config: dict[str, Any]):
 
     device = config.get("device", "cuda:0")
     if device.startswith("cuda") and not torch.cuda.is_available():
-        raise RuntimeError(f"configured device {device}, but CUDA is unavailable")
+        backend = (
+            f"ROCm {torch.version.hip}"
+            if torch.version.hip is not None
+            else (
+                f"CUDA {torch.version.cuda}"
+                if torch.version.cuda is not None
+                else "CPU-only"
+            )
+        )
+        raise RuntimeError(
+            f"configured accelerator device {device}, but torch.cuda.is_available() "
+            f"is false (installed PyTorch backend: {backend})"
+        )
 
     tokenizer = AutoTokenizer.from_pretrained(
         config["tokenizer_id"],
@@ -40,7 +53,7 @@ def load_model_and_tokenizer(config: dict[str, Any]):
     model = AutoModelForCausalLM.from_pretrained(
         config["model_id"],
         revision=config.get("revision"),
-        torch_dtype=_torch_dtype(config.get("dtype", "bfloat16")),
+        dtype=_torch_dtype(config.get("dtype", "bfloat16")),
         device_map={"": device},
         low_cpu_mem_usage=True,
         attn_implementation=config.get("attention_implementation", "sdpa"),
@@ -139,6 +152,7 @@ def environment_report() -> dict[str, Any]:
             "memory_bytes": properties.total_memory,
             "capability": list(torch.cuda.get_device_capability(0)),
             "device_count": torch.cuda.device_count(),
+            "architecture": getattr(properties, "gcnArchName", None),
         }
     try:
         git_commit = subprocess.run(
@@ -151,7 +165,13 @@ def environment_report() -> dict[str, Any]:
         git_commit = None
 
     packages = {}
-    for name in ("accelerate", "torch", "transformers"):
+    for name in (
+        "accelerate",
+        "pytorch-triton-rocm",
+        "torch",
+        "transformers",
+        "triton-rocm",
+    ):
         try:
             packages[name] = importlib.metadata.version(name)
         except importlib.metadata.PackageNotFoundError:
@@ -160,7 +180,18 @@ def environment_report() -> dict[str, Any]:
         "python": platform.python_version(),
         "platform": platform.platform(),
         "packages": packages,
+        "torch_backend": (
+            "rocm"
+            if torch.version.hip is not None
+            else "cuda" if torch.version.cuda is not None else "cpu"
+        ),
         "torch_cuda_version": torch.version.cuda,
+        "torch_hip_version": torch.version.hip,
+        "gpu_visibility": {
+            "HIP_VISIBLE_DEVICES": os.environ.get("HIP_VISIBLE_DEVICES"),
+            "ROCR_VISIBLE_DEVICES": os.environ.get("ROCR_VISIBLE_DEVICES"),
+            "CUDA_VISIBLE_DEVICES": os.environ.get("CUDA_VISIBLE_DEVICES"),
+        },
         "gpu": gpu,
         "git_commit": git_commit,
         "transformers_version": transformers.__version__,

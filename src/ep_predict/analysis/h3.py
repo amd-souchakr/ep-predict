@@ -214,7 +214,10 @@ def _fit_linear_head(
         raise ValueError("linear predictor inputs must be aligned rank-2 arrays")
     device_name = str(config.get("device", "cuda:0"))
     if device_name.startswith("cuda") and not torch.cuda.is_available():
-        raise RuntimeError(f"predictor device {device_name} is unavailable")
+        raise RuntimeError(
+            f"predictor accelerator device {device_name} is unavailable; "
+            "ROCm uses the same torch.cuda device API as CUDA"
+        )
     device = torch.device(device_name)
     seed = int(config["training_seed"])
     torch.manual_seed(seed)
