@@ -1,18 +1,19 @@
 # Project status
 
-**Current focus:** AMD baseline Milestone A — MI355X OLMoE integrity and
-derived routing-trend comparison
-**Current stage:** Exact 128-request matched-workload comparison complete
-pending human review. MI355X execution/hook integrity passed; H1/H2 aggregate
-trends reproduce nearly exactly. NVIDIA raw traces remain unavailable, so
-record-level route interchangeability is unknown. Do not start H4 calibration
-or GPT-OSS qualification before review.
+**Current focus:** Milestone C — GPT-OSS Transformers qualification
+**Current stage:** Milestone B reviewed and accepted with a narrowed
+platform-stack interpretation. Its unchanged K=16, delta 1--3 oracle gate
+passes at every horizon, but it remains regime-space evidence rather than a
+wall-clock claim. Milestone C is next and not started; no GPT-OSS weights have
+been downloaded and no inference has run.
 **Last updated:** 2026-08-01
 
 | Gate | Question | State | Exit evidence |
 |---|---|---|---|
 | M0 | Can we inspect and validate the model without source changes? | Passed | Model report, complete hook traces, and zero integrity failures |
-| AMD-A | Does pinned OLMoE run with valid hooks on one MI355X, and are matched derived NVIDIA trends retained? | Integrity passed; matched aggregate comparison reproduced; review pending | 128/128 requests, 222,688 records, zero router mismatches; H1 top-8 correlation 0.999962 and H2 horizon-gain correlation 0.999989; no raw-record parity claim |
+| AMD-A | Does pinned OLMoE run with valid hooks on one MI355X, and are matched derived NVIDIA trends retained? | Reviewed; aggregate reproduction accepted with raw parity unresolved | 128/128 requests, 222,688 records, zero router mismatches; H1 top-8 correlation 0.999962 and H2 horizon-gain correlation 0.999989; no raw-record parity claim |
+| AMD-B | Does MI355X calibration make the unchanged H4 whole-expert oracle gate feasible on measured AMD demand? | Pilot supports; reviewed with narrowed testbed interpretation | K=16 passes at delta 1/2/3; delta 3 reaches 83.9% timely cold bytes and 86.5% stall reduction |
+| AMD-C | Can Transformers expose GPT-OSS routing with IDs and weights proven identical to actual dispatch? | Next; not started | Requires pinned revisions, dispatch-path proof, hook-bypass test, and complete tensor/routing semantics before a tracer bullet |
 | H1 | Is hotness strong and stable enough for a fast tier? | Mixed; global gate failed | 2/16 mixed decode layers passed; code and math are locally strong |
 | H2 | Does conditional locality beat marginal popularity? | Pilot supported | All Δ=1/2/3 transition baselines passed the held-out decode gate |
 | H3 | Can a small predictor beat transition tables at equal candidate budget? | Formal pilot not supported; reviewed | Global replacement failed; post-hoc scan found strong early-layer/long-range value |
@@ -51,9 +52,33 @@ or GPT-OSS qualification before review.
       96/32 H2 split, and 126/126 available historical input-token hashes.
 - [x] Regenerate H1/H2 and the platform figure with residual panels; confirm
       the H1 offset collapses to 0.0134 pp mean absolute difference.
-- [ ] Researcher reviews the MI355X result and accepts, narrows, or rejects
-      advancing to the isolated H4 calibration.
-- [ ] Do not begin H4 calibration or GPT-OSS qualification before that review.
+- [x] Researcher verified Milestone A and authorized isolated H4 calibration.
+- [x] Collect a separate 128-request, 64-token MI355X standard decode trace;
+      require zero router mismatches and keep timing hook-free.
+- [x] Measure 80 cached-token forwards and 250 pinned H2D copies on exactly one
+      visible `gfx950` device.
+- [x] Replay the unchanged H4 grid on the measured MI355X demand trace and
+      compare calibration directly with the preserved RTX result.
+- [x] Apply the frozen gate unchanged: all K=16 delta 1--3 points pass.
+- [x] Generate and programmatically inspect the two H4 figures with hashed
+      inputs.
+- [x] After researcher feedback, replace the dense H4 views with a
+      plain-language 63-cell grid and a two-metric measured-link chart; retain
+      every capacity/lookahead trend and mark the frozen decision region.
+- [x] Researcher reviewed Milestone B, accepted the regime-space result, and
+      narrowed the forward-time interpretation to a likely software/testbed
+      artifact rather than an inherent MI355X property.
+- [x] Complete the requested plain-language figure revision without dropping
+      any capacity, bandwidth, lookahead, or gate-metric trends.
+- [ ] Freeze exact Transformers and GPT-OSS checkpoint revisions for
+      Milestone C before downloading weights.
+- [ ] Trace the model-specific router-to-dispatch code path and define how
+      hook observations will be proven identical to executed expert IDs.
+- [ ] Qualify whether MXFP4/custom kernels bypass module hooks; record stored
+      and loaded bytes, compute dtype, shared experts, top-k order, and weight
+      normalization semantics.
+- [ ] Exercise only the cheapest configuration/tiny or GPT-OSS 20B path needed
+      to prove the implementation, then stop for review before Milestone D.
 
 - [x] Confirm the actual machine exposes the intended 24 GB NVIDIA GPU.
 - [x] Install the `data` and `inference` dependency groups.
@@ -179,7 +204,7 @@ Prior result: [docs/H4_RESULTS.md](docs/H4_RESULTS.md).
 Architecture protocol:
 [docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md](docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md).
 Latest empirical result:
-[docs/MI355X_OLMOE_PARITY_RESULTS.md](docs/MI355X_OLMOE_PARITY_RESULTS.md).
+[docs/MI355X_H4_RESULTS.md](docs/MI355X_H4_RESULTS.md).
 
 ## Evidence policy
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import statistics
 import time
@@ -13,6 +14,41 @@ from ep_predict.tracing.storage import write_json
 
 
 MIB = 1024 * 1024
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _validate_hardware_report(
+    report: dict[str, Any], hardware: dict[str, Any]
+) -> None:
+    """Reject calibration on a platform outside the frozen hardware scope."""
+
+    if not hardware:
+        return
+    if report.get("torch_backend") != "rocm":
+        raise RuntimeError(
+            "configured H4 hardware requires the ROCm PyTorch backend"
+        )
+    gpu = report.get("gpu") or {}
+    expected_count = int(hardware.get("visible_device_count", 1))
+    observed_count = int(gpu.get("device_count", 0))
+    if observed_count != expected_count:
+        raise RuntimeError(
+            f"expected {expected_count} visible GPU, found {observed_count}"
+        )
+    expected_architecture = hardware.get("required_architecture")
+    observed_architecture = str(gpu.get("architecture") or "").split(":", 1)[0]
+    if expected_architecture and observed_architecture != expected_architecture:
+        raise RuntimeError(
+            f"expected architecture {expected_architecture}, found "
+            f"{observed_architecture or None!r}"
+        )
 
 
 def _load_prompt(path: Path, index: int) -> dict[str, Any]:
@@ -87,6 +123,8 @@ def measure_h4(
             "H4 timing calibration requires a GPU through PyTorch's "
             "torch.cuda API (CUDA or ROCm)"
         )
+    environment = environment_report()
+    _validate_hardware_report(environment, experiment_config.get("hardware", {}))
     output_dir = Path(experiment_config["output_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
     fingerprint = config_fingerprint(model_config, experiment_config)
@@ -106,9 +144,10 @@ def measure_h4(
             },
         )
 
-    model, tokenizer = load_model_and_tokenizer(model_config)
     timing = experiment_config["timing"]
     prompt_path = Path(timing["prompt_file"])
+    prompt_sha256 = _sha256(prompt_path)
+    model, tokenizer = load_model_and_tokenizer(model_config)
     warmups = int(timing["warmup_decode_steps"])
     measured = int(timing["measured_decode_steps"])
     timing_rows: list[dict[str, Any]] = []
@@ -226,7 +265,17 @@ def measure_h4(
     result = {
         "state": "complete",
         "config_fingerprint": fingerprint,
-        "environment": environment_report(),
+        "environment": environment,
+        "provenance": {
+            "run_id": experiment_config["run_id"],
+            "prompt_file": str(prompt_path),
+            "prompt_file_sha256": prompt_sha256,
+            "model_id": model_config["model_id"],
+            "model_revision": model_config.get("revision"),
+            "tokenizer_id": model_config["tokenizer_id"],
+            "tokenizer_revision": model_config.get("tokenizer_revision"),
+            "hooks_installed": False,
+        },
         "decode": {
             "semantics": "hook_free_cached_token_full_forward",
             "samples": len(decode_values),

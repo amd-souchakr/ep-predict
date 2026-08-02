@@ -1,10 +1,11 @@
-# Next experiments: first-order co-design and predictable routing
+# Next experiments: cross-model qualification after the MI355X baseline
 
 **Updated:** 2026-08-01  
-**Current next action:** review AX4's three figures and decide whether its
-high-bandwidth erasure contract warrants a later permission-gated training test
-**Operating rule:** use the cheapest existing artifacts first; model broad
-viability and expected benefit before improving timing fidelity or predictors.
+**Current next action:** freeze and run Milestone C, the smallest GPT-OSS
+Transformers router/dispatch qualification, then stop for review
+**Operating rule:** prove model-specific dispatch visibility before collecting
+routing evidence; do not treat model metadata or reconstructed top-k IDs as
+executed routing.
 
 This plan separates three questions that should not be conflated:
 
@@ -15,7 +16,7 @@ This plan separates three questions that should not be conflated:
 3. Can routing later be trained to move the prediction–quality Pareto frontier
    without harming language-model quality or load balance?
 
-The active AX track answers the first question under an explicit optimistic
+The completed AX track answers the first question under an explicit optimistic
 assumption: a future MTP-style router can expose multi-horizon expert-demand
 predictions without degrading model quality. It does not claim that current
 OLMoE or the fixed H3 predictor achieves those points. The frozen design is in
@@ -25,6 +26,11 @@ OLMoE or the fixed H3 predictor achieves those points. The frozen design is in
 
 | ID | Question | New inference/training? | Status |
 |---|---|---:|---|
+| AMD-A | Does OLMoE retain its derived routing trends on MI355X? | Yes | Complete and reviewed; aggregate trends retained |
+| AMD-B | Does measured MI355X timing pass the unchanged whole-expert H4 oracle gate? | Yes for demand and timing; replay analytical | Complete and reviewed; gate passes with narrowed testbed interpretation |
+| AMD-C | Can Transformers expose GPT-OSS router outputs proven identical to actual dispatch? | Configuration/tiny path first; 20B only as needed | Next; not started |
+| AMD-D | Does the qualified GPT-OSS 20B path produce a complete tracer-bullet artifact chain? | Yes | Blocked on AMD-C review |
+| AMD-E | How does GPT-OSS 120B top-4 routing change normalized coverage and capacity contracts? | Yes | Blocked on AMD-D review |
 | AX1 | What model-capacity and TPOT envelope can future predictive host/pooled-memory prefetch provide? | No | Complete; projected region exists, review pending |
 | AX2 | How do bandwidth, latency, coverage, amplification, and transfer granularity divide the design space? | No | Complete; inverse bounds and phase map generated |
 | AX3 | What local-HBM and rolling-SRAM capacities suit a multi-horizon three-tier hierarchy? | No | Complete; physical staging envelope generated |
@@ -42,6 +48,49 @@ Detailed timing validation, concurrent-copy microbenchmarks, MLPs, predictor
 training, new inference, and model downloads remain deferred. AX is an
 analytical architectural exploration, not an attempt to rescue the current H3
 or H6 policies.
+
+## Immediate next experiment -- Milestone C
+
+### Decisive question
+
+Can the pinned Hugging Face Transformers GPT-OSS implementation be instrumented
+so the captured router IDs and weights are demonstrably the values consumed by
+expert dispatch, including any MXFP4 or custom-kernel path?
+
+This qualification comes before H1/H2 collection. A plausible-looking hook is
+not enough: if the implementation reorders, filters, reconstructs, or bypasses
+router outputs after the hooked module, the resulting trace is not valid
+workload evidence.
+
+### Minimum execution sequence
+
+1. Pin exact Transformers, `gpt-oss-20b`, and tokenizer revisions.
+2. Inspect configuration and source to map router output to the dispatch
+   consumer; document the model-specific path rather than generalizing the
+   OLMoE adapter.
+3. Start with configuration-only or tiny synthetic execution. Use 20B weights
+   only when required to exercise the real MXFP4/kernel path; do not download
+   120B in this milestone.
+4. Compare hook-captured selected IDs and weights with the tensors consumed by
+   dispatch for every tested token and layer. Any mismatch or unobservable
+   kernel bypass fails qualification.
+5. Record expert tensor shapes, stored and loaded bytes, storage/compute dtype,
+   shared experts, top-k ordering, selected-weight normalization, router count,
+   and experts per layer.
+6. Keep vLLM out of qualification because ordinary module visibility is the
+   invariant under test.
+
+### Exit gate and outputs
+
+Pass only with zero hook-to-dispatch ID mismatches, complete router-call
+coverage, pinned provenance, and explicit accounting for quantized/custom
+kernel behavior. Produce one compact model-path report, an integrity table,
+and a go/no-go decision. Stop there for review: Milestone D, not C, is the
+small GPT-OSS 20B routing tracer bullet.
+
+The value of this experiment is epistemic rather than statistical. It prevents
+an expensive 20B/120B collection from producing traces that look reasonable
+but do not represent executed expert demand.
 
 AX4 is the immediate exception to the exact-execution contract, not to the
 no-training rule. It asks whether late experts can be converted from a latency

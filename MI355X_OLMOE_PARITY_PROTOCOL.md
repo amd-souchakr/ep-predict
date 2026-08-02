@@ -1,7 +1,7 @@
 # MI355X OLMoE parity and AMD-baseline protocol
 
 **Frozen:** 2026-08-01  
-**State:** preregistered; Milestone A is the only authorized execution step  
+**State:** Milestones A--B reviewed; Milestone C is next and not started
 **Model:** `allenai/OLMoE-1B-7B-0125-Instruct`, revision
 `caada7d7b70f4b852b14108479e0812223a8794f`  
 **New platform:** one visible AMD MI355X (`gfx950`), ROCm 7.2, PyTorch 2.11  
@@ -33,14 +33,15 @@ Follow an **AMD baseline + model generalization** sequence. Execute and review
 one milestone at a time. Do not begin the next milestone until its predecessor
 has a recorded result and the researcher explicitly approves the transition.
 
-The active milestone is deliberately small:
+The next milestone is deliberately small:
 
-> Does the pinned OLMoE checkpoint run with intact router hooks on one MI355X
-> for 16 existing prompts, and do its derived layer/horizon routing trends
-> remain consistent with the preserved NVIDIA pilot artifacts?
+> Can the pinned Transformers implementation expose GPT-OSS router decisions
+> that are proven identical to the expert IDs actually dispatched, including
+> any MXFP4 or custom-kernel path?
 
-This is an instrumentation and numerical-parity gate. It is not a performance
-benchmark, a new H1 result, or evidence about GPT-OSS.
+This is a model-specific instrumentation gate, not a routing-distribution
+experiment or performance benchmark. It must succeed before a GPT-OSS trace
+can be treated as workload evidence.
 
 ## Project position entering the AMD phase
 
@@ -110,13 +111,13 @@ speedups.
 
 ### Testbed and publication readiness
 
-All substantive empirical routing evidence so far comes from OLMoE on the RTX
-3090 Ti. C0 adds a second checkpoint within the same Base--Instruct lineage,
-not a second model architecture. The ROCm software path and tiny random OLMoE
-GPU verifier exist, but no MI355X full-checkpoint routing or H4 calibration is
-yet recorded. The scale-up host offers eight MI355X GPUs with 288 GB HBM each;
-the baseline and C1 experiments intentionally expose only one GPU so platform
-and model effects are not confounded with expert/tensor parallelism.
+At protocol freeze, all substantive empirical routing evidence came from
+OLMoE on the RTX 3090 Ti, and C0 added a second checkpoint within the same
+Base--Instruct lineage rather than a second model architecture. Milestones A
+and B now add full-checkpoint MI355X routing and calibration while retaining
+the same OLMoE architecture. The scale-up host offers eight MI355X GPUs with
+288 GB HBM each; baseline and C1 experiments intentionally expose only one GPU
+so platform and model effects are not confounded with expert/tensor parallelism.
 
 The project already has most of the mechanics of a strong systems paper:
 frozen protocols, revision-pinned workloads, integrity-checked traces,
@@ -129,16 +130,16 @@ still have recorded human-review checkpoints pending.
 The hardware proposal is therefore at the trace-calibrated analytical stage.
 It has useful quantitative targets for HBM residency, transfer bandwidth,
 rolling SRAM capacity, deadline-aware DMA, and fallback semantics, but lacks
-MI355X calibration, cross-model routing geometry, live copy/compute overlap,
-execution from transferred expert state, and language-quality evidence under
-expert degradation. The sequence below is designed to close the first two
-gaps before deciding whether the proposal deserves broader mechanism work.
+cross-model routing geometry, live copy/compute overlap, execution from
+transferred expert state, and language-quality evidence under expert
+degradation. Milestone B supplied the MI355X calibration; the sequence below
+now targets cross-model validity before broader mechanism work.
 
 ## Long-term milestone sequence
 
 Only the first incomplete milestone is active.
 
-### Milestone A -- OLMoE cross-platform parity (active)
+### Milestone A -- OLMoE cross-platform parity (complete)
 
 Collect 16 raw-prefill requests under
 `configs/experiment/mi355x-olmoe-parity.toml`. Establish exact input-token
@@ -149,7 +150,7 @@ other platform's demand evidence.
 **Review output:** machine-readable H1/H2 analyses, one compact derived-trend
 comparison figure, and a concise result note.
 
-### Milestone B -- MI355X H4 calibration (blocked on A review)
+### Milestone B -- MI355X H4 calibration (complete)
 
 Run hook-free cached-token timing and pinned host-to-device transfer
 calibration under `configs/experiment/mi355x-h4-calibration.toml`. Preserve
@@ -167,7 +168,12 @@ exact 12 MiB copy time, effective inter-MoE interval, H4 gate under the old
 thresholds, and a direct old-versus-new calibration table. Hooked timing is
 never used.
 
-### Milestone C -- GPT-OSS Transformers qualification (blocked on B review)
+**Review decision:** accepted as platform-stack regime evidence. The slower
+measured forward is treated as a likely software/testbed artifact, not an
+inherent MI355X characteristic. Final figures use plain operational language
+and retain every swept trend.
+
+### Milestone C -- GPT-OSS Transformers qualification (next; not started)
 
 Add a model-specific qualification path; do not build a universal MoE
 adapter. Before downloading the 120B weights:
@@ -371,10 +377,12 @@ Milestone B begins only after the researcher records that decision.
 
 ## Milestone B frozen calibration isolation
 
-The calibration config is committed now so its output boundary is fixed, but
-it is not authorized to run before Milestone A review.
+The calibration output boundary was fixed before Milestone A review. The
+researcher's 2026-08-01 instruction that Milestone A is verified and to
+execute Milestone B authorizes this step.
 
 - New run ID: `mi355x-h4-calibration`.
+- New demand-trace run ID: `mi355x-h4-decode`.
 - New output:
   `artifacts/runs/mi355x-h4-calibration/analysis/h4/`.
 - Historical RTX output remains:
@@ -383,9 +391,19 @@ it is not authorized to run before Milestone A review.
 - Transfer sizes, warmups, measured repetitions, capacities, horizons,
   bandwidth sensitivities, and the old H4 gate remain unchanged for a direct
   hardware comparison.
-- ROCm event timing and pinned host-to-device completion are hardware-specific
-  evidence. They never overwrite or retroactively reinterpret the RTX
-  calibration.
+- ROCm event timing and pinned host-to-device completion are measured
+  platform-stack evidence combining the GPU, host, kernels, PyTorch,
+  Transformers, and ROCm. They never overwrite or retroactively reinterpret
+  the RTX calibration, and cross-platform forward differences are not treated
+  as inherent GPU characteristics.
+- The demand trace uses the same 128 prompts, ordering, 384-token prompt cap,
+  greedy decoding, and 64-token generation limit as `h1-standard-small`.
+  Hooks are used only to collect MI355X demand; all timing remains hook-free.
+- `analyze-h4` must reject a `--run` path different from the config's frozen
+  `trace_run`, preventing accidental counterfactual replay in the substantive
+  AMD result.
+- Write a machine-readable direct calibration table against the preserved RTX
+  measurement alongside the unchanged H4 oracle grid.
 
 The existing H4 calibrator is OLMoE-specific: it assumes 16 routed layers and
 an exact 12 MiB BF16 expert. It is appropriate for this baseline milestone and

@@ -1,0 +1,94 @@
+{
+  "config_fingerprint": "01c1f09e44fc909fe8825cb28db1e47107214e7a5fde293ed92b308266cf0bb5",
+  "decode": {
+    "effective_inter_moe_layer_ms": 0.9773803949356079,
+    "mean_forward_ms": 15.594209361076356,
+    "median_forward_ms": 15.638086318969727,
+    "moe_layers": 16,
+    "p10_forward_ms": 15.25144100189209,
+    "p90_forward_ms": 15.857647895812988,
+    "samples": 80,
+    "semantics": "hook_free_cached_token_full_forward"
+  },
+  "environment": {
+    "git_commit": "9a147ba3a9260a844b03af4d5ae0c5fab46bf33d",
+    "gpu": {
+      "architecture": "gfx950:sramecc+:xnack-",
+      "capability": [
+        9,
+        5
+      ],
+      "device_count": 1,
+      "memory_bytes": 309220868096,
+      "name": "AMD Instinct MI355X"
+    },
+    "gpu_visibility": {
+      "CUDA_VISIBLE_DEVICES": null,
+      "HIP_VISIBLE_DEVICES": "0",
+      "ROCR_VISIBLE_DEVICES": null
+    },
+    "packages": {
+      "accelerate": "1.3.0",
+      "pytorch-triton-rocm": "3.5.1",
+      "torch": "2.11.0+rocm7.2",
+      "transformers": "5.14.1",
+      "triton-rocm": "3.6.0"
+    },
+    "platform": "Linux-5.15.0-70-generic-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch_backend": "rocm",
+    "torch_cuda_version": null,
+    "torch_hip_version": "7.2.26015",
+    "transformers_version": "5.14.1"
+  },
+  "provenance": {
+    "hooks_installed": false,
+    "model_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "model_revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "prompt_file": "artifacts/datasets/h1-standard-small/prompts.jsonl",
+    "prompt_file_sha256": "4e08d5b4753ed1d06e6922359ea63249d4e4d215c9bc5081204533adf369fcf1",
+    "run_id": "mi355x-h4-calibration",
+    "tokenizer_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "tokenizer_revision": "caada7d7b70f4b852b14108479e0812223a8794f"
+  },
+  "state": "complete",
+  "transfer": {
+    "by_size_mib": {
+      "12": {
+        "median_ms": 0.28494399785995483,
+        "p10_ms": 0.2840839922428131,
+        "p90_ms": 0.28640300035476685
+      },
+      "16": {
+        "median_ms": 0.37868499755859375,
+        "p10_ms": 0.3774850070476532,
+        "p90_ms": 0.3798049986362457
+      },
+      "24": {
+        "median_ms": 0.5662074983119965,
+        "p10_ms": 0.5649279952049255,
+        "p90_ms": 0.5670869946479797
+      },
+      "4": {
+        "median_ms": 0.09660100191831589,
+        "p10_ms": 0.09456100314855576,
+        "p90_ms": 0.09820099920034409
+      },
+      "8": {
+        "median_ms": 0.19146250188350677,
+        "p10_ms": 0.1899619996547699,
+        "p90_ms": 0.1936420053243637
+      }
+    },
+    "exact_expert_bytes": 12582912,
+    "exact_expert_median_ms": 0.28494399785995483,
+    "fit": {
+      "effective_bandwidth_gbps": 44.688901632957176,
+      "raw_intercept_ms": 0.003242056313398689,
+      "slope_ms_per_byte": 2.237692052074334e-08,
+      "startup_ms": 0.003242056313398689
+    },
+    "samples": 250,
+    "semantics": "pinned_host_to_device_async_single_copy"
+  }
+}

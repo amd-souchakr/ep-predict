@@ -1,0 +1,34 @@
+{
+  "config_fingerprint": "29de5e89190c53d574656b347a66295be4f064e35a0a000d331bdfaa2682a928",
+  "experiment_config": {
+    "do_sample": false,
+    "max_new_tokens": 64,
+    "max_prompt_tokens": 384,
+    "output_dir": "artifacts/runs/mi355x-h4-decode",
+    "prompt_file": "artifacts/datasets/h1-standard-small/prompts.jsonl",
+    "run_id": "mi355x-h4-decode",
+    "seed": 7,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "trace": {
+      "fail_on_missing_router": true,
+      "fail_on_router_mismatch": true
+    }
+  },
+  "model_config": {
+    "attention_implementation": "sdpa",
+    "device": "cuda:0",
+    "dtype": "bfloat16",
+    "model_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "router_name_contains": [
+      ".mlp.gate"
+    ],
+    "tokenizer_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "tokenizer_revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "trust_remote_code": false,
+    "use_cache": true
+  },
+  "prompt_file_sha256": "4e08d5b4753ed1d06e6922359ea63249d4e4d215c9bc5081204533adf369fcf1",
+  "run_id": "mi355x-h4-decode"
+}

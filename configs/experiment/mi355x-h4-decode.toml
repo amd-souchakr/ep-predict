@@ -1,0 +1,15 @@
+# MI355X demand trace for Milestone B. This deliberately matches the original
+# h1-standard-small decode workload while keeping platform evidence isolated.
+run_id = "mi355x-h4-decode"
+prompt_file = "artifacts/datasets/h1-standard-small/prompts.jsonl"
+output_dir = "artifacts/runs/mi355x-h4-decode"
+seed = 7
+max_prompt_tokens = 384
+max_new_tokens = 64
+do_sample = false
+temperature = 1.0
+top_p = 1.0
+
+[trace]
+fail_on_router_mismatch = true
+fail_on_missing_router = true

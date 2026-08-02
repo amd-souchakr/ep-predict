@@ -3,10 +3,42 @@ from __future__ import annotations
 import unittest
 from collections import OrderedDict
 
-from ep_predict.analysis.h4 import DemandWave, _cold_sets, _simulate
+from ep_predict.analysis.h4 import (
+    DemandWave,
+    _calibration_comparison_rows,
+    _cold_sets,
+    _simulate,
+)
 
 
 class H4AnalysisTest(unittest.TestCase):
+    def test_calibration_comparison_reports_ratio_and_change(self) -> None:
+        reference = {
+            "decode": {
+                "median_forward_ms": 10.0,
+                "effective_inter_moe_layer_ms": 0.625,
+            },
+            "transfer": {
+                "exact_expert_median_ms": 0.5,
+                "fit": {"effective_bandwidth_gbps": 24.0},
+            },
+        }
+        current = {
+            "decode": {
+                "median_forward_ms": 5.0,
+                "effective_inter_moe_layer_ms": 0.3125,
+            },
+            "transfer": {
+                "exact_expert_median_ms": 0.25,
+                "fit": {"effective_bandwidth_gbps": 48.0},
+            },
+        }
+        rows = _calibration_comparison_rows(reference, current)
+        self.assertEqual(len(rows), 4)
+        self.assertEqual(rows[0]["current_over_reference"], 0.5)
+        self.assertEqual(rows[0]["percent_change"], -50.0)
+        self.assertEqual(rows[-1]["current_over_reference"], 2.0)
+
     def test_lru_capacity_reuse_and_cold_accounting(self) -> None:
         waves = [
             DemandWave(0, 0, "x", 0, (0, 1)),

@@ -2,7 +2,7 @@
 
 ## Founding Research PRD
 
-**Status:** H1–H6 and C0 empirical pilot complete; AX1–AX4 analytical architecture track complete, AX4 human review pending
+**Status:** H1–H6, C0, and MI355X Milestones A–B complete; Milestone C qualification is next and not started
 **Initial environment:** Python 3.12, `uv`, PyTorch, Hugging Face Transformers, CUDA 12.4<br>
 **Initial hardware:** 1× NVIDIA GPU with 24 GB VRAM  
 **Scale-up environment:** ROCm 7.2, PyTorch 2.11, 8× AMD MI355X-class GPUs with 288 GB HBM per GPU; experiments expose one GPU<br>
@@ -12,8 +12,18 @@
 This durable synthesis is updated only at major evidence transitions; routine
 results remain in `EXPERIMENT_LOG.md` and the per-hypothesis reports.
 
-**Active architecture protocol:**
-[docs/DEADLINE_DEGRADATION_PROTOCOL.md](docs/DEADLINE_DEGRADATION_PROTOCOL.md)
+**Active platform protocol:**
+[MI355X_OLMOE_PARITY_PROTOCOL.md](MI355X_OLMOE_PARITY_PROTOCOL.md)
+
+MI355X Milestone B passes the unchanged H4 physical oracle gate on a newly
+measured standard decode trace. At `K=16`, delta 3, 83.9% of cold bytes are
+timely and modeled reactive stall falls 86.5%, versus 32.8%/38.9% on the
+historical RTX calibration. The exact 12 MiB copy is 45.6% faster, while the
+cached-token forward is 52.9% slower. Given the MI355X's peak capabilities,
+the forward gap is treated as a Transformers/PyTorch/ROCm testbed artifact,
+not an inherent hardware property. It remains valid measured slack for the
+architecture/WL regime exploration, which makes no wall-clock claim. See
+[docs/MI355X_H4_RESULTS.md](docs/MI355X_H4_RESULTS.md).
 
 ---
 

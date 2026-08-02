@@ -13,19 +13,21 @@ per-layer marginal popularity. H3 did not support globally replacing that
 simple policy with a fixed linear hidden-state sidecar at the primary \(n+1\)
 gate. The post-hoc all-layer scan found a narrower use: early hidden states
 strongly improve long-range prediction, while late source layers favor
-transitions. H4 then rejected the preregistered \(K=16,\Delta=1\)–3
+transitions. Historical RTX H4 rejected the preregistered \(K=16,\Delta=1\)–3
 whole-expert PCIe target: even a perfect oracle made only 32.8% of cold bytes
-timely and removed 38.9% of stall at the best primary point. A broader
-descriptive region exists with \(K=32,\Delta=3\), longer lead time, or twice
-the measured bandwidth.
+timely and removed 38.9% of stall at the best primary point. MI355X Milestone
+B reverses that hardware-scoped gate: the exact 12 MiB copy falls to 0.285 ms,
+and \(K=16,\Delta=3\) reaches 83.9% timely cold bytes and 86.5% stall
+reduction. This is an oracle feasibility result, not live overlap or
+end-to-end speedup.
 See [STATUS.md](STATUS.md), [docs/H4_PROTOCOL.md](docs/H4_PROTOCOL.md), and
-[docs/H4_RESULTS.md](docs/H4_RESULTS.md).
+[docs/MI355X_H4_RESULTS.md](docs/MI355X_H4_RESULTS.md).
 
 The current evidence supports source-target-aware planning for the pinned
 OLMoE checkpoint: linear hidden-state candidates for early planning and
-transition candidates for late refinement. H4 now adds a physical boundary:
-the measured platform can hide whole experts only after enough residency,
-lead time, or bandwidth reduces transfer pressure. It still does not establish
+transition candidates for late refinement. The two H4 calibrations show that
+the physical boundary is platform-specific: whole-expert prefetch failed the
+compact short-horizon RTX point but passes its MI355X counterpart. It still does not establish
 live copy/compute overlap, end-to-end latency improvement, or universal MoE
 behavior. H5 found a first-order profitable region, but the unchanged
 transition/linear streams transfer 3.4–6.7× useful cold bytes and do not pass
@@ -236,11 +238,34 @@ uv run ep-predict plot-codesign-map \
   --config configs/experiment/h4-codesign-map.toml
 ```
 
-H4 installs no hooks and collects no new routing data. The timing run measures
+Historical RTX H4 installs no hooks and collects no new routing data. The timing run measures
 ordinary cached-token forwards and pinned host-to-device copies; the simulator
 then replays the existing decode trace.
 The final two commands create a post-hoc regime map combining cold-transfer
 headroom with complete-route prediction coverage; it does not alter H3 or H4.
+
+Run the isolated MI355X Milestone B workflow with one visible GPU:
+
+```bash
+HIP_VISIBLE_DEVICES=0 uv run ep-predict collect \
+  --model-config configs/model/olmoe-1b-7b-instruct.toml \
+  --experiment-config configs/experiment/mi355x-h4-decode.toml
+
+HIP_VISIBLE_DEVICES=0 uv run ep-predict measure-h4 \
+  --model-config configs/model/olmoe-1b-7b-instruct.toml \
+  --experiment-config configs/experiment/mi355x-h4-calibration.toml
+
+uv run ep-predict analyze-h4 \
+  --run artifacts/runs/mi355x-h4-decode \
+  --config configs/experiment/mi355x-h4-calibration.toml
+
+uv run ep-predict plot-h4 \
+  --run artifacts/runs/mi355x-h4-decode \
+  --config configs/experiment/mi355x-h4-calibration.toml
+```
+
+The AMD analyzer rejects any trace path other than the frozen MI355X demand
+run and writes its calibration comparison without modifying RTX artifacts.
 
 Run the analysis-only H5 requirements sweep, inverse design, existing-policy
 placement, and figures:

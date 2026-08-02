@@ -533,3 +533,47 @@ The immutable run manifest and metrics remain the source of truth.
 - Result: supports advancing to isolated MI355X H4 calibration after human
   review. Do not call the old NVIDIA trace measured AMD demand; use it only as
   a counterfactual hardware sensitivity until a new MI355X decode trace exists.
+
+### `mi355x-h4-calibration` — 2026-08-01
+
+- Milestone: AMD-B — hook-free MI355X timing calibration plus H4 oracle replay
+  on a new, platform-scoped standard decode trace.
+- Demand run: `mi355x-h4-decode`, matching the 128-request, 384-prompt-token,
+  greedy 64-token H1 workload. It contains 8,012 decode tokens, 128,192 decode
+  layer-waves, and zero router validation mismatches.
+- Platform: one visible AMD Instinct MI355X, `gfx950`, ROCm 7.2, PyTorch 2.11,
+  and the pinned BF16 OLMoE Instruct checkpoint. Timing installed no hooks.
+- Calibration: 15.638 ms median cached-token forward, 0.977 ms effective
+  inter-MoE interval, 0.285 ms exact 12 MiB H2D event time, 0.300 ms wall
+  completion, and 44.69 GB/s fitted pinned H2D bandwidth.
+- RTX comparison: the measured MI testbed forward is 52.9% slower, while the
+  exact copy is 45.6% faster and fitted bandwidth is 85.2% higher. Given the
+  hardware capability, the forward gap is treated as a software-stack or
+  small-batch kernel artifact, not an inherent MI355X property. Copies per
+  effective layer interval increase from 1.22 to 3.43.
+- Formal result: `PILOT_SUPPORTS`. At K=16, delta 1/2/3, on-time cold bytes are
+  68.8/78.7/83.9% and oracle stall reduction is 74.8/82.7/86.5%; every frozen
+  short horizon passes both 50% thresholds.
+- Attribution: RTX timing on MI demand reproduces the old 32.8%/38.9% delta-3
+  result. The faster MI copy alone passes delta 2 and 3; the extra measured
+  testbed forward slack alone does not pass but expands the combined regime.
+- Boundary: this is a physical oracle ceiling, not predictor sufficiency,
+  concurrent overlap validation, execution from copied state, or end-to-end
+  speedup. Delta 3 still leaves 20.4% of waves with some modeled stall.
+- Figures: a plain-language full-grid map and a two-metric measured-link trend
+  chart retain every capacity/lookahead point as PDF/450-DPI PNG with hashed
+  inputs. Domain jargon was removed and the frozen decision region is marked.
+- Human visual review: completed 2026-08-01 with requested revisions. The
+  researcher accepted the regime-space purpose, classified the slower forward
+  as a likely Transformers/PyTorch/ROCm testbed artifact rather than inherent
+  MI355X behavior, and requested simpler figures.
+- Review revision: the original dense views were replaced by a plain-language
+  63-cell grid and a two-panel measured-link chart. All capacities,
+  bandwidths, lookaheads, and both gate metrics remain visible; no relevant
+  trend was averaged away.
+- Decision: Milestone B is complete with a narrowed platform-stack claim.
+  Advance the queue to Milestone C planning, but do not infer wall-clock
+  benefit or begin GPT-OSS inference from the oracle result.
+- One next action: freeze and execute the smallest GPT-OSS Transformers
+  router/dispatch qualification, then stop for review before the 20B tracer
+  bullet.

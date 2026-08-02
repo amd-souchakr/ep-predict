@@ -1,0 +1,230 @@
+{
+  "calibration_attribution": [
+    {
+      "copies_per_layer_interval": 1.2198356236733572,
+      "deadline_feasible_cold_fraction": 0.26577362302303614,
+      "effective_inter_moe_layer_ms": 0.6393109858036041,
+      "expert_transfer_ms": 0.5240960121154785,
+      "lookahead": 1,
+      "oracle_stall_reduction": 0.3171708583392545,
+      "passes_frozen_gate": false,
+      "scenario": "reference_calibration"
+    },
+    {
+      "copies_per_layer_interval": 1.2198356236733572,
+      "deadline_feasible_cold_fraction": 0.2979311367372137,
+      "effective_inter_moe_layer_ms": 0.6393109858036041,
+      "expert_transfer_ms": 0.5240960121154785,
+      "lookahead": 2,
+      "oracle_stall_reduction": 0.35802968218883213,
+      "passes_frozen_gate": false,
+      "scenario": "reference_calibration"
+    },
+    {
+      "copies_per_layer_interval": 1.2198356236733572,
+      "deadline_feasible_cold_fraction": 0.3282816358389049,
+      "effective_inter_moe_layer_ms": 0.6393109858036041,
+      "expert_transfer_ms": 0.5240960121154785,
+      "lookahead": 3,
+      "oracle_stall_reduction": 0.38911192934939776,
+      "passes_frozen_gate": false,
+      "scenario": "reference_calibration"
+    },
+    {
+      "copies_per_layer_interval": 2.2436373133145087,
+      "deadline_feasible_cold_fraction": 0.49957210598677504,
+      "effective_inter_moe_layer_ms": 0.6393109858036041,
+      "expert_transfer_ms": 0.28494399785995483,
+      "lookahead": 1,
+      "oracle_stall_reduction": 0.5455080358942643,
+      "passes_frozen_gate": false,
+      "scenario": "mi_copy_only"
+    },
+    {
+      "copies_per_layer_interval": 2.2436373133145087,
+      "deadline_feasible_cold_fraction": 0.562719048215532,
+      "effective_inter_moe_layer_ms": 0.6393109858036041,
+      "expert_transfer_ms": 0.28494399785995483,
+      "lookahead": 2,
+      "oracle_stall_reduction": 0.6142872293540145,
+      "passes_frozen_gate": true,
+      "scenario": "mi_copy_only"
+    },
+    {
+      "copies_per_layer_interval": 2.2436373133145087,
+      "deadline_feasible_cold_fraction": 0.6141562341150687,
+      "effective_inter_moe_layer_ms": 0.6393109858036041,
+      "expert_transfer_ms": 0.28494399785995483,
+      "lookahead": 3,
+      "oracle_stall_reduction": 0.6566719055582755,
+      "passes_frozen_gate": true,
+      "scenario": "mi_copy_only"
+    },
+    {
+      "copies_per_layer_interval": 1.8648880593280557,
+      "deadline_feasible_cold_fraction": 0.26577362302303614,
+      "effective_inter_moe_layer_ms": 0.9773803949356079,
+      "expert_transfer_ms": 0.5240960121154785,
+      "lookahead": 1,
+      "oracle_stall_reduction": 0.46798313922738777,
+      "passes_frozen_gate": false,
+      "scenario": "measured_testbed_slack_only"
+    },
+    {
+      "copies_per_layer_interval": 1.8648880593280557,
+      "deadline_feasible_cold_fraction": 0.3604648487528791,
+      "effective_inter_moe_layer_ms": 0.9773803949356079,
+      "expert_transfer_ms": 0.5240960121154785,
+      "lookahead": 2,
+      "oracle_stall_reduction": 0.526829513725787,
+      "passes_frozen_gate": false,
+      "scenario": "measured_testbed_slack_only"
+    },
+    {
+      "copies_per_layer_interval": 1.8648880593280557,
+      "deadline_feasible_cold_fraction": 0.4301063023074295,
+      "effective_inter_moe_layer_ms": 0.9773803949356079,
+      "expert_transfer_ms": 0.5240960121154785,
+      "lookahead": 3,
+      "oracle_stall_reduction": 0.5666182339375314,
+      "passes_frozen_gate": false,
+      "scenario": "measured_testbed_slack_only"
+    },
+    {
+      "copies_per_layer_interval": 3.4300789006827013,
+      "deadline_feasible_cold_fraction": 0.6881143669506823,
+      "effective_inter_moe_layer_ms": 0.9773803949356079,
+      "expert_transfer_ms": 0.28494399785995483,
+      "lookahead": 1,
+      "oracle_stall_reduction": 0.7480472187424303,
+      "passes_frozen_gate": true,
+      "scenario": "measured_testbed_combined"
+    },
+    {
+      "copies_per_layer_interval": 3.4300789006827013,
+      "deadline_feasible_cold_fraction": 0.7865719449564268,
+      "effective_inter_moe_layer_ms": 0.9773803949356079,
+      "expert_transfer_ms": 0.28494399785995483,
+      "lookahead": 2,
+      "oracle_stall_reduction": 0.8266879448293101,
+      "passes_frozen_gate": true,
+      "scenario": "measured_testbed_combined"
+    },
+    {
+      "copies_per_layer_interval": 3.4300789006827013,
+      "deadline_feasible_cold_fraction": 0.8391910247186891,
+      "effective_inter_moe_layer_ms": 0.9773803949356079,
+      "expert_transfer_ms": 0.28494399785995483,
+      "lookahead": 3,
+      "oracle_stall_reduction": 0.8654961031643529,
+      "passes_frozen_gate": true,
+      "scenario": "measured_testbed_combined"
+    }
+  ],
+  "calibration_comparison": {
+    "cached_token_forward_median_ms": {
+      "current_over_reference": 1.5288027527120556,
+      "current_value": 15.638086318969727,
+      "percent_change": 52.880275271205555,
+      "quantity": "cached_token_forward_median_ms",
+      "reference_value": 10.228975772857666
+    },
+    "effective_inter_moe_layer_ms": {
+      "current_over_reference": 1.5288027527120556,
+      "current_value": 0.9773803949356079,
+      "percent_change": 52.880275271205555,
+      "quantity": "effective_inter_moe_layer_ms",
+      "reference_value": 0.6393109858036041
+    },
+    "exact_12mib_copy_median_ms": {
+      "current_over_reference": 0.543686636175302,
+      "current_value": 0.28494399785995483,
+      "percent_change": -45.6313363824698,
+      "quantity": "exact_12mib_copy_median_ms",
+      "reference_value": 0.5240960121154785
+    },
+    "fitted_effective_bandwidth_gbps": {
+      "current_over_reference": 1.851589542438498,
+      "current_value": 44.688901632957176,
+      "percent_change": 85.1589542438498,
+      "quantity": "fitted_effective_bandwidth_gbps",
+      "reference_value": 24.135425594434384
+    }
+  },
+  "decision": "PILOT_SUPPORTS",
+  "decode_tokens": 8012,
+  "decode_waves": 128192,
+  "evidence": {
+    "demand_scope": "measured_mi355x_standard_decode_trace",
+    "platform": "amd-mi355x-rocm72"
+  },
+  "expert_bytes": 12582912,
+  "gate": {
+    "best_primary_row": {
+      "all_trace_capacity_miss_experts": 463931,
+      "all_trace_cold_demand_experts": 464955,
+      "all_trace_compulsory_miss_experts": 1024,
+      "all_trace_demanded_experts": 1025536,
+      "bandwidth_scale": 1.0,
+      "capacity": 16,
+      "capacity_miss_bytes": 4519517749248,
+      "capacity_miss_experts": 359179,
+      "cold_demand_bytes": 4529986732032,
+      "cold_demand_experts": 360011,
+      "compulsory_miss_bytes": 10468982784,
+      "compulsory_miss_experts": 832,
+      "deadline_feasible_cold_experts": 302118,
+      "deadline_feasible_cold_fraction": 0.8391910247186891,
+      "deadline_feasible_demanded_bytes": 3801524207616,
+      "effective_inter_moe_layer_ms": 0.9773803949356079,
+      "eligible_waves": 104156,
+      "expert_transfer_ms": 0.28494399785995483,
+      "late_bytes": 728462524416,
+      "late_cold_experts": 57893,
+      "late_cold_fraction": 0.16080897528131086,
+      "lookahead": 3,
+      "oracle_stall_ms": 13797.809700012207,
+      "oracle_stall_reduction": 0.8654961031643529,
+      "oracle_wave_stall_fraction": 0.2040880986212988,
+      "phase": "decode",
+      "reactive_stall_ms": 102582.9736135602,
+      "resident_hit_bytes": 5954699526144,
+      "resident_hit_experts": 473237,
+      "resident_hit_fraction": 0.5679425573178694,
+      "stalled_waves": 21257,
+      "total_demanded_bytes": 10484686258176,
+      "total_demanded_experts": 833248
+    },
+    "decision": "PILOT_SUPPORTS",
+    "evidence_grade": "calibrated_single_gpu_pilot",
+    "hypothesis": "H4",
+    "passing_lookaheads": [
+      1,
+      2,
+      3
+    ],
+    "primary_scope": {
+      "bandwidth_scale": 1.0,
+      "capacity_experts": 16,
+      "lookaheads": [
+        1,
+        2,
+        3
+      ],
+      "phase": "decode"
+    },
+    "thresholds": {
+      "deadline_feasible_cold_fraction": 0.5,
+      "oracle_stall_reduction": 0.5
+    }
+  },
+  "hypothesis": "H4",
+  "measurement": {
+    "effective_bandwidth_gbps": 44.688901632957176,
+    "effective_inter_moe_layer_ms": 0.9773803949356079,
+    "exact_expert_transfer_ms": 0.28494399785995483,
+    "median_decode_forward_ms": 15.638086318969727
+  },
+  "timing_interpretation": "measured_testbed_stack_slack_not_inherent_gpu_characterization",
+  "trace_run": "artifacts/runs/mi355x-h4-decode"
+}

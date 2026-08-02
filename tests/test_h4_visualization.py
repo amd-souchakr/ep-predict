@@ -27,6 +27,7 @@ class H4VisualizationTest(unittest.TestCase):
                                 "capacity": capacity,
                                 "lookahead": delta,
                                 "bandwidth_scale": bandwidth,
+                                "deadline_feasible_cold_fraction": 0.7,
                                 "oracle_stall_reduction": 0.6,
                             }
                         )

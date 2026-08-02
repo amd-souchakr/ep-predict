@@ -98,14 +98,14 @@ def _plot_heatmap(
     figure, axes = plt.subplots(
         1,
         len(capacities),
-        figsize=(3.75 * len(capacities), 4.15),
+        figsize=(4.0 * len(capacities), 4.55),
         sharex=True,
         sharey=True,
     )
     if len(capacities) == 1:
         axes = [axes]
     figure.subplots_adjust(
-        left=0.08, right=0.93, bottom=0.18, top=0.75, wspace=0.12
+        left=0.11, right=0.91, bottom=0.21, top=0.72, wspace=0.12
     )
     image = None
     for axis, capacity in zip(axes, capacities, strict=True):
@@ -135,13 +135,25 @@ def _plot_heatmap(
             aspect="auto",
             interpolation="nearest",
         )
-        axis.set_title(f"Fast tier K={capacity}", fontweight="bold")
+        resident_fraction = 100 * capacity / 64
+        axis.set_title(
+            f"Keep {capacity} experts on GPU\n({resident_fraction:g}% per layer)",
+            fontweight="bold",
+        )
         axis.set_xticks(range(len(lookaheads)), lookaheads)
+        bandwidth_labels = {
+            0.5: "Half measured",
+            1.0: "Measured",
+            2.0: "Double measured",
+        }
         axis.set_yticks(
             range(len(bandwidths)),
-            [f"{bandwidth:g}×" for bandwidth in bandwidths],
+            [
+                bandwidth_labels.get(bandwidth, f"{bandwidth:g}× measured")
+                for bandwidth in bandwidths
+            ],
         )
-        axis.set_xlabel("Same-token lookahead Δ")
+        axis.set_xlabel("Advance notice (layers before use)")
         for row_index, bandwidth in enumerate(bandwidths):
             for column_index, delta in enumerate(lookaheads):
                 value = matrix[row_index, column_index]
@@ -154,24 +166,52 @@ def _plot_heatmap(
                     fontsize=8,
                     color="white" if value >= 58 else TEXT,
                 )
-    axes[0].set_ylabel("Effective H2D bandwidth")
+        if capacity == 16 and 1.0 in bandwidths:
+            from matplotlib.patches import Rectangle
+
+            primary_columns = [
+                index for index, delta in enumerate(lookaheads) if delta <= 3
+            ]
+            if primary_columns:
+                row_index = bandwidths.index(1.0)
+                start = min(primary_columns)
+                end = max(primary_columns)
+                axis.add_patch(
+                    Rectangle(
+                        (start - 0.5, row_index - 0.5),
+                        end - start + 1,
+                        1,
+                        fill=False,
+                        edgecolor=TEXT,
+                        linewidth=2.4,
+                    )
+                )
+    axes[0].set_ylabel("Host-to-GPU copy speed")
     assert image is not None
     colorbar = figure.colorbar(image, ax=axes, fraction=0.035, pad=0.03)
-    colorbar.set_label("Oracle cold-stall reduction (%)")
+    colorbar.set_label("Transfer waiting removed (%)")
     figure.suptitle(
-        "Perfect knowledge exposes the whole-expert feasibility region",
-        x=0.02,
+        "Faster copies, more GPU capacity, and earlier notice all reduce waiting",
+        x=0.03,
         y=0.97,
         ha="left",
         fontsize=15,
         fontweight="bold",
     )
     figure.text(
-        0.02,
-        0.87,
-        "Decode, one serialized copy engine, exact 12 MiB experts. "
-        "Numbers are reduction versus reactive loading.",
+        0.03,
+        0.85,
+        "Each cell is the percentage of transfer-induced waiting removed with "
+        "perfect knowledge of future expert use. Higher is better.",
         fontsize=9.5,
+        color="#555E6B",
+    )
+    figure.text(
+        0.03,
+        0.07,
+        "Black outline: the formal decision region (16 resident experts, "
+        "measured copy speed, 1–3 layers of notice).",
+        fontsize=9,
         color="#555E6B",
     )
     return _save(figure, output / "fig1_h4_oracle_feasibility_heatmap")
@@ -185,73 +225,100 @@ def _plot_curve(
 ) -> list[Path]:
     import matplotlib.pyplot as plt
 
-    figure, axis = plt.subplots(figsize=(7.6, 4.5))
-    figure.subplots_adjust(left=0.12, right=0.97, bottom=0.17, top=0.76)
-    for capacity, color, marker in zip(
-        capacities,
-        (ORANGE, BLUE, GREEN),
-        ("o", "s", "^"),
-        strict=True,
-    ):
-        values = [
-            100
-            * float(
-                _lookup(
-                    rows,
-                    capacity=capacity,
-                    lookahead=delta,
-                    bandwidth=1.0,
-                )["oracle_stall_reduction"]
+    figure, axes = plt.subplots(1, 2, figsize=(11.8, 4.9), sharex=True, sharey=True)
+    figure.subplots_adjust(
+        left=0.08, right=0.98, bottom=0.24, top=0.70, wspace=0.16
+    )
+    metrics = (
+        (
+            "deadline_feasible_cold_fraction",
+            "Needed expert data arriving on time",
+        ),
+        ("oracle_stall_reduction", "Transfer waiting removed"),
+    )
+    styles = tuple(
+        zip(capacities, (ORANGE, BLUE, GREEN), ("o", "s", "^"), strict=True)
+    )
+    handles = []
+    for axis, (metric, title) in zip(axes, metrics, strict=True):
+        for capacity, color, marker in styles:
+            values = [
+                100
+                * float(
+                    _lookup(
+                        rows,
+                        capacity=capacity,
+                        lookahead=delta,
+                        bandwidth=1.0,
+                    )[metric]
+                )
+                for delta in lookaheads
+            ]
+            (line,) = axis.plot(
+                lookaheads,
+                values,
+                color=color,
+                marker=marker,
+                linewidth=2.2,
+                markersize=5.5,
+                label=(
+                    f"{capacity} experts on GPU "
+                    f"({100 * capacity / 64:g}% per layer)"
+                ),
             )
-            for delta in lookaheads
-        ]
-        axis.plot(
-            lookaheads,
-            values,
-            color=color,
-            marker=marker,
-            linewidth=2.2,
-            markersize=5,
-            label=f"K={capacity}",
+            if axis is axes[0]:
+                handles.append(line)
+        axis.axhline(
+            50,
+            color="#596273",
+            linestyle="--",
+            linewidth=1.3,
         )
-    axis.axhline(
-        50,
-        color="#596273",
-        linestyle="--",
-        linewidth=1.2,
-        label="Primary 50% gate",
-    )
-    axis.axvspan(1, 3, color="#DCE7F5", alpha=0.45, zorder=0)
-    axis.text(
-        2,
-        4,
-        "Primary horizons",
-        ha="center",
-        va="bottom",
-        fontsize=8.5,
-        color="#596273",
-    )
-    axis.set_xticks(lookaheads)
-    axis.set_ylim(0, 103)
-    axis.set_xlabel("Same-token lookahead Δ")
-    axis.set_ylabel("Oracle cold-stall reduction (%)")
-    axis.grid(axis="y", color=GRID, linewidth=0.7)
-    axis.legend(loc="lower right", ncol=2)
+        axis.axvspan(1, 3, color="#DCE7F5", alpha=0.45, zorder=0)
+        axis.text(
+            1.08,
+            52.5,
+            "Required: 50%",
+            ha="left",
+            va="bottom",
+            fontsize=8.5,
+            color="#596273",
+        )
+        axis.set_title(title, fontweight="bold")
+        axis.set_xticks(lookaheads)
+        axis.set_ylim(0, 103)
+        axis.set_xlabel("Advance notice (layers before use)")
+        axis.grid(axis="y", color=GRID, linewidth=0.7)
+    axes[0].set_ylabel("Percent (%)")
     figure.suptitle(
-        "More residency and lookahead jointly reduce cold-expert stall",
-        x=0.02,
+        "At the measured link, more notice and more GPU capacity both help",
+        x=0.03,
         y=0.98,
         ha="left",
         fontsize=15,
         fontweight="bold",
     )
     figure.text(
-        0.02,
-        0.88,
-        "Measured host-to-device rate; synchronous decode waves. "
-        "Long horizons cover fewer target layers (Δ=15 is L0→L15 only) and "
-        "do not alter the Δ=1–3 gate.",
+        0.03,
+        0.84,
+        "Left: does required data arrive before use?  Right: how much waiting "
+        "does advance notice eliminate?  Shading marks the 1–3 layer test range.",
         fontsize=9.5,
+        color="#555E6B",
+    )
+    figure.legend(
+        handles=handles,
+        loc="lower center",
+        bbox_to_anchor=(0.5, 0.075),
+        ncol=len(capacities),
+        frameon=False,
+    )
+    figure.text(
+        0.03,
+        0.015,
+        "All points use the measured MI355X copy rate. Longer notice covers "
+        "fewer destination layers; 15 layers means only the first-to-last pair.",
+        fontsize=8.7,
         color="#555E6B",
     )
     return _save(figure, output / "fig2_h4_stall_reduction_curve")
@@ -301,26 +368,28 @@ def plot_h4(
                 "",
                 "## Automated headline",
                 "",
-                f"Formal decision: `{gate['decision']}`. The best frozen "
-                f"K=16, measured-bandwidth short horizon is Δ="
-                f"{best['lookahead']}: "
+                f"Formal decision: `{gate['decision']}`. With 16 experts kept "
+                f"on GPU per layer and the measured copy speed, the best "
+                f"tested advance notice is {best['lookahead']} layers: "
                 f"{100 * best['deadline_feasible_cold_fraction']:.1f}% "
-                "deadline-feasible cold bytes and "
-                f"{100 * best['oracle_stall_reduction']:.1f}% oracle stall "
-                "reduction.",
+                "of required cold data arrives on time and "
+                f"{100 * best['oracle_stall_reduction']:.1f}% of transfer "
+                "waiting is removed.",
                 "",
                 "## Human review checklist",
                 "",
-                "- [ ] Heatmap axes, bandwidth multipliers, capacities, and "
-                "12 MiB semantics are correct.",
-                "- [ ] The K=16, Δ=1–3 cells agree with `gate.json`.",
-                "- [ ] Deadline-feasible bytes are not conflated with resident "
-                "hit bytes.",
-                "- [ ] Any saturation, capacity threshold, or non-monotonic "
-                "lookahead behavior is recorded.",
+                "- [ ] The grid reads as copy speed × advance notice × experts "
+                "kept on GPU without requiring H4 terminology.",
+                "- [ ] The black-outlined 16-expert, measured-speed, 1–3 layer "
+                "cells agree with `gate.json`.",
+                "- [ ] The two-panel chart keeps on-time data distinct from "
+                "waiting removed.",
+                "- [ ] Every capacity and lookahead remains visible in both "
+                "measured-link trends.",
                 "- [ ] The effective-average layer-time approximation and "
                 "single-copy-engine limitation are accepted.",
-                "- [ ] One next action is recorded before H5.",
+                "- [ ] The testbed forward time is not presented as an inherent "
+                "MI355X hardware characteristic.",
                 "",
             ]
         ),

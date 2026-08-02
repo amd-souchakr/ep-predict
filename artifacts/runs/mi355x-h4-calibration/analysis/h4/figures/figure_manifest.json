@@ -1,0 +1,17 @@
+{
+  "analysis": "h4",
+  "decision": "PILOT_SUPPORTS",
+  "human_review_complete": true,
+  "inputs": {
+    "artifacts/runs/mi355x-h4-calibration/analysis/h4/gate.json": "d97412ce97eca2f83e02dfe5320d91192a69ebeb9adf69c9fe46e35b7f0b58ba",
+    "artifacts/runs/mi355x-h4-calibration/analysis/h4/measurement.json": "a373e0ad04f28e29230dd2de090b059d5dee1cbda71047f5a10e676b1e6ff258",
+    "artifacts/runs/mi355x-h4-calibration/analysis/h4/oracle_metrics.csv": "f4e02217b8c4c8f502f5f19b73809d99e89346997a5c1ed68f26cd3ed393b1be"
+  },
+  "outputs": {
+    "artifacts/runs/mi355x-h4-calibration/analysis/h4/figures/FIGURES.md": "e1411150e4dce9216c4fd6fc50c63f0d17961ef2d32927a1db85a50a470dd76f",
+    "artifacts/runs/mi355x-h4-calibration/analysis/h4/figures/fig1_h4_oracle_feasibility_heatmap.pdf": "f27e8d043c9e7adffa945cca296feb3b1e76e34e89139991560bee59b1ddf177",
+    "artifacts/runs/mi355x-h4-calibration/analysis/h4/figures/fig1_h4_oracle_feasibility_heatmap.png": "fa1659336c96867f8ab40b684124feab5b7cfc25ed2ab611f0797576af65d0ca",
+    "artifacts/runs/mi355x-h4-calibration/analysis/h4/figures/fig2_h4_stall_reduction_curve.pdf": "f8e8608fad30fb067513374e602dad05f1b28ac9aeccd7b0da2c4b0584d9ce71",
+    "artifacts/runs/mi355x-h4-calibration/analysis/h4/figures/fig2_h4_stall_reduction_curve.png": "e0202d4dd814565d28e63a621e00767eb20f06764675931b42b6f07d2fa365b8"
+  }
+}
