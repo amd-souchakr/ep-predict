@@ -1,0 +1,33 @@
+{
+  "figure_grade": "descriptive_platform_trend",
+  "inputs": {
+    "h1_layer_trends": {
+      "path": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/analysis/platform_comparison/h1_layer_trends.csv",
+      "sha256": "f9a891f476bf920733c72fd2fd6fa54e61be5e253f4cf3885ac802f81ed59de9"
+    },
+    "h2_horizon_trends": {
+      "path": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/analysis/platform_comparison/h2_horizon_trends.csv",
+      "sha256": "a940189cf41c83d1d8d18b84d14c4f553d29b4616636ab006fab53b92e5b116e"
+    },
+    "summary": {
+      "path": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/analysis/platform_comparison/summary.json",
+      "sha256": "c6507fad9d5eee7ccace154f29baf5522148b77a401c0d0dd5feadd7c6fa6206"
+    }
+  },
+  "interchangeability": "NOT_ESTABLISHED_NO_NVIDIA_RAW_TRACE",
+  "outputs": [
+    {
+      "path": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/analysis/platform_comparison/figures/fig1_mi355x_nvidia_derived_trends.png",
+      "sha256": "6886f6b954e845d1ce302fe3d0cf94468569354fcc2a685f6cb13b7dd1839162"
+    },
+    {
+      "path": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/analysis/platform_comparison/figures/fig1_mi355x_nvidia_derived_trends.pdf",
+      "sha256": "b7e788b4850c843189903ec49cf5f6c96021b9baab0226ce478cf1e97e6a174d"
+    },
+    {
+      "path": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/analysis/platform_comparison/figures/FIGURES.md",
+      "sha256": "f98728f4611d7a53e8f52ea489054b136a2470e557fa4dc2b969f49b2b9e6dee"
+    }
+  ],
+  "run_id": "mi355x-olmoe-instruct-c0-paired"
+}

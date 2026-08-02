@@ -1,0 +1,412 @@
+{
+  "config_fingerprint": "4c229e72d5feb39ab272f8a7076bebc936407a7dae54f61ea20c1c69c3147f71",
+  "environment": {
+    "git_commit": "e029d8a777a0d8e2618d9e3d5032f27297eded13",
+    "gpu": {
+      "architecture": "gfx950:sramecc+:xnack-",
+      "capability": [
+        9,
+        5
+      ],
+      "device_count": 1,
+      "memory_bytes": 309220868096,
+      "name": "AMD Instinct MI355X"
+    },
+    "gpu_visibility": {
+      "CUDA_VISIBLE_DEVICES": null,
+      "HIP_VISIBLE_DEVICES": "0",
+      "ROCR_VISIBLE_DEVICES": null
+    },
+    "packages": {
+      "accelerate": "1.3.0",
+      "pytorch-triton-rocm": "3.5.1",
+      "torch": "2.11.0+rocm7.2",
+      "transformers": "5.14.1",
+      "triton-rocm": "3.6.0"
+    },
+    "platform": "Linux-5.15.0-70-generic-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch_backend": "rocm",
+    "torch_cuda_version": null,
+    "torch_hip_version": "7.2.26015",
+    "transformers_version": "5.14.1"
+  },
+  "experiment_config": {
+    "analysis": {
+      "top_n": [
+        1,
+        2,
+        4,
+        8,
+        16
+      ],
+      "window_sizes": [
+        256,
+        512
+      ]
+    },
+    "decision_gate": {
+      "capacity_experts": 8,
+      "min_coverage_lift_over_uniform": 2.0,
+      "min_hotset_jaccard": 0.5,
+      "min_lagged_oracle_ratio": 0.8,
+      "min_passing_layer_fraction": 0.5,
+      "phase": "prefill",
+      "window_size": 256
+    },
+    "do_sample": false,
+    "max_new_tokens": 1,
+    "max_prompt_tokens": 384,
+    "output_dir": "artifacts/runs/mi355x-olmoe-parity",
+    "parity": {
+      "phase": "prefill",
+      "platform": "amd-mi355x-rocm72",
+      "reference_platform": "nvidia-rtx3090ti-cuda124",
+      "reference_run": "artifacts/runs/olmoe-instruct-c0-paired",
+      "report_ordered_topk_agreement": true,
+      "report_selected_weight_differences": true,
+      "request_count": 16,
+      "require_exact_route_sets": true,
+      "require_identical_input_tokens": true,
+      "require_identical_record_keys": true,
+      "require_zero_router_mismatches": true
+    },
+    "prompt_file": "artifacts/datasets/h1-standard-small/prompts.jsonl",
+    "prompt_format": "raw",
+    "run_id": "mi355x-olmoe-parity",
+    "seed": 7,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "trace": {
+      "fail_on_missing_router": true,
+      "fail_on_router_mismatch": true
+    }
+  },
+  "model_config": {
+    "attention_implementation": "sdpa",
+    "device": "cuda:0",
+    "dtype": "bfloat16",
+    "model_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "router_name_contains": [
+      ".mlp.gate"
+    ],
+    "tokenizer_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "tokenizer_revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "trust_remote_code": false,
+    "use_cache": true
+  },
+  "model_report_path": "artifacts/runs/mi355x-olmoe-parity/model_report.json",
+  "projection_report": null,
+  "prompt_file_sha256": "4e08d5b4753ed1d06e6922359ea63249d4e4d215c9bc5081204533adf369fcf1",
+  "prompt_format": "raw",
+  "requests": [
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 211,
+      "input_token_ids_sha256": "73a51eb338334b57612ef969a894db11dddf83e6226c527ae739306af493ea43",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3376,
+      "request_id": 0,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_149",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00000-humaneval-HumanEval_149.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 76,
+      "input_token_ids_sha256": "96be49cef98dfe4dcaaba945f1230fc1c2bb984d6b4b11e1070f4129175893e4",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1216,
+      "request_id": 1,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00002",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00001-wikitext2-00002.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 215,
+      "input_token_ids_sha256": "1a1e353347114a9e94efea8f94bf1aa695b448b750fd6308f99b310f5bd54bf3",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3440,
+      "request_id": 2,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00016",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00002-wikitext2-00016.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 157,
+      "input_token_ids_sha256": "a520be7dc411aa77b9f37604720465de57d13159e789ba5dbe1dc5cd625383df",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2512,
+      "request_id": 3,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-97281954",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00003-mt_bench-97281954.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 76,
+      "input_token_ids_sha256": "a50e0edb0381aa0aded88adf20acd4deea682c0f65ace2b27ac0251e550ae35d",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1216,
+      "request_id": 4,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00024",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00004-gsm8k-00024.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 112,
+      "input_token_ids_sha256": "92dad873b0244ab96cbc9188ef4faec168f02c8f2825f729ea2b70264ea26f24",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1792,
+      "request_id": 5,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00011",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00005-wikitext2-00011.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 84,
+      "input_token_ids_sha256": "d94af187cc881339e4e9ddec11619d88c59daee1384ae4db2032d76dcee9f368",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1344,
+      "request_id": 6,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00018",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00006-gsm8k-00018.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 154,
+      "input_token_ids_sha256": "759eeee0be08cad4f21d083f126580b22be2d6dfdef1d146a025c533d66226cc",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2464,
+      "request_id": 7,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00027",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00007-wikitext2-00027.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 192,
+      "input_token_ids_sha256": "b487644f2bf44968502fb0c3e21fb18a24be2f2d4e96a369b6c4576ab98dd1bf",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3072,
+      "request_id": 8,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00008",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00008-wikitext2-00008.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 52,
+      "input_token_ids_sha256": "b2ae71a306a23309337e251b6c083e23c405be2084e72b775abe5b4541bd6daf",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 832,
+      "request_id": 9,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00022",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00009-gsm8k-00022.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 73,
+      "input_token_ids_sha256": "44e6614cd133d5f2c60273e5481a601a3d835c906bdf1717916821d00168af2e",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1168,
+      "request_id": 10,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00014",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00010-gsm8k-00014.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 76,
+      "input_token_ids_sha256": "ba52c60192d2168ef54ee414f25af3811153a5b012b4debdb6bd254f793180a2",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1216,
+      "request_id": 11,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00013",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00011-gsm8k-00013.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 14,
+      "input_token_ids_sha256": "74a96cd9fa4664e9ee6bf96d8b0e10ffbe0cb80e07d32265074c058c30c01d16",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 224,
+      "request_id": 12,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-97392077",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00012-mt_bench-97392077.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 127,
+      "input_token_ids_sha256": "1b42d88819b0afceec6595d0da26c890bc0ff281dae3fc29a032916e6897eac6",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2032,
+      "request_id": 13,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_90",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00013-humaneval-HumanEval_90.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 30,
+      "input_token_ids_sha256": "b17bd45d07fd2b3f03b62be1ebed0c648ac801ad947add5a405da0c850b458da",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 480,
+      "request_id": 14,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-47292991",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00014-mt_bench-47292991.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 23,
+      "input_token_ids_sha256": "1b6c7be9fb6625a6062dff08ee55dc4ee556297c3b8377a7376f706e40180d10",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 368,
+      "request_id": 15,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-3075696",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-parity/trace/request-00015-mt_bench-3075696.jsonl.gz"
+    }
+  ],
+  "run_id": "mi355x-olmoe-parity",
+  "state": "complete",
+  "trace_schema_version": 1
+}

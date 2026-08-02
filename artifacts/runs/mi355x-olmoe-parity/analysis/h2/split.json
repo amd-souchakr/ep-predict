@@ -1,0 +1,163 @@
+{
+  "analysis_id": "mi355x-olmoe-parity-h2",
+  "config_fingerprint": "39e4600c80b445e180eed2c9ce12be1ab85ce219a6014b058f15648cb4d2963f",
+  "experiment_config": {
+    "analysis_id": "mi355x-olmoe-parity-h2",
+    "capacities": [
+      8,
+      16,
+      32
+    ],
+    "decision_gate": {
+      "baseline": "transition",
+      "capacity_experts": 16,
+      "comparator": "static",
+      "min_mean_complete_token_coverage_gain": 0.02,
+      "min_mean_selection_coverage_gain": 0.03,
+      "min_positive_domains": 3,
+      "min_positive_scope_fraction": 0.75,
+      "phase": "prefill"
+    },
+    "lookaheads": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "previous_window_tokens": 128,
+    "split_seed": 17,
+    "test_requests_per_domain": 1,
+    "trace_run": "artifacts/runs/mi355x-olmoe-parity"
+  },
+  "requests": [
+    {
+      "domain": "code",
+      "request_id": 0,
+      "sample_id": "humaneval-HumanEval_149",
+      "split": "train"
+    },
+    {
+      "domain": "code",
+      "request_id": 13,
+      "sample_id": "humaneval-HumanEval_90",
+      "split": "test"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 12,
+      "sample_id": "mt_bench-97392077",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 14,
+      "sample_id": "mt_bench-47292991",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 15,
+      "sample_id": "mt_bench-3075696",
+      "split": "train"
+    },
+    {
+      "domain": "conversation",
+      "request_id": 3,
+      "sample_id": "mt_bench-97281954",
+      "split": "test"
+    },
+    {
+      "domain": "general",
+      "request_id": 1,
+      "sample_id": "wikitext2-00002",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 5,
+      "sample_id": "wikitext2-00011",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 7,
+      "sample_id": "wikitext2-00027",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 8,
+      "sample_id": "wikitext2-00008",
+      "split": "train"
+    },
+    {
+      "domain": "general",
+      "request_id": 2,
+      "sample_id": "wikitext2-00016",
+      "split": "test"
+    },
+    {
+      "domain": "math",
+      "request_id": 4,
+      "sample_id": "gsm8k-00024",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 6,
+      "sample_id": "gsm8k-00018",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 9,
+      "sample_id": "gsm8k-00022",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 11,
+      "sample_id": "gsm8k-00013",
+      "split": "train"
+    },
+    {
+      "domain": "math",
+      "request_id": 10,
+      "sample_id": "gsm8k-00014",
+      "split": "test"
+    }
+  ],
+  "split_seed": 17,
+  "test_request_ids": [
+    2,
+    3,
+    10,
+    13
+  ],
+  "test_requests_per_domain": 1,
+  "train_request_ids": [
+    0,
+    1,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    14,
+    15
+  ]
+}

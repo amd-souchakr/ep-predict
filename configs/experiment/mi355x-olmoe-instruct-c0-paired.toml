@@ -1,0 +1,39 @@
+# Exact MI355X collection counterpart to c0-olmoe-instruct-collect.toml.
+# Only the run identity/output and platform-comparison metadata differ.
+run_id = "mi355x-olmoe-instruct-c0-paired"
+prompt_file = "artifacts/datasets/h1-standard-small/prompts.jsonl"
+output_dir = "artifacts/runs/mi355x-olmoe-instruct-c0-paired"
+seed = 7
+prompt_format = "raw"
+max_prompt_tokens = 384
+max_new_tokens = 1
+do_sample = false
+temperature = 1.0
+top_p = 1.0
+
+[trace]
+fail_on_router_mismatch = true
+fail_on_missing_router = true
+
+[analysis]
+window_sizes = [256, 512]
+top_n = [1, 2, 4, 8, 16]
+
+# H1 is descriptive context in the platform comparison, not a new gate.
+[decision_gate]
+phase = "prefill"
+capacity_experts = 8
+min_coverage_lift_over_uniform = 2.0
+window_size = 512
+min_hotset_jaccard = 0.50
+min_lagged_oracle_ratio = 0.80
+min_passing_layer_fraction = 0.50
+
+[parity]
+platform = "amd-mi355x-rocm72"
+reference_platform = "nvidia-rtx3090ti-cuda124"
+reference_run = "artifacts/runs/olmoe-instruct-c0-paired"
+request_count = 128
+phase = "prefill"
+comparison_scope = "exact_128_request_derived_artifacts"
+

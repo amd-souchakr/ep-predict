@@ -1,0 +1,2535 @@
+{
+  "config_fingerprint": "8750bc87b42e3629ffe9ce6b8c9bd7fa24adb65f40ef180026732858cadfe7b2",
+  "environment": {
+    "git_commit": "e029d8a777a0d8e2618d9e3d5032f27297eded13",
+    "gpu": {
+      "architecture": "gfx950:sramecc+:xnack-",
+      "capability": [
+        9,
+        5
+      ],
+      "device_count": 1,
+      "memory_bytes": 309220868096,
+      "name": "AMD Instinct MI355X"
+    },
+    "gpu_visibility": {
+      "CUDA_VISIBLE_DEVICES": null,
+      "HIP_VISIBLE_DEVICES": "0",
+      "ROCR_VISIBLE_DEVICES": null
+    },
+    "packages": {
+      "accelerate": "1.3.0",
+      "pytorch-triton-rocm": "3.5.1",
+      "torch": "2.11.0+rocm7.2",
+      "transformers": "5.14.1",
+      "triton-rocm": "3.6.0"
+    },
+    "platform": "Linux-5.15.0-70-generic-x86_64-with-glibc2.35",
+    "python": "3.12.13",
+    "torch_backend": "rocm",
+    "torch_cuda_version": null,
+    "torch_hip_version": "7.2.26015",
+    "transformers_version": "5.14.1"
+  },
+  "experiment_config": {
+    "analysis": {
+      "top_n": [
+        1,
+        2,
+        4,
+        8,
+        16
+      ],
+      "window_sizes": [
+        256,
+        512
+      ]
+    },
+    "decision_gate": {
+      "capacity_experts": 8,
+      "min_coverage_lift_over_uniform": 2.0,
+      "min_hotset_jaccard": 0.5,
+      "min_lagged_oracle_ratio": 0.8,
+      "min_passing_layer_fraction": 0.5,
+      "phase": "prefill",
+      "window_size": 512
+    },
+    "do_sample": false,
+    "max_new_tokens": 1,
+    "max_prompt_tokens": 384,
+    "output_dir": "artifacts/runs/mi355x-olmoe-instruct-c0-paired",
+    "parity": {
+      "comparison_scope": "exact_128_request_derived_artifacts",
+      "phase": "prefill",
+      "platform": "amd-mi355x-rocm72",
+      "reference_platform": "nvidia-rtx3090ti-cuda124",
+      "reference_run": "artifacts/runs/olmoe-instruct-c0-paired",
+      "request_count": 128
+    },
+    "prompt_file": "artifacts/datasets/h1-standard-small/prompts.jsonl",
+    "prompt_format": "raw",
+    "run_id": "mi355x-olmoe-instruct-c0-paired",
+    "seed": 7,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "trace": {
+      "fail_on_missing_router": true,
+      "fail_on_router_mismatch": true
+    }
+  },
+  "model_config": {
+    "attention_implementation": "sdpa",
+    "device": "cuda:0",
+    "dtype": "bfloat16",
+    "model_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "router_name_contains": [
+      ".mlp.gate"
+    ],
+    "tokenizer_id": "allenai/OLMoE-1B-7B-0125-Instruct",
+    "tokenizer_revision": "caada7d7b70f4b852b14108479e0812223a8794f",
+    "trust_remote_code": false,
+    "use_cache": true
+  },
+  "model_report_path": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/model_report.json",
+  "projection_report": null,
+  "prompt_file_sha256": "4e08d5b4753ed1d06e6922359ea63249d4e4d215c9bc5081204533adf369fcf1",
+  "prompt_format": "raw",
+  "requests": [
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 211,
+      "input_token_ids_sha256": "73a51eb338334b57612ef969a894db11dddf83e6226c527ae739306af493ea43",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3376,
+      "request_id": 0,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_149",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00000-humaneval-HumanEval_149.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 76,
+      "input_token_ids_sha256": "96be49cef98dfe4dcaaba945f1230fc1c2bb984d6b4b11e1070f4129175893e4",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1216,
+      "request_id": 1,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00002",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00001-wikitext2-00002.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 215,
+      "input_token_ids_sha256": "1a1e353347114a9e94efea8f94bf1aa695b448b750fd6308f99b310f5bd54bf3",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3440,
+      "request_id": 2,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00016",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00002-wikitext2-00016.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 157,
+      "input_token_ids_sha256": "a520be7dc411aa77b9f37604720465de57d13159e789ba5dbe1dc5cd625383df",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2512,
+      "request_id": 3,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-97281954",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00003-mt_bench-97281954.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 76,
+      "input_token_ids_sha256": "a50e0edb0381aa0aded88adf20acd4deea682c0f65ace2b27ac0251e550ae35d",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1216,
+      "request_id": 4,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00024",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00004-gsm8k-00024.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 112,
+      "input_token_ids_sha256": "92dad873b0244ab96cbc9188ef4faec168f02c8f2825f729ea2b70264ea26f24",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1792,
+      "request_id": 5,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00011",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00005-wikitext2-00011.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 84,
+      "input_token_ids_sha256": "d94af187cc881339e4e9ddec11619d88c59daee1384ae4db2032d76dcee9f368",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1344,
+      "request_id": 6,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00018",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00006-gsm8k-00018.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 154,
+      "input_token_ids_sha256": "759eeee0be08cad4f21d083f126580b22be2d6dfdef1d146a025c533d66226cc",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2464,
+      "request_id": 7,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00027",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00007-wikitext2-00027.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 192,
+      "input_token_ids_sha256": "b487644f2bf44968502fb0c3e21fb18a24be2f2d4e96a369b6c4576ab98dd1bf",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3072,
+      "request_id": 8,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00008",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00008-wikitext2-00008.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 52,
+      "input_token_ids_sha256": "b2ae71a306a23309337e251b6c083e23c405be2084e72b775abe5b4541bd6daf",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 832,
+      "request_id": 9,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00022",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00009-gsm8k-00022.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 73,
+      "input_token_ids_sha256": "44e6614cd133d5f2c60273e5481a601a3d835c906bdf1717916821d00168af2e",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1168,
+      "request_id": 10,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00014",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00010-gsm8k-00014.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 76,
+      "input_token_ids_sha256": "ba52c60192d2168ef54ee414f25af3811153a5b012b4debdb6bd254f793180a2",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1216,
+      "request_id": 11,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00013",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00011-gsm8k-00013.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 14,
+      "input_token_ids_sha256": "74a96cd9fa4664e9ee6bf96d8b0e10ffbe0cb80e07d32265074c058c30c01d16",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 224,
+      "request_id": 12,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-97392077",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00012-mt_bench-97392077.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 127,
+      "input_token_ids_sha256": "1b42d88819b0afceec6595d0da26c890bc0ff281dae3fc29a032916e6897eac6",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2032,
+      "request_id": 13,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_90",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00013-humaneval-HumanEval_90.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 30,
+      "input_token_ids_sha256": "b17bd45d07fd2b3f03b62be1ebed0c648ac801ad947add5a405da0c850b458da",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 480,
+      "request_id": 14,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-47292991",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00014-mt_bench-47292991.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 23,
+      "input_token_ids_sha256": "1b6c7be9fb6625a6062dff08ee55dc4ee556297c3b8377a7376f706e40180d10",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 368,
+      "request_id": 15,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-3075696",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00015-mt_bench-3075696.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 54,
+      "input_token_ids_sha256": "9ed43fccab463be7f711be9b99165f9cac8d317066e3688e4f13baa9f76d2db4",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 864,
+      "request_id": 16,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00000",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00016-gsm8k-00000.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 40,
+      "input_token_ids_sha256": "ae94744720f9ad3015046d686fe75b81f26eddd748549babf5b5fb99ff762e81",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 640,
+      "request_id": 17,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00017",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00017-gsm8k-00017.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 19,
+      "input_token_ids_sha256": "e387975e76edf43af03a7a339bcc5d530fee5f4c367cce8c8dc1063abce06ac6",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 304,
+      "request_id": 18,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-57239570",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00018-mt_bench-57239570.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 305,
+      "input_token_ids_sha256": "c4fd73205ed1ac788a497cd96ff9f6d70ea5eeb9598d81d2f9643d534e21be0f",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 4880,
+      "request_id": 19,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00025",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00019-wikitext2-00025.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 275,
+      "input_token_ids_sha256": "9bddf0e5a13773a4eda8d03121acdce79fcb9e591aedf777d24a9aa7589e4cf5",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 4400,
+      "request_id": 20,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_87",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00020-humaneval-HumanEval_87.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 26,
+      "input_token_ids_sha256": "e6e67182681cb65f5d34f204ac961744ee816fa36e265a16310a2dec6d884beb",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 416,
+      "request_id": 21,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-75477827",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00021-mt_bench-75477827.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 72,
+      "input_token_ids_sha256": "c250c25b4b7e6a19b86cd8f67ba4c5673402a3a9b9861e8e513f1fca15d1ff88",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1152,
+      "request_id": 22,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00002",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00022-gsm8k-00002.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 25,
+      "input_token_ids_sha256": "eceba4e64ac2b82be11e36103daed58fce7c719a68516afd3d1f8da531df1ec2",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 400,
+      "request_id": 23,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-92837357",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00023-mt_bench-92837357.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 101,
+      "input_token_ids_sha256": "7621b7be11f7a7e81ebbe9703f8e9c844b5a4af2f9ffd554a8d06943b0aa3f3b",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1616,
+      "request_id": 24,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00014",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00024-wikitext2-00014.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 113,
+      "input_token_ids_sha256": "41a25033590b3260c97aac70e7ade7b829a1cb2dbf97c313c4f549d7267cf065",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1808,
+      "request_id": 25,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00000",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00025-wikitext2-00000.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 21,
+      "input_token_ids_sha256": "7a3667879e50b7b45e9310bb2eb493947ecae49b307506e35126ce02cbf20553",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 336,
+      "request_id": 26,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-6404588",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00026-mt_bench-6404588.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 43,
+      "input_token_ids_sha256": "7d17065cceba43b304d25c6f6bd5a82fa2af7d115df3b8fdf6dc5a4ae405d83a",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 688,
+      "request_id": 27,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-67710207",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00027-mt_bench-67710207.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 59,
+      "input_token_ids_sha256": "8a08d7b661570f3886a2d84c068bd7284a26a6226407f39895045f8d3e2aa19f",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 944,
+      "request_id": 28,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_85",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00028-humaneval-HumanEval_85.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 200,
+      "input_token_ids_sha256": "18c5f9e5ba95fd61b654dce5fdeb59b92c7000206b5ce4c47391a44c3b02fd07",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3200,
+      "request_id": 29,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00018",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00029-wikitext2-00018.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 108,
+      "input_token_ids_sha256": "6c8007bc5946f9e5fdc5534d9e9c232a62b95a7610696854b7541ddbb26b4a85",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1728,
+      "request_id": 30,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_139",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00030-humaneval-HumanEval_139.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 148,
+      "input_token_ids_sha256": "2ffe9cd617383670f60f26fc3f6935f89e2fb23b85a5e1be12d22e80fa7d1bbc",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2368,
+      "request_id": 31,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_64",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00031-humaneval-HumanEval_64.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 64,
+      "input_token_ids_sha256": "dc15f577d273feddedeab7d2ef440d2b8028e3eb37bb9577b76fc19316145406",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1024,
+      "request_id": 32,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00016",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00032-gsm8k-00016.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 146,
+      "input_token_ids_sha256": "2578f26bc87af897fcddde98dff657e390fbf2315dc56a14cd6db09f6391b1d0",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2336,
+      "request_id": 33,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_100",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00033-humaneval-HumanEval_100.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 95,
+      "input_token_ids_sha256": "45b3688d6851eb9b1da7bad189d2240d7eb989f4cb3e9152aa8f6779a1b5cca3",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1520,
+      "request_id": 34,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_121",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00034-humaneval-HumanEval_121.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 32,
+      "input_token_ids_sha256": "2a7ee822fdf4688e2cad1f6bbf19e54bbc5db03d0e9b519952e58c4c13d0d979",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 512,
+      "request_id": 35,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-38622539",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00035-mt_bench-38622539.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 360,
+      "input_token_ids_sha256": "11fb0f2a707d4ed54bc3d279761b711d6d10ee58b86526e610c11818ab8b8d4a",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 5760,
+      "request_id": 36,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00015",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00036-wikitext2-00015.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 209,
+      "input_token_ids_sha256": "32658ebac4c4140c3eee913424eb4aea2f9ad666ca6a36bf9d276f3c266ae410",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3344,
+      "request_id": 37,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-36918905",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00037-mt_bench-36918905.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 91,
+      "input_token_ids_sha256": "8d7d496a67c4b2d6fb015a5567e1988e86f003508d391a333606196a701e10be",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1456,
+      "request_id": 38,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00012",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00038-wikitext2-00012.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 14,
+      "input_token_ids_sha256": "77d9444a8bbe39cb6a45b12531260b0823ee25ac103a98d778c78871062e1d82",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 224,
+      "request_id": 39,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-68280443",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00039-mt_bench-68280443.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 101,
+      "input_token_ids_sha256": "a20d312785628b21c8d24e9839b38d670ecd7741143ae80993b3aba531704406",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1616,
+      "request_id": 40,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00005",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00040-wikitext2-00005.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 150,
+      "input_token_ids_sha256": "d57744f75f78bccab60dfcb62caaaaec1d1607586f6febecc201b6a19eb75f10",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2400,
+      "request_id": 41,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00026",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00041-wikitext2-00026.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 106,
+      "input_token_ids_sha256": "3f90c7ff797bbe8d698676799856cd08be17a0d77f2429d6ec4d371f5b18d09c",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1696,
+      "request_id": 42,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_50",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00042-humaneval-HumanEval_50.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 126,
+      "input_token_ids_sha256": "02c6e0ed6e96b01ff77cc24ed75f2b697d9ac9039761e550acf59bda332f5415",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2016,
+      "request_id": 43,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_156",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00043-humaneval-HumanEval_156.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 28,
+      "input_token_ids_sha256": "e68b43a3fd0cdf15a16808791ed8de4464088f7d9a8f80b0634b25d0030d727b",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 448,
+      "request_id": 44,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-56561594",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00044-mt_bench-56561594.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 43,
+      "input_token_ids_sha256": "17fc63478bee64569bc041fad1235a7e429b0d2569d65a5a6349945e493d9faf",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 688,
+      "request_id": 45,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-16377588",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00045-mt_bench-16377588.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 34,
+      "input_token_ids_sha256": "11b721717bbcddff71b711eba4edb7017aaa499558e99e36ecfd22eb779328c2",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 544,
+      "request_id": 46,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-39413040",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00046-mt_bench-39413040.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 14,
+      "input_token_ids_sha256": "f0e0fff5133b85ff7ffe11e6e37d79591a289160fefbdfe780ca6649c47b596d",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 224,
+      "request_id": 47,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-36620167",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00047-mt_bench-36620167.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 137,
+      "input_token_ids_sha256": "06ec0029498c6a29a507adb0fc18dccd5d5bf048c51f0fc7e37a44ab79f4da72",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2192,
+      "request_id": 48,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_158",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00048-humaneval-HumanEval_158.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 60,
+      "input_token_ids_sha256": "d6ad9c2d0e54cfaca23545a58df435e773d014aeb00c210682e09c9cdfff0a43",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 960,
+      "request_id": 49,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00003",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00049-gsm8k-00003.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 54,
+      "input_token_ids_sha256": "7952b942f672f7b6eecbedc886b5fbca54a1d7933dffb8a24f2ef9d3bffc1172",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 864,
+      "request_id": 50,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-28957987",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00050-mt_bench-28957987.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 242,
+      "input_token_ids_sha256": "60ebc71b361636ec55ad9a585e3ffa026fe52404b22a9b8989b47200ea3ad0d2",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3872,
+      "request_id": 51,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00029",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00051-wikitext2-00029.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 53,
+      "input_token_ids_sha256": "302ef7436b607e96ea06405b311fa57199fd5dc8e8c28c02530e0f27143b9169",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 848,
+      "request_id": 52,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00029",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00052-gsm8k-00029.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 96,
+      "input_token_ids_sha256": "1030fdf367ca1fdb5f005a783774d6ea12766de4c6ec615d5cab37f4bdd53dc3",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1536,
+      "request_id": 53,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-26014682",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00053-mt_bench-26014682.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 32,
+      "input_token_ids_sha256": "be439e3e6d8fe86de46acde8a48103a6c6e805ed4cf58098c1067b9049eb3d7b",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 512,
+      "request_id": 54,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-29742357",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00054-mt_bench-29742357.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 40,
+      "input_token_ids_sha256": "83ea6fa0eb215db6fbde03eff4fa3a25fc31c54cd6e9da3381f9bd246d3fd8c0",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 640,
+      "request_id": 55,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00007",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00055-gsm8k-00007.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 58,
+      "input_token_ids_sha256": "89d817648f56c8fb101d539e2a33ced0649d28b9fda08172d86b69d5d48aa928",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 928,
+      "request_id": 56,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00008",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00056-gsm8k-00008.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 92,
+      "input_token_ids_sha256": "b2d8eae84d9526f9e80c88ba92df48476bce1f1bdaaa95d8edff707231468fd5",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1472,
+      "request_id": 57,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_82",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00057-humaneval-HumanEval_82.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 139,
+      "input_token_ids_sha256": "b94a903fc85059d156cc304ce193374300942f45e5e5a4c5a9f8fcd2a0be8bdb",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2224,
+      "request_id": 58,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-89774116",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00058-mt_bench-89774116.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 95,
+      "input_token_ids_sha256": "645bbbf82cb3950ce5e1e887e7cc2aaf72d2103ea1c338a68481412319d10845",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1520,
+      "request_id": 59,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00030",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00059-gsm8k-00030.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 260,
+      "input_token_ids_sha256": "85a7e7168c4c71a3cc72eb325e2f4aa31b32b20b4d25462ceda90a9d63401481",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 4160,
+      "request_id": 60,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00009",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00060-wikitext2-00009.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 47,
+      "input_token_ids_sha256": "95e7b3d4f36810301239e8deefeeb379aca7c534e872c2cd9baff6b2d361021a",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 752,
+      "request_id": 61,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00026",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00061-gsm8k-00026.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 281,
+      "input_token_ids_sha256": "995e5119be49a67a2723f306c55b9e7115be418237b0016698110551a52aedcb",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 4496,
+      "request_id": 62,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00028",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00062-wikitext2-00028.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 129,
+      "input_token_ids_sha256": "d5657662ba46126534e4aee588fb9abecc5f2c984b30775ea64204723ddcdbe3",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2064,
+      "request_id": 63,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_106",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00063-humaneval-HumanEval_106.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 75,
+      "input_token_ids_sha256": "bb31f9981b720cd01c62d278b5ff799e4afb44fd0d729e9bb4f8c514808ed69e",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1200,
+      "request_id": 64,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00009",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00064-gsm8k-00009.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 207,
+      "input_token_ids_sha256": "9f1960cf41ac2423523b700a8c2a240690210b53cc9ef02c5d5c9bb51e9286fb",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3312,
+      "request_id": 65,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-41972921",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00065-mt_bench-41972921.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 39,
+      "input_token_ids_sha256": "b35c1ad03700785e680b5fc188191efd2a443f33aea8863c4eb28dd670ab0b3c",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 624,
+      "request_id": 66,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-14343420",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00066-mt_bench-14343420.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 78,
+      "input_token_ids_sha256": "20b322de737b34e41ba39b24b3fd69d5bed69c2a25d79d3e51103bbb6bedf4de",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1248,
+      "request_id": 67,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_13",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00067-humaneval-HumanEval_13.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 177,
+      "input_token_ids_sha256": "4216611b66959a84a9f9e1f99c1e1271559c12058e47927fcaab86451359da07",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2832,
+      "request_id": 68,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-37403084",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00068-mt_bench-37403084.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 104,
+      "input_token_ids_sha256": "f592c2d1ad1f5870fe6b6b964e61ab12c83bb62b87e22fe797485aaf8b91272b",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1664,
+      "request_id": 69,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_49",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00069-humaneval-HumanEval_49.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 63,
+      "input_token_ids_sha256": "b53909742f6a957170af23c7f43d8b6d8b7834e1838b1456f547714d571707f9",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1008,
+      "request_id": 70,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-11060974",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00070-mt_bench-11060974.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 63,
+      "input_token_ids_sha256": "448720c17582fa26e92d25cac07a384bd9f80cc0e752067463392dfc6486d03f",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1008,
+      "request_id": 71,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00006",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00071-gsm8k-00006.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 55,
+      "input_token_ids_sha256": "1e8126b333f6eb63a87b3998db737e93df7f84a9f183dfbd5fa6b543602108e6",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 880,
+      "request_id": 72,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_53",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00072-humaneval-HumanEval_53.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 239,
+      "input_token_ids_sha256": "fef092bf2be01af6c1b4073de1c97acdb4ba3c96d3d089e1b6232355920f5b96",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3824,
+      "request_id": 73,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_72",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00073-humaneval-HumanEval_72.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 318,
+      "input_token_ids_sha256": "5fbc79ab4d0749cb259d25ba4d0cd864ea8173c43b3b2c101a91e1dc5b0bc441",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 5088,
+      "request_id": 74,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00017",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00074-wikitext2-00017.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 76,
+      "input_token_ids_sha256": "b5fc0937fd073ac3952b0aeb01154b6fd9bba12929334eebe2f381de3f6641ce",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1216,
+      "request_id": 75,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00006",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00075-wikitext2-00006.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 91,
+      "input_token_ids_sha256": "7a59da071ca6b5a6ff5177d5079da08bec01a8dbb2fefb7a91b7d35904b93e9a",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1456,
+      "request_id": 76,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00005",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00076-gsm8k-00005.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 94,
+      "input_token_ids_sha256": "74005d6e54508bb0ea2c27b2d7f2fb3b22d20419d8faf46bd52d14d8d3be2806",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1504,
+      "request_id": 77,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_114",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00077-humaneval-HumanEval_114.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 64,
+      "input_token_ids_sha256": "8148c07c48aeb1aa6a02dcdb8a58ae900bf12b4e8616a90b30c50347d390c284",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1024,
+      "request_id": 78,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00025",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00078-gsm8k-00025.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 119,
+      "input_token_ids_sha256": "04aeef4a03c4745889f325fef30337f43dec575d85cd69a46aa712075ef8527b",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1904,
+      "request_id": 79,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_31",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00079-humaneval-HumanEval_31.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 248,
+      "input_token_ids_sha256": "435b4e4cc48fc9b7328a91d5f2fb1664cd07732ad9806603b7613617dbb0329c",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3968,
+      "request_id": 80,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_152",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00080-humaneval-HumanEval_152.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 219,
+      "input_token_ids_sha256": "b7ac808379cfca2007766a586c0dfa19bf03cb6dc82ce074e0caca58894f8f76",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3504,
+      "request_id": 81,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00004",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00081-wikitext2-00004.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 85,
+      "input_token_ids_sha256": "dbe428d7efced0c773f6db507716dc0153aaa216da59861f443004a622d9691e",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1360,
+      "request_id": 82,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00027",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00082-gsm8k-00027.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 262,
+      "input_token_ids_sha256": "9782bbe25a8826a4646bf112ab1b03438df3a8e95536769b03f53b3b2a3b02c7",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 4192,
+      "request_id": 83,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00024",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00083-wikitext2-00024.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 123,
+      "input_token_ids_sha256": "3e5638f115ff337e7cfb974285beeae7d9b98d00254da48aa471156ca0dce718",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1968,
+      "request_id": 84,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00022",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00084-wikitext2-00022.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 62,
+      "input_token_ids_sha256": "8bf8d6646f691497ada6b03c70940c40a3ac4dbe53bbdfa1ea7bfb00f1aa79a0",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 992,
+      "request_id": 85,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_27",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00085-humaneval-HumanEval_27.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 90,
+      "input_token_ids_sha256": "355f8c760d3b9106c457c216629188b16c65fa273e246903f23a5c6306d487c2",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1440,
+      "request_id": 86,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-97487108",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00086-mt_bench-97487108.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 37,
+      "input_token_ids_sha256": "347ae20f3202f3a839e2d86b185bff98e456cee32f896d26b64346b031ea336e",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 592,
+      "request_id": 87,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00011",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00087-gsm8k-00011.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 163,
+      "input_token_ids_sha256": "c0510ed16d20df24011abbee31d86d2518c950e1a970149a024b4af93dc4b2ec",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2608,
+      "request_id": 88,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_143",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00088-humaneval-HumanEval_143.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 35,
+      "input_token_ids_sha256": "4ee8cb411440f84ea6ba57a95662d9ff941f6c1dd9fa653cf4bad2e4f41ebf2d",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 560,
+      "request_id": 89,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00019",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00089-gsm8k-00019.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 77,
+      "input_token_ids_sha256": "51edbc463b8fd9d534202069191a2f6a3292b34c94c5dcc3072c6c60afcd11ca",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1232,
+      "request_id": 90,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_131",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00090-humaneval-HumanEval_131.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 202,
+      "input_token_ids_sha256": "ce4ef0e4ed138c3b3569f31cc6b4154496b89c1582750c01b227508597c39fde",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3232,
+      "request_id": 91,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_88",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00091-humaneval-HumanEval_88.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 60,
+      "input_token_ids_sha256": "6f7ba9bbb375c1be69394f6e87d04f5d4ddd67f62101812735efb5ae4a50b9d9",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 960,
+      "request_id": 92,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00023",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00092-wikitext2-00023.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 56,
+      "input_token_ids_sha256": "5d391b9c958559d22e182645b0344a5a0da7c34e99f492752c1ca1267730fb9a",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 896,
+      "request_id": 93,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-29558191",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00093-mt_bench-29558191.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 32,
+      "input_token_ids_sha256": "b3e2724b85cd6cee9fd262b5a5b79f05889a00022a8e8b7d986a3e1f794c092a",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 512,
+      "request_id": 94,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-22339468",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00094-mt_bench-22339468.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 206,
+      "input_token_ids_sha256": "1359f1337faef2da418ec295f35a6bd55a9aa9522aca5c4ebbd6bc76e8845965",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3296,
+      "request_id": 95,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_110",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00095-humaneval-HumanEval_110.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 42,
+      "input_token_ids_sha256": "b3e35c799c8ad6d297fea072e1d2f161639e7165a1a36fd6cc96f364975175cc",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 672,
+      "request_id": 96,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00012",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00096-gsm8k-00012.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 54,
+      "input_token_ids_sha256": "a7038efc71a2464253b65a7f7e6f0bf17489d1f2ca5ca53b0091993988a700bf",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 864,
+      "request_id": 97,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-72595869",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00097-mt_bench-72595869.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 67,
+      "input_token_ids_sha256": "b03ad73f35dff0f80284a4f3fe4327903c2e321fb0cc898a5fc89a1e5b2088eb",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1072,
+      "request_id": 98,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00031",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00098-gsm8k-00031.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 83,
+      "input_token_ids_sha256": "31352f1b47005f391f601a83a8436a991cac73bb111978c8171483cc23104668",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1328,
+      "request_id": 99,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00023",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00099-gsm8k-00023.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 271,
+      "input_token_ids_sha256": "288c83c3f815ed19fd29598fa4bfc0f96322c9d657f9afddfb8a2d065079e3e4",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 4336,
+      "request_id": 100,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_105",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00100-humaneval-HumanEval_105.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 224,
+      "input_token_ids_sha256": "6addf41a41013cfb3de2d86b550ec07530d983b1f6837ab0ed698141a5aa2805",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3584,
+      "request_id": 101,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00001",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00101-wikitext2-00001.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 53,
+      "input_token_ids_sha256": "91533b7d9a9d1270dff66ae09241f1b9be0dbbbdcfeecd2b8f2feb2946c499b3",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 848,
+      "request_id": 102,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00004",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00102-gsm8k-00004.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 105,
+      "input_token_ids_sha256": "799c6b4d3661fdd67f54d4cfde1e7c71df98a8ee85ea39fe2b8f78357a3293aa",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1680,
+      "request_id": 103,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00013",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00103-wikitext2-00013.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 26,
+      "input_token_ids_sha256": "305851a2fe97cb4700be87fd85239755eb57d3d3f7696c44211ee451afa04654",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 416,
+      "request_id": 104,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-34377376",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00104-mt_bench-34377376.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 45,
+      "input_token_ids_sha256": "b1886101d694112a2c625cddc7ef0bf4e3d8a32283e43e07528254bb191edd8a",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 720,
+      "request_id": 105,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00028",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00105-gsm8k-00028.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 49,
+      "input_token_ids_sha256": "e2256fe24b22a5625dd61074a5389ae54ac585c5cce62cddbb39642e5f11946e",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 784,
+      "request_id": 106,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-62739310",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00106-mt_bench-62739310.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 155,
+      "input_token_ids_sha256": "969bfc459007e8372e503b1da2473fdde19bb57e6ee7d42d0f75e5b9e4a66599",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 2480,
+      "request_id": 107,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_69",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00107-humaneval-HumanEval_69.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 33,
+      "input_token_ids_sha256": "8e69f06c843c51eeff79c970ec3ea3a215fcb51e74fe7434eb554df7300a8b5c",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 528,
+      "request_id": 108,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-24063625",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00108-mt_bench-24063625.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 310,
+      "input_token_ids_sha256": "6a7b544ae7c00add368544d53303f2e620335fcbb1c537064437d84858b6bbca",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 4960,
+      "request_id": 109,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00003",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00109-wikitext2-00003.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 117,
+      "input_token_ids_sha256": "dc28f2fbd4726004ea56d1bbc2235d749b0c2564b815dbc687921a575e3f671e",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1872,
+      "request_id": 110,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_19",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00110-humaneval-HumanEval_19.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 71,
+      "input_token_ids_sha256": "dc66d7344763db818e68006d7a9a1ed44e78792ec4728413ff6eefcdeaf89025",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1136,
+      "request_id": 111,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00020",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00111-gsm8k-00020.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 53,
+      "input_token_ids_sha256": "b1c91c7cfc10c987e7f633198dccf8dfd0cc66e46710343410df08d6167f621e",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 848,
+      "request_id": 112,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00010",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00112-gsm8k-00010.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 201,
+      "input_token_ids_sha256": "0fd4060a68bea3ff557ddea3dbc12ddcd74abb86fc6bc1a8cd4fafe344cb854e",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3216,
+      "request_id": 113,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00030",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00113-wikitext2-00030.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 211,
+      "input_token_ids_sha256": "2f53c52c24c81fd49fe10613f63f783c5d98b0c9bce777a2b0bdc9621e1e5a8a",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3376,
+      "request_id": 114,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_120",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00114-humaneval-HumanEval_120.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 72,
+      "input_token_ids_sha256": "166bb74e302efa8537301868f1b7352e062c4573a1e1b078460b6e3155e9fe94",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1152,
+      "request_id": 115,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00010",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00115-wikitext2-00010.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 95,
+      "input_token_ids_sha256": "82602e84236fb874c5d73b8c353fcece35c3f3ec2d0b4bebbbf92f939b4b1cd4",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1520,
+      "request_id": 116,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_26",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00116-humaneval-HumanEval_26.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 107,
+      "input_token_ids_sha256": "d43f38ee98b1f401550f3aaf81a00389df8f63cd2daa1e10762736d88baa18a7",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1712,
+      "request_id": 117,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00001",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00117-gsm8k-00001.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 53,
+      "input_token_ids_sha256": "93f82bd9c039ae1f120d9323a04f5405f7058d5fefd7cd91991d5a696061c9a9",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 848,
+      "request_id": 118,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00015",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00118-gsm8k-00015.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 89,
+      "input_token_ids_sha256": "58bbc122d8cad74f2afba8125da4cc47530c4c167ea0d3f7bf59fa067f20e04b",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1424,
+      "request_id": 119,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00031",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00119-wikitext2-00031.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 245,
+      "input_token_ids_sha256": "b729927cb05b19337f1236a40b51228bb53406465a07a3c699b0d383500c5e4b",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 3920,
+      "request_id": 120,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00020",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00120-wikitext2-00020.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 116,
+      "input_token_ids_sha256": "32185d7b310a3f6ca75e24ae60b6001d4038d93697b2cee493bb2ca8a227498f",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1856,
+      "request_id": 121,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00019",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00121-wikitext2-00019.jsonl.gz"
+    },
+    {
+      "domain": "conversation",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 24,
+      "input_token_ids_sha256": "6aed39efa49cdfb7980bde7b4399ac4d0f1f7b5d7df23b8d3f4e20f52af46168",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 384,
+      "request_id": 122,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "mt_bench-24433994",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00122-mt_bench-24433994.jsonl.gz"
+    },
+    {
+      "domain": "math",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 55,
+      "input_token_ids_sha256": "a201b9c7573b7e0f54daed99a4329576a0698632f9874d22679465a185c2b7ad",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 880,
+      "request_id": 123,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "gsm8k-00021",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00123-gsm8k-00021.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 105,
+      "input_token_ids_sha256": "8e882f4d060bd9b661844e0cfc24be85ee0e9b9e07d3443cba636a1cc3e329f9",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1680,
+      "request_id": 124,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00021",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00124-wikitext2-00021.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 87,
+      "input_token_ids_sha256": "69ea258f3fd12f60866d2d2a86c63675c18867473e1632e63587d1f8cebd4c86",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1392,
+      "request_id": 125,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_11",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00125-humaneval-HumanEval_11.jsonl.gz"
+    },
+    {
+      "domain": "code",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 84,
+      "input_token_ids_sha256": "c6230673feb4cbb7e3a5b19c9a7d23a4ad8da59f8942531a1e4124feb5e1a7f1",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1344,
+      "request_id": 126,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "humaneval-HumanEval_98",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00126-humaneval-HumanEval_98.jsonl.gz"
+    },
+    {
+      "domain": "general",
+      "features": null,
+      "hidden_feature_records": 0,
+      "input_token_count": 88,
+      "input_token_ids_sha256": "7568f4256513f9de83a199f9f72ec6d0985917c7635bbe9b4aa3bcda417fd189",
+      "model_forward_calls": 1,
+      "prompt_format": "raw",
+      "records": 1408,
+      "request_id": 127,
+      "router_calls_per_forward": [
+        16
+      ],
+      "router_count": 16,
+      "router_validation_mismatches": 0,
+      "sample_id": "wikitext2-00007",
+      "state": "complete",
+      "trace": "artifacts/runs/mi355x-olmoe-instruct-c0-paired/trace/request-00127-wikitext2-00007.jsonl.gz"
+    }
+  ],
+  "run_id": "mi355x-olmoe-instruct-c0-paired",
+  "state": "complete",
+  "trace_schema_version": 1
+}

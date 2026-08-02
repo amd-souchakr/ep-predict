@@ -1,14 +1,18 @@
 # Project status
 
-**Current focus:** AX4 — deadline-bounded graceful expert degradation
-**Current stage:** Complete; formal analytical gate passed under a
-mass-priority, high-bandwidth FCFS regime. Human figure review is pending; no
-training or new-model work is authorized.
+**Current focus:** AMD baseline Milestone A — MI355X OLMoE integrity and
+derived routing-trend comparison
+**Current stage:** Exact 128-request matched-workload comparison complete
+pending human review. MI355X execution/hook integrity passed; H1/H2 aggregate
+trends reproduce nearly exactly. NVIDIA raw traces remain unavailable, so
+record-level route interchangeability is unknown. Do not start H4 calibration
+or GPT-OSS qualification before review.
 **Last updated:** 2026-08-01
 
 | Gate | Question | State | Exit evidence |
 |---|---|---|---|
 | M0 | Can we inspect and validate the model without source changes? | Passed | Model report, complete hook traces, and zero integrity failures |
+| AMD-A | Does pinned OLMoE run with valid hooks on one MI355X, and are matched derived NVIDIA trends retained? | Integrity passed; matched aggregate comparison reproduced; review pending | 128/128 requests, 222,688 records, zero router mismatches; H1 top-8 correlation 0.999962 and H2 horizon-gain correlation 0.999989; no raw-record parity claim |
 | H1 | Is hotness strong and stable enough for a fast tier? | Mixed; global gate failed | 2/16 mixed decode layers passed; code and math are locally strong |
 | H2 | Does conditional locality beat marginal popularity? | Pilot supported | All Δ=1/2/3 transition baselines passed the held-out decode gate |
 | H3 | Can a small predictor beat transition tables at equal candidate budget? | Formal pilot not supported; reviewed | Global replacement failed; post-hoc scan found strong early-layer/long-range value |
@@ -27,6 +31,29 @@ training or new-model work is authorized.
 | AX4 | Can deadline-controlled expert erasure bound low-batch TPOT while retaining a plausible routed-mass/quality contract? | Supported analytically under explicit assumptions; review pending | K=8, 256 GB/s, C=99%, A=1.5× passes with 1/8 experts resident, 11.25 ms bounded TPOT, zero full fallback, and <1% degraded waves; measured PCIe fails |
 
 ## Immediate run checklist
+
+- [x] Amend the parity scope after confirming NVIDIA request traces cannot be
+      restored; derived trends cannot establish trace interchangeability.
+- [x] Expose one MI355X and pass ROCm, BF16, pinned-H2D, and tiny-router-hook
+      qualification.
+- [x] Inspect the pinned full OLMoE checkpoint and reproduce its 16-layer,
+      64-expert, top-8, 12 MiB geometry.
+- [x] Collect the frozen 16-request raw-prefill prefix with input hashes and
+      zero router mismatches.
+- [x] Run descriptive H1 and held-out H2 analyses through Δ=15.
+- [x] Compare MI355X H1 layer trends and H2 horizon trends with the preserved
+      128-request NVIDIA artifacts.
+- [x] Generate and inspect the derived-trend PDF/PNG with hashed inputs.
+- [x] After review identified a visible H1 offset, preserve the 16-request
+      tracer bullet and rerun all 128 requests under the exact NVIDIA C0
+      collection and H2 settings.
+- [x] Verify matching request keys/order, prompt hash, collection settings,
+      96/32 H2 split, and 126/126 available historical input-token hashes.
+- [x] Regenerate H1/H2 and the platform figure with residual panels; confirm
+      the H1 offset collapses to 0.0134 pp mean absolute difference.
+- [ ] Researcher reviews the MI355X result and accepts, narrows, or rejects
+      advancing to the isolated H4 calibration.
+- [ ] Do not begin H4 calibration or GPT-OSS qualification before that review.
 
 - [x] Confirm the actual machine exposes the intended 24 GB NVIDIA GPU.
 - [x] Install the `data` and `inference` dependency groups.
@@ -151,7 +178,8 @@ Full plan: [docs/NEXT_EXPERIMENTS.md](docs/NEXT_EXPERIMENTS.md).
 Prior result: [docs/H4_RESULTS.md](docs/H4_RESULTS.md).
 Architecture protocol:
 [docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md](docs/ARCHITECTURE_EXPLORATION_PROTOCOL.md).
-Latest empirical result: [docs/C0_RESULTS.md](docs/C0_RESULTS.md).
+Latest empirical result:
+[docs/MI355X_OLMOE_PARITY_RESULTS.md](docs/MI355X_OLMOE_PARITY_RESULTS.md).
 
 ## Evidence policy
 

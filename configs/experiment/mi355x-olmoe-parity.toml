@@ -1,0 +1,45 @@
+# Cross-platform OLMoE integrity run. Invoke collect with --limit 16 as frozen
+# in MI355X_OLMOE_PARITY_PROTOCOL.md. Do not reuse an NVIDIA run directory.
+run_id = "mi355x-olmoe-parity"
+prompt_file = "artifacts/datasets/h1-standard-small/prompts.jsonl"
+output_dir = "artifacts/runs/mi355x-olmoe-parity"
+seed = 7
+prompt_format = "raw"
+max_prompt_tokens = 384
+max_new_tokens = 1
+do_sample = false
+temperature = 1.0
+top_p = 1.0
+
+[trace]
+fail_on_router_mismatch = true
+fail_on_missing_router = true
+
+[parity]
+platform = "amd-mi355x-rocm72"
+reference_platform = "nvidia-rtx3090ti-cuda124"
+reference_run = "artifacts/runs/olmoe-instruct-c0-paired"
+request_count = 16
+phase = "prefill"
+require_identical_input_tokens = true
+require_identical_record_keys = true
+require_zero_router_mismatches = true
+require_exact_route_sets = true
+report_ordered_topk_agreement = true
+report_selected_weight_differences = true
+
+[analysis]
+window_sizes = [256, 512]
+top_n = [1, 2, 4, 8, 16]
+
+# Descriptive only: the 16-request prefix is not a confirmation workload and
+# cannot establish cross-platform trace parity without NVIDIA raw records.
+[decision_gate]
+phase = "prefill"
+capacity_experts = 8
+min_coverage_lift_over_uniform = 2.0
+window_size = 256
+min_hotset_jaccard = 0.50
+min_lagged_oracle_ratio = 0.80
+min_passing_layer_fraction = 0.50
+

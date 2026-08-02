@@ -456,3 +456,80 @@ The immutable run manifest and metrics remain the source of truth.
   training for. It cannot show current-model quality under missing experts.
 - One next action: human review. Do not start training, new inference, or a
   new checkpoint without explicit permission.
+
+### `mi355x-olmoe-parity` — 2026-08-01
+
+- Milestone: AMD-A — qualify pinned OLMoE and its hook-visible routing path on
+  one MI355X, then compare derived trajectory trends with retained NVIDIA
+  artifacts.
+- Scope amendment: NVIDIA request-level traces were not committed and cannot
+  be restored. Record-level selected-ID parity and trace interchangeability
+  are therefore untestable. The comparison uses the nested 16-request MI355X
+  prefix versus preserved 128-request NVIDIA H1/H2 CSV/JSON outputs.
+- Platform: one visible AMD Instinct MI355X, `gfx950:sramecc+:xnack-`, ROCm
+  7.2, PyTorch `2.11.0+rocm7.2`, Transformers 5.14.1, BF16 SDPA.
+- Model: pinned Instruct revision
+  `caada7d7b70f4b852b14108479e0812223a8794f`; inspection reproduces 16
+  routers, 64 experts/layer, top-8, and 12,582,912 bytes/expert.
+- Integrity: all 16 requests completed with one prefill forward each; 26,752
+  routed token-layer records, 16/16 input hashes, zero router mismatches, zero
+  missing/extra router-call counts, and complete 16-layer trace integrity.
+- H1: both runs fail the model-wide prefill hot-tier gate. MI355X mean top-8
+  coverage is 22.37% versus 25.17% NVIDIA. Layerwise top-8 Pearson/Spearman is
+  0.839/0.841; Gini is 0.947/0.959. Mean top-8 expert intersection is 4.94/8
+  with Jaccard 0.456.
+- H2: transition-over-static selection-gain curves are nearly identical over
+  Δ=1..15 (Pearson/Spearman 0.999/1.000; 0.86 pp mean absolute difference).
+  Complete-route-gain correlation is 0.996/1.000. MI355X passes the
+  descriptive gate through Δ=14; Δ=15 misses only the 2% complete-gain
+  threshold at 1.967% on the four-request test set.
+- Interpretation: MI355X Transformers execution and router instrumentation are
+  qualified, and the historical skew/trajectory conclusions are
+  qualitatively retained. No observed difference can be attributed solely to
+  platform because request counts and H2 splits differ.
+- Figure: one two-panel H1 layer/H2 horizon comparison retained as PDF and
+  450-DPI PNG with hashed inputs under
+  `analysis/platform_comparison/figures/`; programmatic and visual inspection
+  completed.
+- Result: supports advancing to isolated MI355X H4 calibration after human
+  review, while keeping all routing traces platform-scoped. Any replay of the
+  old NVIDIA demand trace with AMD timing is a counterfactual sensitivity, not
+  a measured AMD workload.
+- One next action: researcher review of the comparison figure and result. Do
+  not start H4 calibration or GPT-OSS qualification first.
+
+### `mi355x-olmoe-instruct-c0-paired` — 2026-08-01
+
+- Milestone: AMD-A matched-workload confirmation, requested after the
+  16-request comparison showed a visible H1 absolute-skew offset.
+- Collection config: exact counterpart of
+  `c0-olmoe-instruct-collect.toml`; only run identity/output and platform
+  metadata differ. All 128 revision-pinned prompts use raw serialization,
+  384-token truncation, greedy one-token generation, and BF16 SDPA.
+- H2 config: exact counterpart of `c0-olmoe-instruct-h2.toml`; same split
+  seed, 8 held-out requests/domain, 96/32 split, K=8/16/32, and Δ=1..15.
+- Scope integrity: request keys/order, prompt SHA-256, collection settings,
+  and H2 split match. All 126 NVIDIA manifest token hashes that remain
+  available match MI355X; two older already-complete entries lack hashes.
+- Run integrity: 128/128 requests, 222,688 prefill token-layer records,
+  128/128 MI355X input hashes, zero router mismatches, zero bad router-call
+  counts, and exact inspected model geometry.
+- H1 result: the visible 16-request offset disappears. Mean top-8 coverage is
+  25.1758% MI355X versus 25.1746% NVIDIA; layerwise MAE is 0.0134 pp, maximum
+  difference 0.0305 pp, and Pearson/Spearman 0.999962/1.0. Mean Gini differs
+  by −0.000017. Fourteen layers have identical top-8 hot sets; layers 5 and
+  14 differ only at rank eight, giving mean intersection 7.875/8 and Jaccard
+  0.9722.
+- H2 result: selection-gain Pearson/Spearman is 0.999989/1.0 with 0.0402 pp
+  MAE; complete-route gain is 0.999922/1.0 with 0.1008 pp MAE. Every horizon
+  Δ=1..15 passes on both platforms.
+- Interpretation: the earlier H1 discrepancy was an incomplete-workload
+  artifact. Aggregate OLMoE skew and trajectory statistics reproduce nearly
+  exactly across the NVIDIA/CUDA and AMD/ROCm execution paths. Raw selected-ID
+  parity remains unavailable because NVIDIA trace shards were not retained.
+- Figure: overlaid H1/H2 curves plus MI355X−NVIDIA residual panels, retained
+  as PDF/450-DPI PNG with hashed inputs under the matched run's
+  `analysis/platform_comparison/figures/`; visual inspection completed.
+- Result: supports advancing to isolated MI355X H4 calibration after human
+  review. Do not call the old NVIDIA trace measured AMD demand; use it only as
+  a counterfactual hardware sensitivity until a new MI355X decode trace exists.

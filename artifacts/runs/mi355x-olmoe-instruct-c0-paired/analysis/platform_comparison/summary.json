@@ -1,0 +1,140 @@
+{
+  "analysis_id": "mi355x-olmoe-derived-platform-comparison",
+  "evidence_grade": "descriptive_matched_workload_platform_comparison",
+  "h1": {
+    "gini": {
+      "max_absolute_difference": 0.0004597239186664992,
+      "mean_absolute_difference": 0.00016129278968782072,
+      "mean_difference": -1.7172989788408546e-05,
+      "mi355x_mean": 0.2644757954514837,
+      "nvidia_mean": 0.26449296844127207,
+      "pearson": 0.9999777882563545,
+      "spearman": 1.0
+    },
+    "mean_top8_hotset_intersection": 7.875,
+    "mean_top8_hotset_jaccard": 0.9722222222222222,
+    "top8_coverage": {
+      "max_absolute_difference": 0.0003053599655122863,
+      "mean_absolute_difference": 0.00013359498491162525,
+      "mean_difference": 1.1226469320304439e-05,
+      "mi355x_mean": 0.2517575037720937,
+      "nvidia_mean": 0.2517462773027734,
+      "pearson": 0.9999617850073103,
+      "spearman": 1.0
+    }
+  },
+  "h2": {
+    "complete_gain_over_static": {
+      "max_absolute_difference": 0.0025489403149455137,
+      "mean_absolute_difference": 0.0010077753198844996,
+      "mean_difference": 0.0010077753198844996,
+      "mi355x_mean": 0.13827476232335778,
+      "nvidia_mean": 0.13726698700347326,
+      "pearson": 0.9999220145251324,
+      "spearman": 1.0
+    },
+    "mi355x_passing_horizons": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "nvidia_passing_horizons": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "selection_gain_over_static": {
+      "max_absolute_difference": 0.0008089969172340172,
+      "mean_absolute_difference": 0.00040168518145897354,
+      "mean_difference": 0.0002275668071269221,
+      "mi355x_mean": 0.2825020857742622,
+      "nvidia_mean": 0.2822745189671353,
+      "pearson": 0.9999890023737059,
+      "spearman": 1.0
+    }
+  },
+  "integrity": {
+    "collection_settings_match": true,
+    "comparable_input_hash_mismatches": 0,
+    "comparable_input_hashes": 126,
+    "geometry_match": true,
+    "h2_request_split_match": true,
+    "mi355x_environment": {
+      "git_commit": "e029d8a777a0d8e2618d9e3d5032f27297eded13",
+      "gpu": {
+        "architecture": "gfx950:sramecc+:xnack-",
+        "capability": [
+          9,
+          5
+        ],
+        "device_count": 1,
+        "memory_bytes": 309220868096,
+        "name": "AMD Instinct MI355X"
+      },
+      "gpu_visibility": {
+        "CUDA_VISIBLE_DEVICES": null,
+        "HIP_VISIBLE_DEVICES": "0",
+        "ROCR_VISIBLE_DEVICES": null
+      },
+      "packages": {
+        "accelerate": "1.3.0",
+        "pytorch-triton-rocm": "3.5.1",
+        "torch": "2.11.0+rocm7.2",
+        "transformers": "5.14.1",
+        "triton-rocm": "3.6.0"
+      },
+      "platform": "Linux-5.15.0-70-generic-x86_64-with-glibc2.35",
+      "python": "3.12.13",
+      "torch_backend": "rocm",
+      "torch_cuda_version": null,
+      "torch_hip_version": "7.2.26015",
+      "transformers_version": "5.14.1"
+    },
+    "mi355x_input_hashes_recorded": 128,
+    "mi355x_requests_with_bad_router_call_counts": 0,
+    "mi355x_router_validation_mismatches": 0,
+    "mi355x_trace_integrity_passed": true,
+    "nvidia_input_hashes_recorded": 126,
+    "prompt_file_sha256_match": true,
+    "request_keys_match": true
+  },
+  "interchangeability": "NOT_ESTABLISHED_NO_NVIDIA_RAW_TRACE",
+  "limitations": [
+    "NVIDIA request-level traces are unavailable, so selected-ID parity cannot be tested.",
+    "The run contains prefill only; decode parity and timing are not evaluated."
+  ],
+  "scope": {
+    "matched_workload_and_split": true,
+    "mi355x_requests": 128,
+    "mi355x_run": "artifacts/runs/mi355x-olmoe-instruct-c0-paired",
+    "nvidia_reference_requests": 128,
+    "nvidia_reference_run": "artifacts/runs/olmoe-instruct-c0-paired",
+    "phase": "prefill",
+    "routing_top_k": 8
+  },
+  "state": "complete"
+}

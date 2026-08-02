@@ -100,6 +100,26 @@ def _plot_h2(args: argparse.Namespace) -> int:
     return 0
 
 
+def _analyze_platform_comparison(args: argparse.Namespace) -> int:
+    from ep_predict.analysis.platform import analyze_platform_comparison
+
+    summary = analyze_platform_comparison(args.run, load_toml(args.config))
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+def _plot_platform_comparison(args: argparse.Namespace) -> int:
+    from ep_predict.visualize.platform import plot_platform_comparison
+
+    manifest = plot_platform_comparison(
+        args.run,
+        load_toml(args.config),
+        output_dir=args.output,
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
 def _analyze_h3(args: argparse.Namespace) -> int:
     from ep_predict.analysis.h3 import analyze_h3
 
@@ -395,6 +415,23 @@ def build_parser() -> argparse.ArgumentParser:
         help="figure directory (default: RUN/analysis/h2/figures)",
     )
     h2_plot_parser.set_defaults(function=_plot_h2)
+
+    platform_parser = subparsers.add_parser(
+        "analyze-platform-comparison",
+        help="compare MI355X OLMoE derived H1/H2 trends with NVIDIA artifacts",
+    )
+    platform_parser.add_argument("--run", required=True, type=Path)
+    platform_parser.add_argument("--config", required=True, type=Path)
+    platform_parser.set_defaults(function=_analyze_platform_comparison)
+
+    platform_plot_parser = subparsers.add_parser(
+        "plot-platform-comparison",
+        help="plot the MI355X versus NVIDIA derived routing trends",
+    )
+    platform_plot_parser.add_argument("--run", required=True, type=Path)
+    platform_plot_parser.add_argument("--config", required=True, type=Path)
+    platform_plot_parser.add_argument("--output", type=Path)
+    platform_plot_parser.set_defaults(function=_plot_platform_comparison)
 
     h3_parser = subparsers.add_parser(
         "analyze-h3",

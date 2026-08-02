@@ -1,0 +1,38 @@
+# MI355X-only H4 calibration. This output must never overwrite the historical
+# RTX 3090 Ti calibration under artifacts/runs/h1-standard-small/analysis/h4.
+run_id = "mi355x-h4-calibration"
+trace_run = "artifacts/runs/h1-standard-small"
+output_dir = "artifacts/runs/mi355x-h4-calibration/analysis/h4"
+
+[hardware]
+platform = "amd-mi355x-rocm72"
+visible_device_count = 1
+required_architecture = "gfx950"
+
+[timing]
+prompt_file = "artifacts/datasets/h1-standard-small/prompts.jsonl"
+prompt_indices = [0, 1, 3, 4]
+max_prompt_tokens = 256
+warmup_decode_steps = 5
+measured_decode_steps = 20
+
+[transfer]
+sizes_mib = [4, 8, 12, 16, 24]
+warmup_copies = 10
+measured_copies = 50
+
+[simulation]
+phase = "decode"
+capacities = [8, 16, 32]
+lookaheads = [1, 2, 3, 6, 9, 12, 15]
+bandwidth_scales = [0.5, 1.0, 2.0]
+transfer_concurrency = 1
+cache_policy = "lru"
+
+[decision_gate]
+phase = "decode"
+capacity_experts = 16
+eligible_lookaheads = [1, 2, 3]
+bandwidth_scale = 1.0
+min_deadline_feasible_cold_fraction = 0.50
+min_oracle_stall_reduction = 0.50
