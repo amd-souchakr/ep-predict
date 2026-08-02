@@ -1,0 +1,20 @@
+{
+  "files": {
+    "artifacts/runs/gpt-oss-20b-milestone-d/REPORT.md": "a0dd248d587c159f3b09b72afb7062fd9d9acaef86cff95fe0f612dcd260f022",
+    "artifacts/runs/gpt-oss-20b-milestone-d/figures/FIGURES.md": "005a5e5e8bd3665af33240273381cb6084d4f38ff67da2d83215d3c79c2a985c",
+    "artifacts/runs/gpt-oss-20b-milestone-d/figures/fig1_routing_raster.pdf": "87ba65af62fd31e96b1a9827240df9885b0529acdc5533beb2b9fc5228eb5997",
+    "artifacts/runs/gpt-oss-20b-milestone-d/figures/fig1_routing_raster.png": "77389824c512d5ac3ea528da81c60b4c3822e2daf4d9f3274bb8380fb8f834cc",
+    "artifacts/runs/gpt-oss-20b-milestone-d/figures/fig2_occupancy_and_coverage.pdf": "b32e6d335cd9c76ccfd3b44dde346d689d7a5d7be15a00b7b90feb46a60445fe",
+    "artifacts/runs/gpt-oss-20b-milestone-d/figures/fig2_occupancy_and_coverage.png": "9763f122f2b0a0a82597f1538c39fbd09505244fc3de3a303dcf4755c5e155c2",
+    "artifacts/runs/gpt-oss-20b-milestone-d/integrity.json": "cea62d8b46505ba01f22766c2aeda03aca0f979d7ee8f04c8058a6e132002b15",
+    "artifacts/runs/gpt-oss-20b-milestone-d/layer_integrity.csv": "607ccb3485cc2e060a790bd9f6bc17051355fa44d7b0fe8020bba312a60a994c",
+    "artifacts/runs/gpt-oss-20b-milestone-d/model_inspection.json": "1428d773505887e20e35e495bbed85d6361936bb1b2b3f7d2e4abe3d47f1c2b4",
+    "artifacts/runs/gpt-oss-20b-milestone-d/outputs.jsonl": "3a8732088ede4342a23bb1a1edb9495857d3dd1546b706f3da79d09b90d71950",
+    "artifacts/runs/gpt-oss-20b-milestone-d/result.json": "f405fb40f64d8e9501326fd8e2f7010a1e3772f4bdad6698bf09b2de0e83d8ec",
+    "artifacts/runs/gpt-oss-20b-milestone-d/routing_summary.csv": "e6d80b669e9933b8cf8a7f315bcc11fb76d71e7e4e484d5066bcbe5112ca85b7",
+    "artifacts/runs/gpt-oss-20b-milestone-d/run_definition.json": "41f9908357946094884200def13f9390e2009ee3798a1de5ec92b8e5b9687bfa",
+    "artifacts/runs/gpt-oss-20b-milestone-d/trace/request-00000-d-factual-000.jsonl.gz": "d1a6e6bc30068f8560619e3222e8db96ec347822c595ea402b57ba548bbb3a02",
+    "artifacts/runs/gpt-oss-20b-milestone-d/trace/request-00001-d-arithmetic-000.jsonl.gz": "32d934435077b4297999701a212027219f204bc458622c5dd92efd314ecc5f58"
+  },
+  "schema_version": 1
+}

@@ -2,7 +2,7 @@
 
 ## Founding Research PRD
 
-**Status:** H1–H6, C0, and MI355X Milestones A–B complete; Milestone C is qualified pending review, and Milestone D remains blocked
+**Status:** H1–H6, C0, and MI355X Milestones A–E complete; Milestone E conditionally supports GPT-OSS 20B route prediction pending review; the 120B comparison is cancelled under the disk constraint
 **Initial environment:** Python 3.12, `uv`, PyTorch, Hugging Face Transformers, CUDA 12.4<br>
 **Initial hardware:** 1× NVIDIA GPU with 24 GB VRAM  
 **Scale-up environment:** ROCm 7.2, PyTorch 2.11, 8× AMD MI355X-class GPUs with 288 GB HBM per GPU; experiments expose one GPU<br>
@@ -24,6 +24,19 @@ the forward gap is treated as a Transformers/PyTorch/ROCm testbed artifact,
 not an inherent hardware property. It remains valid measured slack for the
 architecture/WL regime exploration, which makes no wall-clock claim. See
 [docs/MI355X_H4_RESULTS.md](docs/MI355X_H4_RESULTS.md).
+
+GPT-OSS 20B Milestone E adds a request-held-out prediction result on the
+qualified dispatch path. At decode K=8, transition tables cover
+86.3%/85.5%/84.4% of selections at Δ=1/2/3 and improve complete top-4 coverage
+by 32.3/30.0/26.9 points over the stronger of domain popularity and
+current-route copy. All three bootstrap gates pass across all four domains.
+The overall result remains conditional: six of 2,323,200 independently
+reconstructed BF16 weights exceeded the overstrict `1e-6` trace tolerance,
+although every executed expert ID matched and exact dispatch weights were
+retained. See [docs/GPT_OSS_MILESTONE_E_RESULTS.md](docs/GPT_OSS_MILESTONE_E_RESULTS.md).
+Milestone E's K is strictly prediction candidate count: K/32 normalizes the
+candidate set, not fast-tier residency. Any resource replay must introduce an
+independent resident capacity R and sweep K and R separately.
 
 ---
 

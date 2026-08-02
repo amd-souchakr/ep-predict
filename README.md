@@ -23,12 +23,18 @@ end-to-end speedup.
 See [STATUS.md](STATUS.md), [docs/H4_PROTOCOL.md](docs/H4_PROTOCOL.md), and
 [docs/MI355X_H4_RESULTS.md](docs/MI355X_H4_RESULTS.md).
 
-GPT-OSS 20B Milestone C now qualifies the model-specific Transformers tracing
-boundary on one MI355X. The native MXFP4 path bypasses ordinary router-module
-hooks, but dispatch-boundary hooks cover all 24 layers and match all 576
-consumed expert-ID/weight pairs exactly. This is instrumentation qualification,
-not a routing-distribution or performance result; the project stops for review
-before Milestone D. See [docs/GPT_OSS_MILESTONE_C_RESULTS.md](docs/GPT_OSS_MILESTONE_C_RESULTS.md).
+GPT-OSS 20B Milestone E now conditionally supports held-out route prediction.
+Across 96 train and 32 test requests, decode K=8 transition tables cover
+86.3%/85.5%/84.4% of selected experts at Δ=1/2/3 and beat the stronger cheap
+baseline by 18.2/16.7/15.5 points. Complete top-4 coverage improves by
+32.3/30.0/26.9 points, and all three request-bootstrap gates pass. The result
+is conditional because the frozen trace gate found six BF16-scale independent
+weight differences among 2,323,200 pairs, despite exact executed IDs. This is
+internal route-prediction evidence, not language quality, timing, or prefetch
+profitability. The 120B comparison is cancelled under the disk constraint.
+Here K is prediction candidate count and K/32 is candidate-set fraction;
+residency is an independent variable that Milestone E does not model.
+See [docs/GPT_OSS_MILESTONE_E_RESULTS.md](docs/GPT_OSS_MILESTONE_E_RESULTS.md).
 
 The current evidence supports source-target-aware planning for the pinned
 OLMoE checkpoint: linear hidden-state candidates for early planning and
@@ -361,6 +367,25 @@ uv run ep-predict plot-checkpoint-trajectories \
 C0 uses raw prompt serialization, one generation token, identical input-ID
 validation, and only matched prefill evidence. It does not compare divergent
 free-running outputs or train a predictor.
+
+Run the GPT-OSS 20B Milestone E collection and held-out prediction analysis:
+
+```bash
+HIP_VISIBLE_DEVICES=0 uv run python scripts/run_gpt_oss_prediction.py \
+  --config configs/experiment/gpt-oss-20b-milestone-e.toml
+
+uv run python scripts/analyze_gpt_oss_prediction.py \
+  --run artifacts/runs/gpt-oss-20b-milestone-e \
+  --config configs/experiment/gpt-oss-20b-milestone-e.toml
+
+uv run python scripts/plot_gpt_oss_prediction.py \
+  --run artifacts/runs/gpt-oss-20b-milestone-e
+```
+
+The collection requires the revision-pinned 20B snapshot to be present
+locally. It runs one MI355X, retains exact dispatch-consumed routes, and makes
+no latency or language-quality claim. The analysis is request-held-out and
+uses request-level bootstrap uncertainty.
 
 The collector writes one compressed JSONL routing trace per request. H3 also
 writes one aligned numeric NPZ shard containing compact projected router

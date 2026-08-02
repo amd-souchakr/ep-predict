@@ -26,7 +26,6 @@ from ep_predict.gpt_oss_qualification import (
     write_json,
 )
 
-
 DEFAULT_SNAPSHOT = Path(
     "/home/souchakr/.cache/huggingface/hub/models--openai--gpt-oss-20b/"
     "snapshots/6cee5e81ee83917806bbde320786a8fb61efebee"
@@ -52,7 +51,8 @@ def checkpoint_inspection(snapshot: Path) -> dict[str, Any]:
     layer0_payload = 0
     for shard in shards:
         with safe_open(snapshot / shard, framework="pt", device="cpu") as handle:
-            for key in handle.keys():
+            # ``safe_open`` exposes keys through its API but is not a dict.
+            for key in handle.keys():  # noqa: SIM118
                 if not key.startswith("model.layers.0.mlp.experts."):
                     continue
                 view = handle.get_slice(key)
@@ -154,7 +154,7 @@ def _storage_component_bytes(experts: torch.nn.Module) -> tuple[dict[str, int | 
 
 
 def _kernel_provenance(model: torch.nn.Module) -> dict[str, Any]:
-    import transformers.integrations.mxfp4 as mxfp4
+    from transformers.integrations import mxfp4
 
     quantizer = getattr(model, "hf_quantizer", None)
     # Transformers removes/does not retain the quantizer on every load path,
@@ -212,15 +212,15 @@ def native_checkpoint_run(snapshot: Path) -> tuple[dict[str, Any], list[dict[str
 
     for layer_idx, layer in enumerate(model.model.layers):
         mlp = layer.mlp
+        top_k = int(mlp.router.top_k)
 
         def mlp_pre_hook(module, args, kwargs, layer_idx=layer_idx):
             hidden = args[0].reshape(-1, module.router.hidden_dim)
             logits = F.linear(hidden, module.router.weight, module.router.bias)
             expected[layer_idx].append(tuple(value.detach().clone() for value in expected_from_logits(logits, module.router.top_k)))
 
-        def dispatch_pre_hook(module, args, kwargs, layer_idx=layer_idx):
+        def dispatch_pre_hook(module, args, kwargs, layer_idx=layer_idx, top_k=top_k):
             routing_data, gather_idx = args[1], args[2]
-            top_k = model.config.num_experts_per_tok
             num_tokens = expected[layer_idx][-1][0].shape[0]
             consumed[layer_idx].append(
                 decode_dispatch_inputs(routing_data, gather_idx, num_tokens=num_tokens, top_k=top_k)
@@ -297,8 +297,8 @@ def native_checkpoint_run(snapshot: Path) -> tuple[dict[str, Any], list[dict[str
 
 
 def source_provenance() -> dict[str, Any]:
-    import transformers.integrations.mxfp4 as mxfp4
     import transformers.models.gpt_oss.modeling_gpt_oss as modeling
+    from transformers.integrations import mxfp4
 
     paths = [Path(inspect.getfile(modeling)), Path(inspect.getfile(mxfp4))]
     return {str(path): sha256_file(path) for path in paths}

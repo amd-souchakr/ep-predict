@@ -1,0 +1,150 @@
+{
+  "model_id": "openai/gpt-oss-20b",
+  "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+  "routers": [
+    {
+      "layer_id": 0,
+      "moe_layer_index": 0,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 1,
+      "moe_layer_index": 1,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 2,
+      "moe_layer_index": 2,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 3,
+      "moe_layer_index": 3,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 4,
+      "moe_layer_index": 4,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 5,
+      "moe_layer_index": 5,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 6,
+      "moe_layer_index": 6,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 7,
+      "moe_layer_index": 7,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 8,
+      "moe_layer_index": 8,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 9,
+      "moe_layer_index": 9,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 10,
+      "moe_layer_index": 10,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 11,
+      "moe_layer_index": 11,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 12,
+      "moe_layer_index": 12,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 13,
+      "moe_layer_index": 13,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 14,
+      "moe_layer_index": 14,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 15,
+      "moe_layer_index": 15,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 16,
+      "moe_layer_index": 16,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 17,
+      "moe_layer_index": 17,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 18,
+      "moe_layer_index": 18,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 19,
+      "moe_layer_index": 19,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 20,
+      "moe_layer_index": 20,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 21,
+      "moe_layer_index": 21,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 22,
+      "moe_layer_index": 22,
+      "num_experts": 32,
+      "top_k": 4
+    },
+    {
+      "layer_id": 23,
+      "moe_layer_index": 23,
+      "num_experts": 32,
+      "top_k": 4
+    }
+  ]
+}

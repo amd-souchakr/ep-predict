@@ -1,0 +1,28 @@
+run_id = "gpt-oss-20b-milestone-d"
+output_dir = "artifacts/runs/gpt-oss-20b-milestone-d"
+model_id = "openai/gpt-oss-20b"
+revision = "6cee5e81ee83917806bbde320786a8fb61efebee"
+snapshot = "/home/souchakr/.cache/huggingface/hub/models--openai--gpt-oss-20b/snapshots/6cee5e81ee83917806bbde320786a8fb61efebee"
+device = "cuda:0"
+seed = 20260801
+max_new_tokens = 8
+repeat_count = 2
+chat_template_current_date = "2026-08-01"
+
+[trace]
+expected_layers = 24
+expected_experts = 32
+expected_top_k = 4
+dispatch_weight_atol = 1e-6
+repeat_weight_atol = 1e-6
+terminal_decode_forward = true
+
+[[workload]]
+sample_id = "d-factual-000"
+domain = "factual"
+prompt = "Reply with exactly one word: What color is a clear daytime sky?"
+
+[[workload]]
+sample_id = "d-arithmetic-000"
+domain = "arithmetic"
+prompt = "Reply with exactly one integer: What is seven multiplied by eight?"

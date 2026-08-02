@@ -1,7 +1,7 @@
 # GPT-OSS 20B Milestone C results
 
 **Decision:** `QUALIFIED`
-**Review state:** complete pending researcher review; Milestone D remains blocked
+**Review state:** reviewed and advanced by the researcher's explicit Milestone D request
 **Checkpoint:** `openai/gpt-oss-20b` at
 `6cee5e81ee83917806bbde320786a8fb61efebee`
 
@@ -71,8 +71,8 @@ safetensors index, Transformers model/MXFP4 source, and loaded kernel sources.
 Milestone C passes: there is no unobserved MXFP4 dispatch bypass, and the
 model-specific observer is admissible for a later GPT-OSS tracer. This is not a
 routing-distribution experiment, output-quality evaluation, timing result, or
-20B end-to-end tracer bullet. Milestone D must not begin until the researcher
-reviews this qualification and explicitly advances the sequence.
+20B end-to-end tracer bullet. The researcher subsequently advanced the
+sequence by explicitly requesting Milestone D.
 
 Canonical artifacts are under
 `artifacts/runs/gpt-oss-20b-milestone-c/`.

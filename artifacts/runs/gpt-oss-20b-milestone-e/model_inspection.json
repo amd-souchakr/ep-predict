@@ -1,0 +1,22 @@
+{
+  "chat_template_sha256": "a4c9919cbbd4acdd51ccffe22da049264b1b73e59055fa58811a99efbd7c8146",
+  "device": "cuda:0",
+  "device_capability": [
+    9,
+    5
+  ],
+  "device_name": "AMD Instinct MI355X",
+  "expert_class": "Mxfp4GptOssExperts",
+  "experts_per_layer": 32,
+  "geometry_matches_config": true,
+  "hidden_size": 2880,
+  "intermediate_size": 2880,
+  "mlp_forward_module": "transformers.integrations.mxfp4",
+  "model_class": "GptOssForCausalLM",
+  "native_mxfp4": true,
+  "parameter_dtype": "torch.bfloat16",
+  "routed_layers": 24,
+  "shared_experts": 0,
+  "tokenizer_class": "TokenizersBackend",
+  "top_k": 4
+}

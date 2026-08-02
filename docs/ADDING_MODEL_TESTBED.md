@@ -70,13 +70,16 @@ Do not blindly reuse absolute capacities or gates. Report at least:
 and:
 
 \[
-\text{resident fraction}=K/E,
+\text{candidate-set fraction}=K/E,
 \]
 
-where \(k\) is routing top-k and \(E\) is the expert count. Also derive expert
-bytes and available routed-layer horizons from the new testbed. Complete-set
-coverage naturally becomes easier or harder as top-k changes; that is an
-architectural result, not a nuisance to normalize away.
+where \(K\) is prediction candidate count, \(k\) is routing top-k, and \(E\)
+is the expert count. Residency is an independent variable \(R\), normalized as
+\(R/E\); do not substitute \(K/E\) for \(R/E\) unless a separately stated
+staging policy makes them equal. Also derive expert bytes and available
+routed-layer horizons from the new testbed. Complete-set coverage naturally
+becomes easier or harder as top-k changes; that is an architectural result,
+not a nuisance to normalize away.
 
 Preregister the new model's gate before seeing its result. Reuse the scientific
 question and metric definitions, but adjust model-dependent capacity,
@@ -136,7 +139,8 @@ A new testbed is ready for substantive comparison only when:
 - model revision and environment are pinned;
 - router selection integrity passes;
 - run and document names cannot collide with another model;
-- capacities expose both \(K/k\) and \(K/E\);
+- candidate counts expose both \(K/k\) and \(K/E\), while any residency study
+  independently exposes \(R/E\);
 - model-specific constants are removed or consciously recalibrated in every
   experiment being run;
 - status and conclusions remain explicitly scoped to the checkpoint;

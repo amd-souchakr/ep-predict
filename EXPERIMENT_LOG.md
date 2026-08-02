@@ -606,3 +606,74 @@ The immutable run manifest and metrics remain the source of truth.
   with hashed inputs/outputs under `analysis`-independent run `figures/`.
 - One next action: researcher reviews the report and figure. Do not begin
   Milestone D without explicit approval.
+
+### `gpt-oss-20b-milestone-d` — 2026-08-01
+
+- Milestone: D — small end-to-end GPT-OSS 20B tracer bullet, not the
+  routing-distribution comparison.
+- Authorization: the researcher explicitly requested Milestone D, satisfying
+  the Milestone C review/advance stop condition.
+- Frozen workload: two local prompts, checkpoint chat template with fixed
+  current date, batch one, greedy eight-token output, and a terminal cached
+  forward so every retained output token has routing coverage. The complete
+  workload was repeated once without reloading the model.
+- Provenance: the same pinned 20B checkpoint, Transformers 5.14.1, native
+  MXFP4 path, PyTorch 2.11.0+rocm7.2, and one visible MI355X used by Milestone
+  C. The run definition hashes the config, checkpoint config, tokenizer, and
+  safetensors index and links the qualified Milestone C evidence.
+- Coverage: 161 prompt plus 16 generated tokens; 4,248/4,248 token-layer
+  records across 24 layers; zero missing, unexpected, duplicate, bad-phase,
+  or bad-top-k records.
+- Dispatch integrity: 16,992 consumed `(expert_id, weight)` pairs; zero ID or
+  selected-weight mismatches versus independent router calculation and 0.0
+  maximum absolute selected-weight error.
+- Determinism: repeat input and generated token IDs match exactly; all route
+  IDs and selected weights match with 0.0 maximum absolute error.
+- Outputs: both eight-token generations are retained but end inside the model's
+  analysis channel. They qualify output capture and determinism, not answer
+  quality.
+- Artifacts: two standard trace shards, inspection, output JSONL, integrity
+  JSON/CSV, compact phase/layer routing table, two PDF/450-DPI PNG figures,
+  report, and a SHA-256 manifest.
+- Decision: `QUALIFIED`. The end-to-end GPT-OSS 20B tracing workflow is
+  reproducible and complete. No routing-distribution, domain, performance,
+  quality, or 120B claim follows from this convenience workload.
+- One next action: researcher reviews Milestone D. Do not begin Milestone E
+  without explicit approval.
+
+### `gpt-oss-20b-milestone-e` — 2026-08-01
+
+- Milestone: E — request-held-out GPT-OSS 20B route-prediction quality. The
+  planned 120B comparison was cancelled because available disk is
+  insufficient; no 120B result is implied.
+- Frozen design: all 128 revision-pinned standard prompts, 32 per domain;
+  greedy batch-one inference; 16 traced decode tokens; 96/32 stratified
+  train/test split; K=4/8/16; all Δ=1--23; prefill/decode separated.
+- Collection: 22,152 prompt plus 2,048 decode tokens; 580,800/580,800 complete
+  token-layer records; 2,323,200 exact dispatch-consumed ID/weight pairs.
+- Frozen trace gate: `FAILED`. Every executed expert ID matches, but 6
+  independently reconstructed weights exceed `1e-6`; maximum absolute error
+  is 0.001953125. These sparse BF16-sized deviations are consistent
+  with native fused Triton versus independent PyTorch softmax numerics. The
+  threshold is not weakened post hoc.
+- Analysis status: conditional post-hoc evidence is admissible for set metrics
+  because IDs are exact and for routed-mass metrics because stored weights are
+  the dispatch-consumed values.
+- Primary prediction result at decode K=8: transition selection coverage is
+  86.3%/85.5%/84.4% at Δ=1/2/3, gains of +18.2/+16.7/+15.5 pp over the
+  stronger of domain popularity and route copy. Complete-route gains are
+  +32.3/+30.0/+26.9 pp. All request-bootstrap intervals exclude zero and all
+  four domains improve; 3/3 gate points pass.
+- Candidate-count qualification: K=4 achieves 63--67% selection but only
+  18--20% complete-route coverage; K=16 reaches 85--87% complete routes with
+  a candidate set spanning 50% of the expert namespace and 4× candidate
+  amplification. K is not resident capacity; no residency state is modeled.
+- Overall decision: `CONDITIONAL_PILOT_SUPPORT_WITH_TRACE_WEIGHT_EXCEPTION`.
+  This is one-model internal route-prediction evidence, not language quality,
+  timing, prefetch profitability, or a controlled cross-model comparison.
+- Artifacts: protocol/config, 128 trace shards, exact outputs and integrity
+  tables, split and scope/request/horizon/bootstrap tables, three PDF/450-DPI
+  figures, reports, and hashed manifest under
+  `artifacts/runs/gpt-oss-20b-milestone-e/`.
+- One next action: researcher reviews the result and chooses a bounded 20B
+  resource-contract replay or closes the GPT-OSS track.

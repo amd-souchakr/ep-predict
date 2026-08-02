@@ -1,11 +1,12 @@
-# Next experiments: cross-model qualification after the MI355X baseline
+# Next experiments: GPT-OSS 20B prediction review after the MI355X baseline
 
 **Updated:** 2026-08-01  
-**Current next action:** freeze and run Milestone C, the smallest GPT-OSS
-Transformers router/dispatch qualification, then stop for review
+**Current next action:** review the conditional Milestone E GPT-OSS 20B
+prediction result; the 120B comparison is cancelled under the disk constraint
 **Operating rule:** prove model-specific dispatch visibility before collecting
 routing evidence; do not treat model metadata or reconstructed top-k IDs as
-executed routing.
+executed routing. Keep prediction candidate count K independent from resident
+capacity R; K/E is candidate-set fraction, whereas R/E is resident fraction.
 
 This plan separates three questions that should not be conflated:
 
@@ -28,9 +29,10 @@ OLMoE or the fixed H3 predictor achieves those points. The frozen design is in
 |---|---|---:|---|
 | AMD-A | Does OLMoE retain its derived routing trends on MI355X? | Yes | Complete and reviewed; aggregate trends retained |
 | AMD-B | Does measured MI355X timing pass the unchanged whole-expert H4 oracle gate? | Yes for demand and timing; replay analytical | Complete and reviewed; gate passes with narrowed testbed interpretation |
-| AMD-C | Can Transformers expose GPT-OSS router outputs proven identical to actual dispatch? | Configuration/tiny path first; 20B only as needed | Next; not started |
-| AMD-D | Does the qualified GPT-OSS 20B path produce a complete tracer-bullet artifact chain? | Yes | Blocked on AMD-C review |
-| AMD-E | How does GPT-OSS 120B top-4 routing change normalized coverage and capacity contracts? | Yes | Blocked on AMD-D review |
+| AMD-C | Can Transformers expose GPT-OSS router outputs proven identical to actual dispatch? | Configuration/tiny path first; 20B only as needed | Qualified; reviewed and advanced |
+| AMD-D | Does the qualified GPT-OSS 20B path produce a complete tracer-bullet artifact chain? | Yes | Qualified and reviewed |
+| AMD-E | On held-out GPT-OSS 20B requests, do transition tables beat strong cheap route baselines? | Yes | Conditional support: 3/3 prediction gates pass; frozen trace-weight gate fails on 6/2,323,200 pairs; K is candidate count and residency is unmodeled |
+| AMD-120B | How does 120B routing change normalized contracts? | Would require a new checkpoint | Cancelled: insufficient disk; no result claimed |
 | AX1 | What model-capacity and TPOT envelope can future predictive host/pooled-memory prefetch provide? | No | Complete; projected region exists, review pending |
 | AX2 | How do bandwidth, latency, coverage, amplification, and transfer granularity divide the design space? | No | Complete; inverse bounds and phase map generated |
 | AX3 | What local-HBM and rolling-SRAM capacities suit a multi-horizon three-tier hierarchy? | No | Complete; physical staging envelope generated |
@@ -49,7 +51,7 @@ training, new inference, and model downloads remain deferred. AX is an
 analytical architectural exploration, not an attempt to rescue the current H3
 or H6 policies.
 
-## Immediate next experiment -- Milestone C
+## Completed GPT-OSS sequence -- Milestones C through E
 
 ### Decisive question
 
@@ -88,9 +90,20 @@ kernel behavior. Produce one compact model-path report, an integrity table,
 and a go/no-go decision. Stop there for review: Milestone D, not C, is the
 small GPT-OSS 20B routing tracer bullet.
 
-The value of this experiment is epistemic rather than statistical. It prevents
-an expensive 20B/120B collection from producing traces that look reasonable
-but do not represent executed expert demand.
+The value of Milestone C is epistemic rather than statistical. It prevents an
+expensive 20B/120B collection from producing traces that look reasonable but
+do not represent executed expert demand. Milestone D then exercised that
+qualified path end to end: 4,248/4,248 token-layer records and all 16,992
+dispatch-consumed pairs are complete and exact, and the immediate repeat is
+identical. The outputs, trace shards, tables, figures, and hash manifest are
+retained under `artifacts/runs/gpt-oss-20b-milestone-d/`. Milestone E then
+used all 128 frozen standard requests for a 96/32 request-held-out prediction
+test. At decode K=8, transition selection coverage is 86.3%/85.5%/84.4% at
+Δ=1/2/3 and all three bootstrap gates pass against the stronger cheap
+baseline. The overall result is conditional because six rare BF16-scale
+independent weight deviations fail the frozen trace threshold; all executed
+IDs match and exact dispatch weights are retained. See
+[GPT_OSS_MILESTONE_E_RESULTS.md](GPT_OSS_MILESTONE_E_RESULTS.md).
 
 AX4 is the immediate exception to the exact-execution contract, not to the
 no-training rule. It asks whether late experts can be converted from a latency

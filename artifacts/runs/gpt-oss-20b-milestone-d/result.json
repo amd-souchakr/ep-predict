@@ -1,0 +1,23 @@
+{
+  "artifact_gate_checks": {
+    "all_required_artifacts_present": true,
+    "required_artifacts_parseable": true,
+    "trace_gate_qualified": true,
+    "two_scripted_figures_present": true,
+    "two_trace_shards_present": true
+  },
+  "claim_boundary": "end-to-end tracing workflow qualification only; no routing-distribution comparison or timing claim",
+  "decision": "QUALIFIED",
+  "milestone": "D",
+  "schema_version": 1,
+  "trace_integrity": {
+    "dispatch_consumed_pairs": 16992,
+    "dispatch_id_mismatches": 0,
+    "dispatch_max_abs_weight_error": 0.0,
+    "dispatch_weight_mismatches": 0,
+    "generated_tokens": 16,
+    "prompt_tokens": 161,
+    "requests": 2,
+    "trace_records": 4248
+  }
+}

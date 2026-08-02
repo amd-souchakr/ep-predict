@@ -1,0 +1,61 @@
+{
+  "checkpoint": {
+    "config_sha256": "3a2a26ded679375b7928ddeca59764df7cea83220c1961035f6d6e232659e9ce",
+    "model_id": "openai/gpt-oss-20b",
+    "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+    "safetensors_index_sha256": "0e085b977c4c9942f85938828e8c989ed7d5cdabf852e4da6a67c116cd502cd1",
+    "snapshot": "/home/souchakr/.cache/huggingface/hub/models--openai--gpt-oss-20b/snapshots/6cee5e81ee83917806bbde320786a8fb61efebee",
+    "tokenizer_json_sha256": "0614fe83cadab421296e664e1f48f4261fa8fef6e03e63bb75c20f38e37d07d3"
+  },
+  "claim_boundary": "end-to-end tracing workflow qualification only; no routing-distribution comparison or timing claim",
+  "config": {
+    "chat_template_current_date": "2026-08-01",
+    "device": "cuda:0",
+    "max_new_tokens": 8,
+    "model_id": "openai/gpt-oss-20b",
+    "output_dir": "artifacts/runs/gpt-oss-20b-milestone-d",
+    "repeat_count": 2,
+    "revision": "6cee5e81ee83917806bbde320786a8fb61efebee",
+    "run_id": "gpt-oss-20b-milestone-d",
+    "seed": 20260801,
+    "snapshot": "/home/souchakr/.cache/huggingface/hub/models--openai--gpt-oss-20b/snapshots/6cee5e81ee83917806bbde320786a8fb61efebee",
+    "trace": {
+      "dispatch_weight_atol": 1e-06,
+      "expected_experts": 32,
+      "expected_layers": 24,
+      "expected_top_k": 4,
+      "repeat_weight_atol": 1e-06,
+      "terminal_decode_forward": true
+    },
+    "workload": [
+      {
+        "domain": "factual",
+        "prompt": "Reply with exactly one word: What color is a clear daytime sky?",
+        "sample_id": "d-factual-000"
+      },
+      {
+        "domain": "arithmetic",
+        "prompt": "Reply with exactly one integer: What is seven multiplied by eight?",
+        "sample_id": "d-arithmetic-000"
+      }
+    ]
+  },
+  "config_path": "configs/experiment/gpt-oss-20b-milestone-d.toml",
+  "config_sha256": "fbefed882a827dbec926ab2eef359744bca15d1d49b697e953ef790e3c876731",
+  "environment": {
+    "hip_visible_devices": "0",
+    "kernels": "0.15.2",
+    "python": "3.12.13",
+    "tokenizers": "0.22.2",
+    "torch": "2.11.0+rocm7.2",
+    "torch_hip": "7.2.26015",
+    "transformers": "5.14.1",
+    "visible_device_count": 1
+  },
+  "git_commit": "18c30390124119fb44bf3ae9400cb0c123be62a5",
+  "milestone_c_qualification": {
+    "path": "artifacts/runs/gpt-oss-20b-milestone-c/qualification.json",
+    "sha256": "4c46d9643e62dc36aeb9f36561df75e0038510b384ebe0ab8397c1eca6d742dc"
+  },
+  "schema_version": 1
+}

@@ -1,0 +1,11 @@
+{
+  "claim_boundary": "held-out GPT-OSS 20B route-prediction quality only; no language-quality, timing, 120B, or cross-model conclusion",
+  "decision": "CONDITIONAL_PILOT_SUPPORT_WITH_TRACE_WEIGHT_EXCEPTION",
+  "milestone": "E",
+  "passing_lookaheads": 3,
+  "prediction_decision": "PILOT_SUPPORTS_20B_ROUTE_PREDICTION",
+  "preregistered_trace_gate_passed": false,
+  "required_passing_lookaheads": 2,
+  "schema_version": 1,
+  "trace_integrity": "TRACE_INVALID"
+}

@@ -1,7 +1,7 @@
 # MI355X OLMoE parity and AMD-baseline protocol
 
 **Frozen:** 2026-08-01  
-**State:** Milestones A--B reviewed; Milestone C qualified pending review
+**State:** Milestones A--D reviewed; Milestone E conditionally supports GPT-OSS 20B route prediction pending review
 **Model:** `allenai/OLMoE-1B-7B-0125-Instruct`, revision
 `caada7d7b70f4b852b14108479e0812223a8794f`  
 **New platform:** one visible AMD MI355X (`gfx950`), ROCm 7.2, PyTorch 2.11  
@@ -173,7 +173,7 @@ measured forward is treated as a likely software/testbed artifact, not an
 inherent MI355X characteristic. Final figures use plain operational language
 and retain every swept trend.
 
-### Milestone C -- GPT-OSS Transformers qualification (qualified; review pending)
+### Milestone C -- GPT-OSS Transformers qualification (qualified; reviewed)
 
 Add a model-specific qualification path; do not build a universal MoE
 adapter. Before downloading the 120B weights:
@@ -202,7 +202,7 @@ BF16 compute, top-k/dispatch ordering, selected-softmax semantics, absence of
 shared experts, and complete source/kernel provenance are recorded in
 `docs/GPT_OSS_MILESTONE_C_RESULTS.md`. Stop for review before Milestone D.
 
-### Milestone D -- GPT-OSS 20B tracer bullet (blocked on C review)
+### Milestone D -- GPT-OSS 20B tracer bullet (qualified; reviewed)
 
 Run the complete project SOP on a small workload: pinned checkpoint download,
 inspection, tokenization, deterministic inference, routing and selected-score
@@ -214,36 +214,44 @@ Its exit condition is an end-to-end reproducible artifact chain with no hook
 ambiguity and with every model-specific constant removed from, or explicitly
 scoped within, the GPT-OSS path.
 
-### Milestone E -- GPT-OSS 120B decisive C1 (blocked on D review)
+**Execution result:** `QUALIFIED`. Two fixed chat-formatted requests retained
+161 prompt and 16 generated tokens, yielding 4,248/4,248 token-layer records
+and 16,992 dispatch-consumed ID/weight pairs with zero parity errors. The
+immediate repeat reproduced all rendered inputs, generated IDs, route IDs, and
+selected weights exactly. Outputs, standard trace shards, inspection,
+integrity tables, compact summaries, two scripted figures, and their hashes
+are retained under `artifacts/runs/gpt-oss-20b-milestone-d/`. This qualifies
+the workflow, not a routing distribution or output-quality claim. Stop for
+review before Milestone E.
 
-Use `gpt-oss-120b` as the scientific comparison target. Its advertised
-36-layer, 128-expert, top-4, 5.1B-active-parameter geometry and approximately
-60.8 GiB MXFP4 checkpoint provide the intended contrast with OLMoE's 16
-layers, 64 experts, and top-8 routing while fitting on one MI355X. Reconfirm
-these properties from the pinned model config and loaded inspection report;
-do not rely on prose metadata alone. See the
-[OpenAI architecture overview](https://openai.com/index/introducing-gpt-oss/)
-and [official model card](https://huggingface.co/openai/gpt-oss-120b).
+### Milestone E -- GPT-OSS 20B held-out route prediction (conditional support)
 
-Preregister only the following C1 comparison:
+The researcher cancelled the planned 120B comparison because the checkpoint
+is too large for available disk. The replacement experiment retains the
+qualified 20B path and tests all 128 standard requests with a 96/32
+request-held-out split, K=4/8/16, and Δ=1--23. The frozen protocol is
+`docs/GPT_OSS_MILESTONE_E_PROTOCOL.md`.
 
-- H1 skew and window stability;
-- H2 transition predictability through every available horizon;
-- complete-route coverage at normalized capacities;
-- candidate amplification `K/k`;
-- resident fraction `K/E`.
+**Execution result:** the prediction gate passes 3/3 primary decode K=8
+lookaheads. Transition selection coverage is 86.3%/85.5%/84.4% at Δ=1/2/3,
+with +18.2/+16.7/+15.5-point gains over the stronger cheap baseline; complete
+top-4 gains are +32.3/+30.0/+26.9 points. The overall result is conditional
+because six of 2,323,200 independently reconstructed weights exceed the
+frozen `1e-6` tolerance by at most 0.001953125. All executed expert IDs match,
+coverage is complete, and the analysis uses exact dispatch-consumed weights.
+K denotes prediction candidate count in this milestone; K/32 is candidate-set
+fraction, not residency. A later resource replay must introduce resident
+capacity R independently.
+See `docs/GPT_OSS_MILESTONE_E_RESULTS.md`.
 
-Do not expand H3, remeasure model-specific H4, or replay H6 unless the routing
-geometry produces a meaningful difference at this gate. In particular,
-top-4 complete-route coverage must not be compared with top-8 OLMoE coverage
-at the same absolute `K` without also reporting `K/k` and `K/E`.
+### Milestone F -- 20B synthesis or close (blocked on E review)
 
-### Milestone F -- publication and hardware proposal (blocked on E review)
-
-Produce a cross-model synthesis that labels every conclusion as
-single-testbed, replicated, architecture-dependent, or contradicted. The
-publication target is a measured account of how routing geometry changes the
-coverage/capacity contract, paired with a calibrated MI355X physical bound.
+The cancelled 120B run removes the planned controlled routing-geometry
+comparison. Any synthesis must therefore label GPT-OSS evidence as a
+single-checkpoint replication of structured cross-layer predictability, not a
+cross-model effect-size estimate. After Milestone E review, either close the
+track with that bounded conclusion or authorize a 20B resource-contract
+replay paired with the calibrated MI355X physical bound.
 
 Advance the hardware proposal only where the combined evidence supports it.
 Candidate long-term mechanisms remain:
